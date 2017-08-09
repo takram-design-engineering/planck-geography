@@ -83,7 +83,7 @@ function convertPolygonsToShapes(polygons, projection, errors = []) {
       errors.push(index)
       return shapes
     }
-    const path = Path.parse(svg)
+    const path = Path.parse(svg, true)
     let paths
     if (path instanceof Three.Shape) {
       paths = path.curves
@@ -93,9 +93,9 @@ function convertPolygonsToShapes(polygons, projection, errors = []) {
     const shape = new Three.Shape()
     paths.forEach(path => {
       const winding = Path.winding(path.curves)
-      if (winding === 'ccw') {
+      if (winding === 'cw') {
         shape.add(path)
-      } else if (winding === 'cw') {
+      } else if (winding === 'ccw') {
         shape.holes.push(path)
       }
     })
@@ -238,7 +238,7 @@ export default class GeographyBuilder {
         console.warn('Unable to derive pole of inaccessibility:', level, code)
         return null
       }
-      const path = Path.parse(svg)
+      const path = Path.parse(svg, true)
       if (!path) {
         console.warn('Unable to derive pole of inaccessibility:', level, code)
         return null
@@ -297,7 +297,7 @@ export default class GeographyBuilder {
       errors.push(0)
       return convertLinesToGeometry([])
     }
-    const path = Path.parse(svg)
+    const path = Path.parse(svg, true)
     let lines
     if (path instanceof Three.Shape) {
       lines = path.curves.reduce((lines, path) => {

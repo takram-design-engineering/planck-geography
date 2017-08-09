@@ -77,7 +77,7 @@ export default {
     return (sum % 2) === 1
   },
 
-  parse(input) {
+  parse(input, flip = false) {
     let x1 = 0
     let y1 = 0
     let x2 = 0
@@ -102,7 +102,11 @@ export default {
           }
           path = new Three.Path()
           paths.push(path)
-          path.moveTo(x, y)
+          if (flip) {
+            path.moveTo(x, -y)
+          } else {
+            path.moveTo(x, y)
+          }
           break
         case 'L':
         case 'l':
@@ -113,7 +117,11 @@ export default {
             x = current.x
             y = current.y
           }
-          path.lineTo(x, y)
+          if (flip) {
+            path.lineTo(x, -y)
+          } else {
+            path.lineTo(x, y)
+          }
           break
         case 'V':
         case 'v':
@@ -122,7 +130,11 @@ export default {
           } else {
             y = current.y
           }
-          path.lineTo(x, y)
+          if (flip) {
+            path.lineTo(x, -y)
+          } else {
+            path.lineTo(x, y)
+          }
           break
         case 'H':
         case 'h':
@@ -131,7 +143,11 @@ export default {
           } else {
             x = current.x
           }
-          path.lineTo(x, y)
+          if (flip) {
+            path.lineTo(x, -y)
+          } else {
+            path.lineTo(x, y)
+          }
           break
         case 'C':
         case 'c':
@@ -150,7 +166,11 @@ export default {
             x = current.x
             y = current.y
           }
-          path.bezierCurveTo(x1, y1, x2, y2, x, y)
+          if (flip) {
+            path.bezierCurveTo(x1, -y1, x2, -y2, x, -y)
+          } else {
+            path.bezierCurveTo(x1, y1, x2, y2, x, y)
+          }
           break
         case 'S':
         case 's':
@@ -167,7 +187,11 @@ export default {
             x = current.x
             y = current.y
           }
-          path.bezierCurveTo(x1, y1, x2, y2, x, y)
+          if (flip) {
+            path.bezierCurveTo(x1, -y1, x2, -y2, x, -y)
+          } else {
+            path.bezierCurveTo(x1, y1, x2, y2, x, y)
+          }
           break
         case 'Q':
         case 'q':
@@ -182,7 +206,11 @@ export default {
             x = current.x
             y = current.y
           }
-          path.quadraticCurveTo(x1, y1, x, y)
+          if (flip) {
+            path.quadraticCurveTo(x1, -y1, x, -y)
+          } else {
+            path.quadraticCurveTo(x1, y1, x, y)
+          }
           break
         case 'T':
         case 't':
@@ -195,7 +223,11 @@ export default {
             x = current.x
             y = current.y
           }
-          path.quadraticCurveTo(x1, y1, x, y)
+          if (flip) {
+            path.quadraticCurveTo(x1, -y1, x, -y)
+          } else {
+            path.quadraticCurveTo(x1, y1, x, y)
+          }
           break
         case 'A':
         case 'a':

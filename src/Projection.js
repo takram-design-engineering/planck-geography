@@ -57,20 +57,28 @@ export default class Projection {
     scope.projector = this.projector
   }
 
-  project(coordinates) {
+  project(point, flip = false) {
     const scope = internal(this)
-    const result = scope.projector(coordinates)
+    const result = scope.projector(point)
     if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
-      throw new Error(`Could not project coordinates [${coordinates}]`)
+      throw new Error(`Could not project point [${point}]`)
+    }
+    if (flip) {
+      // Avoid negating zero
+      result[1] = result[1] || 0
     }
     return result
   }
 
-  unproject(coordinates) {
+  unproject(point, flip = false) {
     const scope = internal(this)
-    const result = scope.projector.invert(coordinates)
+    const result = scope.projector.invert([
+      point[0],
+      // Avoid negating zero
+      flip ? (-point[1] || 0) : point[1],
+    ])
     if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
-      throw new Error(`Could not project coordinates [${coordinates}]`)
+      throw new Error(`Could not unproject point [${point}]`)
     }
     return result
   }
