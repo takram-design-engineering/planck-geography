@@ -227,7 +227,7 @@ export default class GeographyBuilder {
         })
       })
       if (!polygon) {
-        console.warn('Failed to derive polygons')
+        console.warn('Unable to derive pole of inaccessibility:', level, code)
         return null
       }
       const svg = projection.path({
@@ -235,12 +235,12 @@ export default class GeographyBuilder {
         coordinates: polygon,
       })
       if (!svg) {
-        console.warn('Failed to project polygons')
+        console.warn('Unable to derive pole of inaccessibility:', level, code)
         return null
       }
       const path = Path.parse(svg)
       if (!path) {
-        console.warn('Failed to parse path')
+        console.warn('Unable to derive pole of inaccessibility:', level, code)
         return null
       }
       let paths
@@ -264,7 +264,7 @@ export default class GeographyBuilder {
       })
     })
     if (!polygon) {
-      console.warn('Failed to derive polygons')
+      console.warn('Unable to derive pole of inaccessibility:', level, code)
       return null
     }
     return polylabel(polygon, Math.sqrt(d3.geoArea({
@@ -317,7 +317,7 @@ export default class GeographyBuilder {
       geometries,
     }, errors)
     if (errors.length !== 0) {
-      console.warn(`${errors.length} polygons failed to project`)
+      console.warn(`Unable to project ${errors.length} polygons`)
     }
     return result
   }
@@ -330,7 +330,7 @@ export default class GeographyBuilder {
       geometries,
     }, errors)
     if (errors.length !== 0) {
-      console.warn(`${errors.length} polygons failed to project`)
+      console.warn(`Unable to project ${errors.length} polygons`)
     }
     return result
   }
@@ -343,7 +343,7 @@ export default class GeographyBuilder {
       geometries,
     }, errors)
     if (errors.length !== 0) {
-      console.warn(`${errors.length} polygons failed to project`)
+      console.warn(`Unable to project ${errors.length} polygons`)
     }
     return result
   }
@@ -373,7 +373,7 @@ export default class GeographyBuilder {
       }),
     }, errors)
     if (errors.length !== 0) {
-      console.warn(`${errors.length} polygons failed to project`)
+      console.warn(`Unable to project ${errors.length} polygons:`, level, code)
     }
     return result
   }
@@ -388,7 +388,7 @@ export default class GeographyBuilder {
       }),
     }, errors)
     if (errors.length !== 0) {
-      console.warn(`${errors.length} polygons failed to project`)
+      console.warn(`Unable to project ${errors.length} polygons:`, level, code)
     }
     return result
   }
