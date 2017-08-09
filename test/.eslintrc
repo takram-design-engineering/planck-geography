@@ -1,0 +1,16 @@
+{
+  'extends': '@takram/planck',
+  'globals': {
+    'after': true,
+    'afterEach': true,
+    'before': true,
+    'beforeEach': true,
+    'describe': true,
+    'expect': true,
+    'it': true,
+    'BUNDLER': true,
+  },
+  'rules': {
+    'no-unused-expressions': 0,
+  },
+}

@@ -1,0 +1,8 @@
+script:
+- npm install --no-save @takram/planck-core @takram/planck-worker three
+- npm run data:setup
+- npm run data:project
+- npm run test
+language: node_js
+node_js:
+- 8.1
