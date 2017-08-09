@@ -79,16 +79,29 @@ async function convertToTopoJSON({ shp, dbf }, method, encoding) {
     return topojson.topology({ geography: geojson }, 100000)
   }
   if (method === 'mapshaper') {
-    const data = await promisify(mapshaper.applyCommands)([
+    const result = await promisify(mapshaper.applyCommands)([
       `-i input.shp name=geography encoding=${encoding}`,
       '-o output.json format=topojson',
     ].join(' '), {
       'input.shp': shp,
       'input.dbf': dbf,
     })
-    return JSON.parse(data['output.json'])
+    return JSON.parse(result['output.json'])
   }
   throw new Error(`Unknown conversion method: ${method}`)
+}
+
+async function simplifyTopoJSON(data) {
+  console.log(chalk.cyan('Simplifying TopoJSON'))
+
+  const result = await promisify(mapshaper.applyCommands)([
+    `-i input.json`,
+    '-simplify weighted 50%',
+    '-o output.json format=topojson',
+  ].join(' '), {
+    'input.json': data,
+  })
+  return JSON.parse(result['output.json'])
 }
 
 function createCatalog(data, identifier, levels) {
@@ -192,12 +205,13 @@ async function main({
   }
 
   // Write topojson
-  const topojson = await convertToTopoJSON(shapefile, method, encoding)
+  let topojson = await convertToTopoJSON(shapefile, method, encoding)
   if (transform) {
     topojson.objects.geography.geometries.forEach(geometry => {
       geometry.properties = transform(geometry.properties)
     })
   }
+  topojson = await simplifyTopoJSON(topojson)
   await writeFiles(path.resolve(outputDir, `${identifier}.topojson`), topojson)
 
   // Write catalog
