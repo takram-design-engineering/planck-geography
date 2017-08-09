@@ -6068,6 +6068,8 @@ var Path$1 = {
     return sum % 2 === 1;
   },
   parse: function parse(input) {
+    var flip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
     var x1 = 0;
     var y1 = 0;
     var x2 = 0;
@@ -6092,7 +6094,11 @@ var Path$1 = {
           }
           path = new Three.Path();
           paths.push(path);
-          path.moveTo(x, y);
+          if (flip) {
+            path.moveTo(x, -y);
+          } else {
+            path.moveTo(x, y);
+          }
           break;
         case 'L':
         case 'l':
@@ -6103,7 +6109,11 @@ var Path$1 = {
             x = current.x;
             y = current.y;
           }
-          path.lineTo(x, y);
+          if (flip) {
+            path.lineTo(x, -y);
+          } else {
+            path.lineTo(x, y);
+          }
           break;
         case 'V':
         case 'v':
@@ -6112,7 +6122,11 @@ var Path$1 = {
           } else {
             y = current.y;
           }
-          path.lineTo(x, y);
+          if (flip) {
+            path.lineTo(x, -y);
+          } else {
+            path.lineTo(x, y);
+          }
           break;
         case 'H':
         case 'h':
@@ -6121,7 +6135,11 @@ var Path$1 = {
           } else {
             x = current.x;
           }
-          path.lineTo(x, y);
+          if (flip) {
+            path.lineTo(x, -y);
+          } else {
+            path.lineTo(x, y);
+          }
           break;
         case 'C':
         case 'c':
@@ -6140,7 +6158,11 @@ var Path$1 = {
             x = current.x;
             y = current.y;
           }
-          path.bezierCurveTo(x1, y1, x2, y2, x, y);
+          if (flip) {
+            path.bezierCurveTo(x1, -y1, x2, -y2, x, -y);
+          } else {
+            path.bezierCurveTo(x1, y1, x2, y2, x, y);
+          }
           break;
         case 'S':
         case 's':
@@ -6157,7 +6179,11 @@ var Path$1 = {
             x = current.x;
             y = current.y;
           }
-          path.bezierCurveTo(x1, y1, x2, y2, x, y);
+          if (flip) {
+            path.bezierCurveTo(x1, -y1, x2, -y2, x, -y);
+          } else {
+            path.bezierCurveTo(x1, y1, x2, y2, x, y);
+          }
           break;
         case 'Q':
         case 'q':
@@ -6172,7 +6198,11 @@ var Path$1 = {
             x = current.x;
             y = current.y;
           }
-          path.quadraticCurveTo(x1, y1, x, y);
+          if (flip) {
+            path.quadraticCurveTo(x1, -y1, x, -y);
+          } else {
+            path.quadraticCurveTo(x1, y1, x, y);
+          }
           break;
         case 'T':
         case 't':
@@ -6185,7 +6215,11 @@ var Path$1 = {
             x = current.x;
             y = current.y;
           }
-          path.quadraticCurveTo(x1, y1, x, y);
+          if (flip) {
+            path.quadraticCurveTo(x1, -y1, x, -y);
+          } else {
+            path.quadraticCurveTo(x1, y1, x, y);
+          }
           break;
         case 'A':
         case 'a':
@@ -6285,7 +6319,7 @@ function convertPolygonsToShapes(polygons, projection) {
       errors.push(index);
       return shapes;
     }
-    var path = Path$1.parse(svg);
+    var path = Path$1.parse(svg, true);
     var paths = void 0;
     if (path instanceof Three.Shape) {
       paths = path.curves;
@@ -6295,9 +6329,9 @@ function convertPolygonsToShapes(polygons, projection) {
     var shape = new Three.Shape();
     paths.forEach(function (path) {
       var winding = Path$1.winding(path.curves);
-      if (winding === 'ccw') {
+      if (winding === 'cw') {
         shape.add(path);
-      } else if (winding === 'cw') {
+      } else if (winding === 'ccw') {
         shape.holes.push(path);
       }
     });
@@ -6469,7 +6503,7 @@ var GeographyBuilder = function () {
           });
         });
         if (!_polygon) {
-          console.warn('Failed to derive polygons');
+          console.warn('Unable to derive pole of inaccessibility:', level, code);
           return null;
         }
         var svg = projection.path({
@@ -6477,12 +6511,12 @@ var GeographyBuilder = function () {
           coordinates: _polygon
         });
         if (!svg) {
-          console.warn('Failed to project polygons');
+          console.warn('Unable to derive pole of inaccessibility:', level, code);
           return null;
         }
-        var path = Path$1.parse(svg);
+        var path = Path$1.parse(svg, true);
         if (!path) {
-          console.warn('Failed to parse path');
+          console.warn('Unable to derive pole of inaccessibility:', level, code);
           return null;
         }
         var paths = void 0;
@@ -6508,7 +6542,7 @@ var GeographyBuilder = function () {
         });
       });
       if (!polygon) {
-        console.warn('Failed to derive polygons');
+        console.warn('Unable to derive pole of inaccessibility:', level, code);
         return null;
       }
       return index$6(polygon, Math.sqrt(d3.geoArea({
@@ -6562,7 +6596,7 @@ var GeographyBuilder = function () {
         errors.push(0);
         return convertLinesToGeometry([]);
       }
-      var path = Path$1.parse(svg);
+      var path = Path$1.parse(svg, true);
       var lines = void 0;
       if (path instanceof Three.Shape) {
         lines = path.curves.reduce(function (lines, path) {
@@ -6585,7 +6619,7 @@ var GeographyBuilder = function () {
         geometries: geometries
       }, errors);
       if (errors.length !== 0) {
-        console.warn(errors.length + ' polygons failed to project');
+        console.warn('Unable to project ' + errors.length + ' polygons');
       }
       return result;
     }
@@ -6601,7 +6635,7 @@ var GeographyBuilder = function () {
         geometries: geometries
       }, errors);
       if (errors.length !== 0) {
-        console.warn(errors.length + ' polygons failed to project');
+        console.warn('Unable to project ' + errors.length + ' polygons');
       }
       return result;
     }
@@ -6617,7 +6651,7 @@ var GeographyBuilder = function () {
         geometries: geometries
       }, errors);
       if (errors.length !== 0) {
-        console.warn(errors.length + ' polygons failed to project');
+        console.warn('Unable to project ' + errors.length + ' polygons');
       }
       return result;
     }
@@ -6657,7 +6691,7 @@ var GeographyBuilder = function () {
         })
       }, errors);
       if (errors.length !== 0) {
-        console.warn(errors.length + ' polygons failed to project');
+        console.warn('Unable to project ' + errors.length + ' polygons:', level, code);
       }
       return result;
     }
@@ -6677,7 +6711,7 @@ var GeographyBuilder = function () {
         })
       }, errors);
       if (errors.length !== 0) {
-        console.warn(errors.length + ' polygons failed to project');
+        console.warn('Unable to project ' + errors.length + ' polygons:', level, code);
       }
       return result;
     }
@@ -8371,21 +8405,31 @@ var Projection = function () {
 
   createClass(Projection, [{
     key: 'project',
-    value: function project(coordinates) {
+    value: function project(point) {
+      var flip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
       var scope = internal$6(this);
-      var result = scope.projector(coordinates);
+      var result = scope.projector(point);
       if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
-        throw new Error('Could not project coordinates [' + coordinates + ']');
+        throw new Error('Could not project point [' + point + ']');
+      }
+      if (flip) {
+        // Avoid negating zero
+        result[1] = result[1] || 0;
       }
       return result;
     }
   }, {
     key: 'unproject',
-    value: function unproject(coordinates) {
+    value: function unproject(point) {
+      var flip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
       var scope = internal$6(this);
-      var result = scope.projector.invert(coordinates);
+      var result = scope.projector.invert([point[0],
+      // Avoid negating zero
+      flip ? -point[1] || 0 : point[1]]);
       if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
-        throw new Error('Could not project coordinates [' + coordinates + ']');
+        throw new Error('Could not unproject point [' + point + ']');
       }
       return result;
     }
