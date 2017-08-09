@@ -233,7 +233,7 @@ async function writeDivisions(options) {
   })))
 }
 
-export default async function projection({
+async function main({
   catalog,
   topojson,
   output,
@@ -293,4 +293,17 @@ export default async function projection({
     writeGeography(options),
     writeDivisions(options),
   ])
+}
+
+export default async function project(options) {
+  const levels = options.levels.split(',')
+  let center
+  if (options.center) {
+    center = JSON.parse(options.center)
+  }
+  let rotates
+  if (options.rotates) {
+    rotates = JSON.parse(options.rotates)
+  }
+  await main({ ...options, levels, center, rotates })
 }

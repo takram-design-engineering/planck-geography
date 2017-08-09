@@ -39,13 +39,13 @@
     "watch:fixture": "nodemon -C --watch webpack.config.fixture.js --exec 'npm run test:compile:fixture'",
     "serve": "browser-sync start --server . --files dist --startPath test --no-notify",
     "data:setup": "npm-run-all --parallel data:setup:japan data:setup:us data:setup:world",
-    "data:setup:japan": "node data/index.js setup --preset=japan --output=dist/data --identifier=japan --levels={prefecture,municipality} --method=topojson --encoding=shift-jis",
-    "data:setup:us": "node data/index.js setup --preset=us --output=dist/data --identifier=us --levels={state,county} --method=mapshaper --encoding=utf-8",
+    "data:setup:japan": "node data/index.js setup --preset=japan --output=dist/data --identifier=japan --levels=prefecture,municipality --method=topojson --encoding=shift-jis",
+    "data:setup:us": "node data/index.js setup --preset=us --output=dist/data --identifier=us --levels=state,county --method=mapshaper --encoding=utf-8",
     "data:setup:world": "node data/index.js setup --preset=world --output=dist/data --identifier=world --levels=country --method=topojson --encoding=utf-8",
     "data:project": "npm-run-all --parallel data:project:japan data:project:us data:project:world",
-    "data:project:japan": "node data/index.js project --output=dist/data --identifier=japan --levels={prefecture,municipality} --name=TransverseMercator --center={137.16800932720935,36.99379114041933} --rotates={1,1}",
-    "data:project:us": "node data/index.js project --output=dist/data --identifier=us --levels={state,county} --name=AlbersUsa --center={-99.48157075125744,39.416441728431266} --rotates={0,0}",
-    "data:project:world": "node data/index.js project --output=dist/data --identifier=world --levels=country --name=PeirceQuincuncial --center={45,90} --rotates={1,1}"
+    "data:project:japan": "node data/index.js project --output=dist/data --identifier=japan --levels=prefecture,municipality --name=TransverseMercator --center=[137.16800932720935,36.99379114041933] --rotates=true",
+    "data:project:us": "node data/index.js project --output=dist/data --identifier=us --levels=state,county --name=AlbersUsa --center=[-99.48157075125744,39.416441728431266] --rotates=false",
+    "data:project:world": "node data/index.js project --output=dist/data --identifier=world --levels=country --name=PeirceQuincuncial --center=[45,90] --rotates=true"
   },
   "dependencies": {
     "babel-core": "^6.25.0",

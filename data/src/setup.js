@@ -161,7 +161,7 @@ async function writeFiles(file, data) {
   ])
 }
 
-export default async function setup({
+async function main({
   url,
   file,
   output,
@@ -203,4 +203,9 @@ export default async function setup({
   // Write catalog
   const catalog = createCatalog(topojson, identifier, [].concat(levels))
   await writeFiles(path.resolve(outputDir, `${identifier}.json`), catalog)
+}
+
+export default async function setup(options) {
+  const levels = options.levels.split(',')
+  await main({ ...options, levels })
 }
