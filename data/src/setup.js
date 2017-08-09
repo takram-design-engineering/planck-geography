@@ -95,7 +95,7 @@ async function simplifyTopoJSON(data) {
   console.log(chalk.cyan('Simplifying TopoJSON'))
 
   const result = await promisify(mapshaper.applyCommands)([
-    `-i input.json`,
+    '-i input.json',
     '-simplify weighted 50%',
     '-o output.json format=topojson',
   ].join(' '), {
