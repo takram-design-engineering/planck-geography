@@ -93,9 +93,9 @@ function convertPolygonsToShapes(polygons, projection, errors = []) {
     const shape = new Three.Shape()
     paths.forEach(path => {
       const winding = Path.winding(path.curves)
-      if (winding === 'cw') {
+      if (winding === 'ccw') {
         shape.add(path)
-      } else if (winding === 'ccw') {
+      } else if (winding === 'cw') {
         shape.holes.push(path)
       }
     })
