@@ -32,7 +32,6 @@ import polylabel from 'polylabel'
 
 import Array from '@takram/planck-core/src/Array'
 import External from '@takram/planck-core/src/External'
-import FilePath from '@takram/planck-core/src/FilePath'
 import Namespace from '@takram/planck-core/src/Namespace'
 import Request from '@takram/planck-core/src/Request'
 
@@ -168,7 +167,6 @@ export default class GeographyBuilder {
   async init(data) {
     const scope = internal(this)
     if (typeof data === 'string') {
-      const path = FilePath.resolve(data)
       scope.data = await Request.json(path, { local: true })
     } else {
       scope.data = await Promise.resolve(data)
