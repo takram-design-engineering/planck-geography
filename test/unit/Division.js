@@ -51,7 +51,7 @@ describe('Division', function () {
 
   before(async () => {
     await geography.init('/dist/data/japan.json')
-    division = geography.level('prefecture').division(1)
+    division = geography.division('prefecture', 1)
   })
 
   describe('#bounds', () => {

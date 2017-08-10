@@ -62,10 +62,6 @@ export default class Geography {
     return [...scope.levels]
   }
 
-  level(identifier) {
-    return this.levels.find(level => level.identifier === identifier)
-  }
-
   get path() {
     const scope = internal(this)
     return scope.path
@@ -77,6 +73,30 @@ export default class Geography {
       throw new Error(`Data is missing for ${this.identifier}`)
     }
     return scope.data
+  }
+
+  division(identifier, code) {
+    const level = this.levels.find(level => level.identifier === identifier)
+    if (level === undefined) {
+      throw new Error(`Could not find ${identifier} level in geography`)
+    }
+    return level.division(code)
+  }
+
+  divisions(identifier) {
+    const level = this.levels.find(level => level.identifier === identifier)
+    if (level === undefined) {
+      throw new Error(`Could not find ${identifier} level in geography`)
+    }
+    return level.divisions()
+  }
+
+  codes(identifier) {
+    const level = this.levels.find(level => level.identifier === identifier)
+    if (level === undefined) {
+      throw new Error(`Could not find ${identifier} level in geography`)
+    }
+    return level.codes()
   }
 
   async properties(projection) {
