@@ -28,6 +28,7 @@ import 'source-map-support/register'
 
 import chai from 'chai'
 
+import { FilePath } from '@takram/planck-core'
 import { GeographyBuilder, Projection } from '../..'
 
 const expect = chai.expect
@@ -42,7 +43,7 @@ describe('GeographyBuilder', function () {
   const builder = new GeographyBuilder(['prefecture', 'municipality'])
 
   before(async () => {
-    await builder.init('dist/data/japan.topojson')
+    await builder.init(FilePath.resolve('dist/data/japan.topojson'))
   })
 
   describe('#bounds', () => {
