@@ -153,7 +153,7 @@ export default class DivisionLevel {
       scope.geometries[hash] = geometries
     }
     if (geometries[name] === undefined) {
-      geometries[name] = await this.requestGeometries(name, projection)
+      geometries[name] = this.requestGeometries(name, projection)
     }
     return geometries[name]
   }

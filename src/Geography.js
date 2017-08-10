@@ -139,7 +139,7 @@ export default class Geography {
       scope.geometries[hash] = geometries
     }
     if (geometries[name] === undefined) {
-      geometries[name] = await this.requestGeometry(name, projection)
+      geometries[name] = this.requestGeometry(name, projection)
     }
     return geometries[name]
   }

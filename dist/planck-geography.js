@@ -2322,22 +2322,12 @@ var DivisionLevel = function () {
                   geometries = {};
                   scope.geometries[hash] = geometries;
                 }
-
-                if (!(geometries[name] === undefined)) {
-                  _context2.next = 8;
-                  break;
+                if (geometries[name] === undefined) {
+                  geometries[name] = this.requestGeometries(name, projection);
                 }
-
-                _context2.next = 7;
-                return this.requestGeometries(name, projection);
-
-              case 7:
-                geometries[name] = _context2.sent;
-
-              case 8:
                 return _context2.abrupt('return', geometries[name]);
 
-              case 9:
+              case 6:
               case 'end':
                 return _context2.stop();
             }
@@ -2771,22 +2761,12 @@ var Geography = function () {
                   geometries = {};
                   scope.geometries[hash] = geometries;
                 }
-
-                if (!(geometries[name] === undefined)) {
-                  _context7.next = 8;
-                  break;
+                if (geometries[name] === undefined) {
+                  geometries[name] = this.requestGeometry(name, projection);
                 }
-
-                _context7.next = 7;
-                return this.requestGeometry(name, projection);
-
-              case 7:
-                geometries[name] = _context7.sent;
-
-              case 8:
                 return _context7.abrupt('return', geometries[name]);
 
-              case 9:
+              case 6:
               case 'end':
                 return _context7.stop();
             }
