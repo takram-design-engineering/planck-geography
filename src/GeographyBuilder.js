@@ -167,7 +167,7 @@ export default class GeographyBuilder {
   async init(data) {
     const scope = internal(this)
     if (typeof data === 'string') {
-      scope.data = await Request.json(path, { local: true })
+      scope.data = await Request.json(data, { local: true })
     } else {
       scope.data = await Promise.resolve(data)
     }
