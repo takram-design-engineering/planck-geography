@@ -109,7 +109,7 @@ export default class Geography {
         this.identifier,
         'properties.json',
       )
-      scope.properties[hash] = await Request.json(path, { local: true })
+      scope.properties[hash] = Request.json(path, { local: true })
     }
     return scope.properties[hash]
   }
