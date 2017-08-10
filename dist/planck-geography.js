@@ -2596,7 +2596,7 @@ var Geography = function () {
       if (level === undefined) {
         throw new Error('Could not find ' + identifier + ' level in geography');
       }
-      return level.divisions();
+      return level.divisions;
     }
   }, {
     key: 'codes',
@@ -2607,7 +2607,7 @@ var Geography = function () {
       if (level === undefined) {
         throw new Error('Could not find ' + identifier + ' level in geography');
       }
-      return level.codes();
+      return level.codes;
     }
   }, {
     key: 'properties',

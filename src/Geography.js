@@ -88,7 +88,7 @@ export default class Geography {
     if (level === undefined) {
       throw new Error(`Could not find ${identifier} level in geography`)
     }
-    return level.divisions()
+    return level.divisions
   }
 
   codes(identifier) {
@@ -96,7 +96,7 @@ export default class Geography {
     if (level === undefined) {
       throw new Error(`Could not find ${identifier} level in geography`)
     }
-    return level.codes()
+    return level.codes
   }
 
   async properties(projection) {
