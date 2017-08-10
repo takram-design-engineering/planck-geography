@@ -8372,8 +8372,8 @@ var Projection = function () {
         name = _ref$name === undefined ? 'Equirectangular' : _ref$name,
         _ref$scale = _ref.scale,
         scale = _ref$scale === undefined ? 10000 : _ref$scale,
-        _ref$center = _ref.center,
-        center = _ref$center === undefined ? [0, 0] : _ref$center,
+        _ref$origin = _ref.origin,
+        origin = _ref$origin === undefined ? [0, 0] : _ref$origin,
         _ref$rotates = _ref.rotates,
         rotates = _ref$rotates === undefined ? [true, true] : _ref$rotates;
 
@@ -8382,10 +8382,10 @@ var Projection = function () {
     var scope = internal$6(this);
     scope.name = name;
     scope.scale = +scale || 1;
-    if (Array.isArray(center)) {
-      scope.center = [+center[0] || 0, +center[1] || 0];
+    if (Array.isArray(origin)) {
+      scope.origin = [+origin[0] || 0, +origin[1] || 0];
     } else {
-      scope.center = [+center || 0, +center || 0];
+      scope.origin = [+origin || 0, +origin || 0];
     }
     if (Array.isArray(rotates)) {
       scope.rotates = [!!rotates[0], !!rotates[1]];
@@ -8428,19 +8428,19 @@ var Projection = function () {
   }, {
     key: 'sun',
     value: function sun(time) {
-      var center = this.center;
-      return suncalc.getPosition(time, center[1], center[0]);
+      var origin = this.origin;
+      return suncalc.getPosition(time, origin[1], origin[0]);
     }
   }, {
     key: 'moon',
     value: function moon(time) {
-      var center = this.center;
-      return suncalc.getMoonPosition(time, center[1], center[0]);
+      var origin = this.origin;
+      return suncalc.getMoonPosition(time, origin[1], origin[0]);
     }
   }, {
     key: 'equals',
     value: function equals(other) {
-      return this.name === other.name && this.scale === other.scale && this.center[0] === other.center[0] && this.center[1] === other.center[1] && this.rotates[0] === other.rotates[0] && this.rotates[1] === other.rotates[1];
+      return this.name === other.name && this.scale === other.scale && this.origin[0] === other.origin[0] && this.origin[1] === other.origin[1] && this.rotates[0] === other.rotates[0] && this.rotates[1] === other.rotates[1];
     }
   }, {
     key: 'toJSON',
@@ -8448,7 +8448,7 @@ var Projection = function () {
       return {
         name: this.name,
         scale: this.scale,
-        center: this.center,
+        origin: this.origin,
         rotates: this.rotates
       };
     }
@@ -8463,16 +8463,16 @@ var Projection = function () {
       if (typeof projector.rotate === 'function') {
         var rotation = [0, 0, 0];
         if (this.rotates[0]) {
-          rotation[0] = -this.center[0];
+          rotation[0] = -this.origin[0];
         }
         if (this.rotates[1]) {
-          rotation[1] = -this.center[1];
+          rotation[1] = -this.origin[1];
         }
         projector.rotate(rotation);
       }
       projector.translate([0, 0]);
       projector.scale(this.scale);
-      var offset = projector(this.center);
+      var offset = projector(this.origin);
       if (Array.isArray(offset)) {
         projector.translate([-offset[0], -offset[1]]);
       }
@@ -8497,10 +8497,10 @@ var Projection = function () {
       return scope.scale;
     }
   }, {
-    key: 'center',
+    key: 'origin',
     get: function get$$1() {
       var scope = internal$6(this);
-      return [].concat(toConsumableArray(scope.center));
+      return [].concat(toConsumableArray(scope.origin));
     }
   }, {
     key: 'rotates',

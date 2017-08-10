@@ -297,13 +297,13 @@ async function main({
 
 export default async function project(options) {
   const levels = options.levels.split(',')
-  let center
-  if (options.center) {
-    center = JSON.parse(options.center)
+  let origin
+  if (options.origin) {
+    origin = JSON.parse(options.origin)
   }
   let rotates
   if (options.rotates) {
     rotates = JSON.parse(options.rotates)
   }
-  await main({ ...options, levels, center, rotates })
+  await main({ ...options, levels, origin, rotates })
 }

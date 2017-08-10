@@ -42,7 +42,7 @@ describe('Geography', function () {
   const geography = new JapanGeography()
   const projection = new Projection({
     name: 'TransverseMercator',
-    center: [137.16800932720935, 36.99379114041933],
+    origin: [137.2, 37],
     rotates: [true, true],
   })
 

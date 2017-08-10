@@ -38,16 +38,16 @@ export default class Projection {
   constructor({
     name = 'Equirectangular',
     scale = 10000,
-    center = [0, 0],
+    origin = [0, 0],
     rotates = [true, true],
   } = {}) {
     const scope = internal(this)
     scope.name = name
     scope.scale = +scale || 1
-    if (Array.isArray(center)) {
-      scope.center = [+center[0] || 0, +center[1] || 0]
+    if (Array.isArray(origin)) {
+      scope.origin = [+origin[0] || 0, +origin[1] || 0]
     } else {
-      scope.center = [+center || 0, +center || 0]
+      scope.origin = [+origin || 0, +origin || 0]
     }
     if (Array.isArray(rotates)) {
       scope.rotates = [!!rotates[0], !!rotates[1]]
@@ -92,16 +92,16 @@ export default class Projection {
     if (typeof projector.rotate === 'function') {
       const rotation = [0, 0, 0]
       if (this.rotates[0]) {
-        rotation[0] = -this.center[0]
+        rotation[0] = -this.origin[0]
       }
       if (this.rotates[1]) {
-        rotation[1] = -this.center[1]
+        rotation[1] = -this.origin[1]
       }
       projector.rotate(rotation)
     }
     projector.translate([0, 0])
     projector.scale(this.scale)
-    const offset = projector(this.center)
+    const offset = projector(this.origin)
     if (Array.isArray(offset)) {
       projector.translate([-offset[0], -offset[1]])
     }
@@ -114,13 +114,13 @@ export default class Projection {
   }
 
   sun(time) {
-    const center = this.center
-    return suncalc.getPosition(time, center[1], center[0])
+    const origin = this.origin
+    return suncalc.getPosition(time, origin[1], origin[0])
   }
 
   moon(time) {
-    const center = this.center
-    return suncalc.getMoonPosition(time, center[1], center[0])
+    const origin = this.origin
+    return suncalc.getMoonPosition(time, origin[1], origin[0])
   }
 
   get name() {
@@ -133,9 +133,9 @@ export default class Projection {
     return scope.scale
   }
 
-  get center() {
+  get origin() {
     const scope = internal(this)
-    return [...scope.center]
+    return [...scope.origin]
   }
 
   get rotates() {
@@ -155,8 +155,8 @@ export default class Projection {
     return (
       this.name === other.name &&
       this.scale === other.scale &&
-      this.center[0] === other.center[0] &&
-      this.center[1] === other.center[1] &&
+      this.origin[0] === other.origin[0] &&
+      this.origin[1] === other.origin[1] &&
       this.rotates[0] === other.rotates[0] &&
       this.rotates[1] === other.rotates[1])
   }
@@ -165,7 +165,7 @@ export default class Projection {
     return {
       name: this.name,
       scale: this.scale,
-      center: this.center,
+      origin: this.origin,
       rotates: this.rotates,
     }
   }

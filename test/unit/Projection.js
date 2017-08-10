@@ -35,7 +35,7 @@ describe('Projection', () => {
     const projection = new Projection()
     expect(projection.name).equal('Equirectangular')
     expect(projection.scale).equal(10000)
-    expect(projection.center).deep.equal([0, 0])
+    expect(projection.origin).deep.equal([0, 0])
     expect(projection.rotates).deep.equal([true, true])
   })
 
@@ -43,7 +43,7 @@ describe('Projection', () => {
     [
       new Projection({ name: 'TransverseMercator' }),
       new Projection({ scale: 1 }),
-      new Projection({ center: [1, 1] }),
+      new Projection({ origin: [1, 1] }),
       new Projection({ rotates: [false, false] }),
     ].forEach(projection => {
       expect(projection.equals(new Projection())).false
@@ -56,7 +56,7 @@ describe('Projection', () => {
       new Projection(),
       new Projection({ name: 'PeirceQuincuncial' }),
       new Projection({ scale: 1 }),
-      new Projection({ center: [1, 1] }),
+      new Projection({ origin: [1, 1] }),
       new Projection({ rotates: [false, false] }),
     ].forEach(projection => {
       expect(projection.equals(new Projection(projection.toJSON()))).true

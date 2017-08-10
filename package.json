@@ -43,9 +43,9 @@
     "data:setup:us": "node data/index.js setup --preset=us --output=dist/data --identifier=us --levels=state,county --method=mapshaper --encoding=utf-8",
     "data:setup:world": "node data/index.js setup --preset=world --output=dist/data --identifier=world --levels=country --method=topojson --encoding=utf-8",
     "data:project": "npm-run-all --parallel data:project:japan data:project:us data:project:world",
-    "data:project:japan": "node data/index.js project --output=dist/data --identifier=japan --levels=prefecture,municipality --name=TransverseMercator --center=[137.16800932720935,36.99379114041933] --rotates=true",
-    "data:project:us": "node data/index.js project --output=dist/data --identifier=us --levels=state,county --name=AlbersUsa --center=[-99.48157075125744,39.416441728431266] --rotates=false",
-    "data:project:world": "node data/index.js project --output=dist/data --identifier=world --levels=country --name=PeirceQuincuncial --center=[45,90] --rotates=true"
+    "data:project:japan": "node data/index.js project --output=dist/data --identifier=japan --levels=prefecture,municipality --name=TransverseMercator --origin=[137.2,37] --rotates=true",
+    "data:project:us": "node data/index.js project --output=dist/data --identifier=us --levels=state,county --name=AlbersUsa --origin=[-99.5,39.5] --rotates=false",
+    "data:project:world": "node data/index.js project --output=dist/data --identifier=world --levels=country --name=PeirceQuincuncial --origin=[45,90] --rotates=true"
   },
   "dependencies": {
     "babel-core": "^6.25.0",
