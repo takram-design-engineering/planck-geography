@@ -42,14 +42,14 @@ export default class Geography {
   async init(path, data) {
     const scope = internal(this)
     scope.path = path
-    this.levels.map(level => {
-      return level.init(this)
-    })
     if (data) {
       scope.data = await Promise.resolve(data)
     } else {
       scope.data = await Request.json(path, { local: true })
     }
+    await Promise.all(this.levels.map(level => {
+      return level.init(this)
+    }))
   }
 
   get identifier() {
