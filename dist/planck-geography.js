@@ -2582,11 +2582,37 @@ var Geography = function () {
       return init;
     }()
   }, {
-    key: 'level',
-    value: function level(identifier) {
-      return this.levels.find(function (level) {
+    key: 'division',
+    value: function division(identifier, code) {
+      var level = this.levels.find(function (level) {
         return level.identifier === identifier;
       });
+      if (level === undefined) {
+        throw new Error('Could not find ' + identifier + ' level in geography');
+      }
+      return level.division(code);
+    }
+  }, {
+    key: 'divisions',
+    value: function divisions(identifier) {
+      var level = this.levels.find(function (level) {
+        return level.identifier === identifier;
+      });
+      if (level === undefined) {
+        throw new Error('Could not find ' + identifier + ' level in geography');
+      }
+      return level.divisions();
+    }
+  }, {
+    key: 'codes',
+    value: function codes(identifier) {
+      var level = this.levels.find(function (level) {
+        return level.identifier === identifier;
+      });
+      if (level === undefined) {
+        throw new Error('Could not find ' + identifier + ' level in geography');
+      }
+      return level.codes();
     }
   }, {
     key: 'properties',
@@ -6329,9 +6355,9 @@ function convertPolygonsToShapes(polygons, projection) {
     var shape = new Three.Shape();
     paths.forEach(function (path) {
       var winding = Path$1.winding(path.curves);
-      if (winding === 'cw') {
+      if (winding === 'ccw') {
         shape.add(path);
-      } else if (winding === 'ccw') {
+      } else if (winding === 'cw') {
         shape.holes.push(path);
       }
     });
