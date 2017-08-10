@@ -2284,22 +2284,14 @@ var DivisionLevel = function () {
                 scope = internal$1(this);
                 hash = projection ? projection.hash : null;
 
-                if (!(scope.properties[hash] === undefined)) {
-                  _context.next = 7;
-                  break;
+                if (scope.properties[hash] === undefined) {
+                  path = FilePath.join(FilePath.dirname(this.geography.path), hash || '', this.geography.identifier, this.identifier, 'properties.json');
+
+                  scope.properties[hash] = Request.json(path, { local: true });
                 }
-
-                path = FilePath.join(FilePath.dirname(this.geography.path), hash || '', this.geography.identifier, this.identifier, 'properties.json');
-                _context.next = 6;
-                return Request.json(path, { local: true });
-
-              case 6:
-                scope.properties[hash] = _context.sent;
-
-              case 7:
                 return _context.abrupt('return', scope.properties[hash]);
 
-              case 8:
+              case 4:
               case 'end':
                 return _context.stop();
             }
@@ -2543,31 +2535,34 @@ var Geography = function () {
                 scope = internal$3(this);
 
                 scope.path = path;
-                this.levels.map(function (level) {
-                  return level.init(_this);
-                });
 
                 if (!data) {
-                  _context.next = 9;
+                  _context.next = 8;
                   break;
                 }
 
-                _context.next = 6;
+                _context.next = 5;
                 return Promise.resolve(data);
 
-              case 6:
+              case 5:
                 scope.data = _context.sent;
-                _context.next = 12;
+                _context.next = 11;
                 break;
 
-              case 9:
-                _context.next = 11;
+              case 8:
+                _context.next = 10;
                 return Request.json(path, { local: true });
 
-              case 11:
+              case 10:
                 scope.data = _context.sent;
 
-              case 12:
+              case 11:
+                _context.next = 13;
+                return Promise.all(this.levels.map(function (level) {
+                  return level.init(_this);
+                }));
+
+              case 13:
               case 'end':
                 return _context.stop();
             }
@@ -2626,22 +2621,14 @@ var Geography = function () {
                 scope = internal$3(this);
                 hash = projection ? projection.hash : null;
 
-                if (!(scope.properties[hash] === undefined)) {
-                  _context2.next = 7;
-                  break;
+                if (scope.properties[hash] === undefined) {
+                  path = FilePath.join(FilePath.dirname(this.path), hash || '', this.identifier, 'properties.json');
+
+                  scope.properties[hash] = Request.json(path, { local: true });
                 }
-
-                path = FilePath.join(FilePath.dirname(this.path), hash || '', this.identifier, 'properties.json');
-                _context2.next = 6;
-                return Request.json(path, { local: true });
-
-              case 6:
-                scope.properties[hash] = _context2.sent;
-
-              case 7:
                 return _context2.abrupt('return', scope.properties[hash]);
 
-              case 8:
+              case 4:
               case 'end':
                 return _context2.stop();
             }
@@ -6429,7 +6416,7 @@ var GeographyBuilder = function () {
     key: 'init',
     value: function () {
       var _ref = asyncToGenerator(regeneratorRuntime.mark(function _callee(data) {
-        var scope, path;
+        var scope;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -6437,27 +6424,26 @@ var GeographyBuilder = function () {
                 scope = internal$4(this);
 
                 if (!(typeof data === 'string')) {
-                  _context.next = 8;
+                  _context.next = 7;
                   break;
                 }
 
-                path = FilePath.resolve(data);
-                _context.next = 5;
-                return Request.json(path, { local: true });
+                _context.next = 4;
+                return Request.json(data, { local: true });
 
-              case 5:
+              case 4:
                 scope.data = _context.sent;
-                _context.next = 11;
+                _context.next = 10;
                 break;
 
-              case 8:
-                _context.next = 10;
+              case 7:
+                _context.next = 9;
                 return Promise.resolve(data);
 
-              case 10:
+              case 9:
                 scope.data = _context.sent;
 
-              case 11:
+              case 10:
               case 'end':
                 return _context.stop();
             }
