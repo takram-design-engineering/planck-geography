@@ -85,22 +85,22 @@ function packBufferGeometries(geometries) {
 }
 
 function unpackBufferGeometry(data, buffer) {
-  const scope = data.data
-  if (scope) {
-    if (scope.index) {
-      const { type } = scope.index
-      const view = new Environment.self[type](buffer, ...scope.index.array)
-      scope.index.array = view
-    }
-    if (scope.attributes) {
-      Object.values(scope.attributes).forEach(attribute => {
-        const { type } = attribute
-        const view = new Environment.self[type](buffer, ...attribute.array)
-        attribute.array = view
-      })
-    }
+  const copy = { ...data, data: { ...data.data } }
+  if (copy.data.index) {
+    const { type } = copy.data.index
+    const view = new Environment.self[type](buffer, ...copy.data.index.array)
+    copy.data.index = { ...copy.data.index, array: view }
   }
-  return new Three.BufferGeometryLoader().parse(data)
+  if (copy.data.attributes) {
+    const entries = Object.entries(copy.data.attributes)
+    copy.data.attributes = entries.reduce((attributes, entry) => {
+      const [name, attribute] = entry
+      const { type } = attribute
+      const view = new Environment.self[type](buffer, ...attribute.array)
+      return { ...attributes, [name]: { ...attribute, array: view } }
+    }, {})
+  }
+  return new Three.BufferGeometryLoader().parse(copy)
 }
 
 function mergeBuffers(buffers, byteLength) {
