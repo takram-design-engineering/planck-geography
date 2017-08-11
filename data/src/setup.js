@@ -208,6 +208,7 @@ async function main({
   let topojson = await convertToTopoJSON(shapefile, method, encoding)
   if (transform) {
     topojson.objects.geography.geometries.forEach(geometry => {
+      // eslint-disable-next-line no-param-reassign
       geometry.properties = transform(geometry.properties)
     })
   }
