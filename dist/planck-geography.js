@@ -38,6 +38,7 @@ function Namespace() {
     };
 
     if (object[symbol] === undefined) {
+      // eslint-disable-next-line no-param-reassign
       object[symbol] = init({});
     }
     return object[symbol];
@@ -2144,33 +2145,36 @@ function _packBufferGeometries(geometries) {
 }
 
 function _unpackBufferGeometry(data, buffer) {
-  var scope = data.data;
-  if (scope) {
-    if (scope.index) {
-      var type = scope.index.type;
+  var copy = _extends({}, data, { data: _extends({}, data.data) });
+  if (copy.data.index) {
+    var type = copy.data.index.type;
 
-      var view = new (Function.prototype.bind.apply(Environment.self[type], [null].concat([buffer], toConsumableArray(scope.index.array))))();
-      scope.index.array = view;
-    }
-    if (scope.attributes) {
-      Object.values(scope.attributes).forEach(function (attribute) {
-        var type = attribute.type;
-
-        var view = new (Function.prototype.bind.apply(Environment.self[type], [null].concat([buffer], toConsumableArray(attribute.array))))();
-        attribute.array = view;
-      });
-    }
+    var view = new (Function.prototype.bind.apply(Environment.self[type], [null].concat([buffer], toConsumableArray(copy.data.index.array))))();
+    copy.data.index = _extends({}, copy.data.index, { array: view });
   }
-  return new Three.BufferGeometryLoader().parse(data);
+  if (copy.data.attributes) {
+    var entries = Object.entries(copy.data.attributes);
+    copy.data.attributes = entries.reduce(function (attributes, entry) {
+      var _entry3 = slicedToArray(entry, 2),
+          name = _entry3[0],
+          attribute = _entry3[1];
+
+      var type = attribute.type;
+
+      var view = new (Function.prototype.bind.apply(Environment.self[type], [null].concat([buffer], toConsumableArray(attribute.array))))();
+      return _extends({}, attributes, defineProperty({}, name, _extends({}, attribute, { array: view })));
+    }, {});
+  }
+  return new Three.BufferGeometryLoader().parse(copy);
 }
 
 function mergeBuffers(buffers, byteLength) {
   var buffer = new ArrayBuffer(byteLength);
   var view = new Uint8Array(buffer);
   buffers.forEach(function (entry) {
-    var _entry3 = slicedToArray(entry, 2),
-        buffer = _entry3[0],
-        byteOffset = _entry3[1];
+    var _entry4 = slicedToArray(entry, 2),
+        buffer = _entry4[0],
+        byteOffset = _entry4[1];
 
     view.set(new Uint8Array(buffer), byteOffset);
   });
@@ -2208,9 +2212,9 @@ var GeometryPack = {
       });
     }
     return Object.entries(data).reduce(function (result, entry) {
-      var _entry4 = slicedToArray(entry, 2),
-          key = _entry4[0],
-          data = _entry4[1];
+      var _entry5 = slicedToArray(entry, 2),
+          key = _entry5[0],
+          data = _entry5[1];
 
       return Object.assign(result, defineProperty({}, key, _unpackBufferGeometry(data, buffer)));
     }, {});
