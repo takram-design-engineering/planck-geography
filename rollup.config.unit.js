@@ -52,6 +52,9 @@ export default {
   external: [
     'source-map-support/register',
     '@takram/planck-core',
+    'd3-array',
+    'd3-geo',
+    'd3-geo-projection',
     'three',
     path.resolve(pkg.browser),
     'chai',
@@ -59,6 +62,9 @@ export default {
   ],
   globals: {
     '@takram/planck-core': 'Planck',
+    'd3-array': 'd3',
+    'd3-geo': 'd3',
+    'd3-geo-projection': 'd3',
     'three': 'THREE',
     [path.resolve(pkg.browser)]: 'Planck',
     'chai': 'chai',
