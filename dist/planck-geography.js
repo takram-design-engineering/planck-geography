@@ -6740,7 +6740,7 @@ var GeographyBuilder = function () {
 
       // Remember the indices of geometries in this division
       var indices = geometries.filter(function (geometry) {
-        return includesGeometryObject(superlevel, code, geometry);
+        return includesGeometryObject(level, code, geometry);
       }).map(function (geometry) {
         return geometries.indexOf(geometry);
       });
