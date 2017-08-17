@@ -413,7 +413,7 @@ export default class GeographyBuilder {
     // Remember the indices of geometries in this division
     const indices = geometries
       .filter(geometry => {
-        return includesGeometryObject(superlevel, code, geometry)
+        return includesGeometryObject(level, code, geometry)
       })
       .map(geometry => {
         return geometries.indexOf(geometry)
