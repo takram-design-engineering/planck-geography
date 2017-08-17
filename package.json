@@ -48,13 +48,13 @@
     "data:project:world": "node data/index.js project --output=dist/data --identifier=world --levels=country --name=PeirceQuincuncial --origin=[45,90] --rotates=true"
   },
   "dependencies": {
-    "babel-core": "^6.25.0",
-    "babel-polyfill": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
     "chalk": "^2.1.0",
     "decompress": "^4.2.0",
     "download": "^6.2.5",
     "earcut": "^2.1.1",
-    "mapshaper": "^0.4.44",
+    "mapshaper": "^0.4.47",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "polylabel": "^1.0.2",
@@ -95,8 +95,8 @@
     "mocha": "^3.5.0",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.2",
-    "rollup": "^0.46.3",
-    "rollup-plugin-babel": "^3.0.1",
+    "rollup": "^0.47.6",
+    "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.1.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "sauce-connect-launcher": "^1.2.2",
@@ -104,7 +104,7 @@
     "source-map-support": "^0.4.15",
     "three": "^0.86.0",
     "uglify-js": "^3.0.27",
-    "webpack": "^3.5.3"
+    "webpack": "^3.5.5"
   },
   "saucelabs": {
     "framework": "mocha",
