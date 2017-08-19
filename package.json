@@ -38,7 +38,6 @@
     "watch:webpack": "nodemon -C --watch webpack.config.unit.js --exec 'npm run test:compile:webpack'",
     "watch:fixture": "nodemon -C --watch webpack.config.fixture.js --exec 'npm run test:compile:fixture'",
     "serve": "browser-sync start --server . --files dist --startPath test --no-open --no-notify",
-    "link": "npm link @takram/planck-core @takram/planck-worker",
     "data:setup": "npm-run-all --parallel data:setup:japan data:setup:us data:setup:world",
     "data:setup:japan": "node data/index.js setup --preset=japan --output=dist/data --identifier=japan --levels=prefecture,municipality --method=topojson --encoding=shift-jis",
     "data:setup:us": "node data/index.js setup --preset=us --output=dist/data --identifier=us --levels=state,county --method=mapshaper --encoding=utf-8",
