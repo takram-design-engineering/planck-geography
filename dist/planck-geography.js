@@ -283,7 +283,7 @@ var Division = function () {
   createClass(Division, [{
     key: 'properties',
     value: function () {
-      var _ref = asyncToGenerator(regeneratorRuntime.mark(function _callee(projection) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(projection) {
         var properties, code, result, level;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -325,7 +325,7 @@ var Division = function () {
   }, {
     key: 'bounds',
     value: function () {
-      var _ref2 = asyncToGenerator(regeneratorRuntime.mark(function _callee2(projection) {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(projection) {
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -353,7 +353,7 @@ var Division = function () {
   }, {
     key: 'area',
     value: function () {
-      var _ref3 = asyncToGenerator(regeneratorRuntime.mark(function _callee3(projection) {
+      var _ref3 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(projection) {
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -381,7 +381,7 @@ var Division = function () {
   }, {
     key: 'centroid',
     value: function () {
-      var _ref4 = asyncToGenerator(regeneratorRuntime.mark(function _callee4(projection) {
+      var _ref4 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(projection) {
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -409,7 +409,7 @@ var Division = function () {
   }, {
     key: 'poleOfInaccessibility',
     value: function () {
-      var _ref5 = asyncToGenerator(regeneratorRuntime.mark(function _callee5(projection) {
+      var _ref5 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(projection) {
         return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -437,7 +437,7 @@ var Division = function () {
   }, {
     key: 'geometry',
     value: function () {
-      var _ref6 = asyncToGenerator(regeneratorRuntime.mark(function _callee6(name, projection) {
+      var _ref6 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(name, projection) {
         var geometries, code, result, level;
         return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
@@ -479,7 +479,7 @@ var Division = function () {
   }, {
     key: 'shapeGeometry',
     value: function () {
-      var _ref7 = asyncToGenerator(regeneratorRuntime.mark(function _callee7(projection) {
+      var _ref7 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(projection) {
         return regeneratorRuntime.wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
@@ -503,7 +503,7 @@ var Division = function () {
   }, {
     key: 'outlineGeometry',
     value: function () {
-      var _ref8 = asyncToGenerator(regeneratorRuntime.mark(function _callee8(projection) {
+      var _ref8 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(projection) {
         return regeneratorRuntime.wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
@@ -527,7 +527,7 @@ var Division = function () {
   }, {
     key: 'borderGeometry',
     value: function () {
-      var _ref9 = asyncToGenerator(regeneratorRuntime.mark(function _callee9(projection) {
+      var _ref9 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(projection) {
         return regeneratorRuntime.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
@@ -551,7 +551,7 @@ var Division = function () {
   }, {
     key: 'subdivisionGeometry',
     value: function () {
-      var _ref10 = asyncToGenerator(regeneratorRuntime.mark(function _callee10(projection) {
+      var _ref10 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(projection) {
         return regeneratorRuntime.wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
@@ -2279,7 +2279,7 @@ var DivisionLevel = function () {
   }, {
     key: 'properties',
     value: function () {
-      var _ref = asyncToGenerator(regeneratorRuntime.mark(function _callee(projection) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(projection) {
         var scope, hash, path;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -2312,7 +2312,7 @@ var DivisionLevel = function () {
   }, {
     key: 'geometries',
     value: function () {
-      var _ref2 = asyncToGenerator(regeneratorRuntime.mark(function _callee2(name, projection) {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(name, projection) {
         var scope, hash, geometries;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
@@ -2348,7 +2348,7 @@ var DivisionLevel = function () {
   }, {
     key: 'requestGeometries',
     value: function () {
-      var _ref3 = asyncToGenerator(regeneratorRuntime.mark(function _callee3(name, projection) {
+      var _ref3 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(name, projection) {
         var path, data, buffer, _ref4, _ref5;
 
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
@@ -2518,7 +2518,7 @@ var Geography = function () {
   createClass(Geography, [{
     key: 'init',
     value: function () {
-      var _ref = asyncToGenerator(regeneratorRuntime.mark(function _callee(path, data) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(path, data) {
         var _this = this;
 
         var scope;
@@ -2606,7 +2606,7 @@ var Geography = function () {
   }, {
     key: 'properties',
     value: function () {
-      var _ref2 = asyncToGenerator(regeneratorRuntime.mark(function _callee2(projection) {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(projection) {
         var scope, hash, path;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
@@ -2639,7 +2639,7 @@ var Geography = function () {
   }, {
     key: 'bounds',
     value: function () {
-      var _ref3 = asyncToGenerator(regeneratorRuntime.mark(function _callee3(projection) {
+      var _ref3 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(projection) {
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -2667,7 +2667,7 @@ var Geography = function () {
   }, {
     key: 'area',
     value: function () {
-      var _ref4 = asyncToGenerator(regeneratorRuntime.mark(function _callee4(projection) {
+      var _ref4 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(projection) {
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -2695,7 +2695,7 @@ var Geography = function () {
   }, {
     key: 'centroid',
     value: function () {
-      var _ref5 = asyncToGenerator(regeneratorRuntime.mark(function _callee5(projection) {
+      var _ref5 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(projection) {
         return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -2723,7 +2723,7 @@ var Geography = function () {
   }, {
     key: 'poleOfInaccessibility',
     value: function () {
-      var _ref6 = asyncToGenerator(regeneratorRuntime.mark(function _callee6(projection) {
+      var _ref6 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(projection) {
         return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -2751,7 +2751,7 @@ var Geography = function () {
   }, {
     key: 'geometry',
     value: function () {
-      var _ref7 = asyncToGenerator(regeneratorRuntime.mark(function _callee7(name, projection) {
+      var _ref7 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(name, projection) {
         var scope, hash, geometries;
         return regeneratorRuntime.wrap(function _callee7$(_context7) {
           while (1) {
@@ -2787,7 +2787,7 @@ var Geography = function () {
   }, {
     key: 'requestGeometry',
     value: function () {
-      var _ref8 = asyncToGenerator(regeneratorRuntime.mark(function _callee8(name, projection) {
+      var _ref8 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(name, projection) {
         var path, data, buffer, _ref9, _ref10;
 
         return regeneratorRuntime.wrap(function _callee8$(_context8) {
@@ -2834,7 +2834,7 @@ var Geography = function () {
   }, {
     key: 'shapeGeometry',
     value: function () {
-      var _ref11 = asyncToGenerator(regeneratorRuntime.mark(function _callee9(projection) {
+      var _ref11 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(projection) {
         return regeneratorRuntime.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
@@ -2858,7 +2858,7 @@ var Geography = function () {
   }, {
     key: 'outlineGeometry',
     value: function () {
-      var _ref12 = asyncToGenerator(regeneratorRuntime.mark(function _callee10(projection) {
+      var _ref12 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(projection) {
         return regeneratorRuntime.wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
@@ -6399,7 +6399,7 @@ var GeographyBuilder = function () {
   createClass(GeographyBuilder, [{
     key: 'init',
     value: function () {
-      var _ref = asyncToGenerator(regeneratorRuntime.mark(function _callee(data) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data) {
         var scope;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
