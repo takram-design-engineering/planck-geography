@@ -27,8 +27,8 @@ import commonjs from 'rollup-plugin-commonjs'
 import nodeResolve from 'rollup-plugin-node-resolve'
 
 export default {
-  entry: './dist/planck-geography.module.js',
-  sourceMap: true,
+  input: './dist/planck-geography.module.js',
+  sourcemap: true,
   plugins: [
     nodeResolve({ browser: true }),
     commonjs(),
@@ -57,12 +57,12 @@ export default {
     'd3-geo-projection': 'd3',
     'three': 'THREE',
   },
-  targets: [
+  output: [
     {
       format: 'umd',
       extend: true,
-      moduleName: 'Planck',
-      dest: './dist/planck-geography.js',
+      name: 'Planck',
+      file: './dist/planck-geography.js',
     },
   ],
 }
