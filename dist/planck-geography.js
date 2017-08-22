@@ -678,7 +678,7 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
-var index = createCommonjsModule(function (module, exports) {
+var pathBrowserify = createCommonjsModule(function (module, exports) {
   // Copyright Joyent, Inc. and other Node contributors.
   //
   // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1148,18 +1148,18 @@ if (Environment.type === 'node') {
         paths[_key] = arguments[_key];
       }
 
-      return index.resolve.apply(index, ['/'].concat(paths));
+      return pathBrowserify.resolve.apply(pathBrowserify, ['/'].concat(paths));
     },
 
 
-    normalize: index.normalize,
-    join: index.join,
-    relative: index.relative,
-    dirname: index.dirname,
-    basename: index.basename,
-    extname: index.extname,
-    separator: index.sep,
-    delimiter: index.delimiter
+    normalize: pathBrowserify.normalize,
+    join: pathBrowserify.join,
+    relative: pathBrowserify.relative,
+    dirname: pathBrowserify.dirname,
+    basename: pathBrowserify.basename,
+    extname: pathBrowserify.extname,
+    separator: pathBrowserify.sep,
+    delimiter: pathBrowserify.delimiter
   };
 }
 
@@ -1334,7 +1334,7 @@ var tsvParse = tsv.parse;
  * @api private
  */
 
-var index$2 = function required(port, protocol) {
+var requiresPort = function required(port, protocol) {
   protocol = protocol.split(':')[0];
   port = +port;
 
@@ -1430,7 +1430,7 @@ function querystringify(obj, prefix) {
 var stringify = querystringify;
 var parse = querystring;
 
-var index$4 = {
+var querystringify_1 = {
   stringify: stringify,
   parse: parse
 };
@@ -1611,7 +1611,7 @@ function URL$1(address, location, parser) {
     location = null;
   }
 
-  if (parser && 'function' !== typeof parser) parser = index$4.parse;
+  if (parser && 'function' !== typeof parser) parser = querystringify_1.parse;
 
   location = lolcation(location);
 
@@ -1680,7 +1680,7 @@ function URL$1(address, location, parser) {
   // for a given protocol. As the host also contains the port number we're going
   // override it with the hostname which contains no port number.
   //
-  if (!index$2(url.port, url.protocol)) {
+  if (!requiresPort(url.port, url.protocol)) {
     url.host = url.hostname;
     url.port = '';
   }
@@ -1722,7 +1722,7 @@ function set$1(part, value, fn) {
   switch (part) {
     case 'query':
       if ('string' === typeof value && value.length) {
-        value = (fn || index$4.parse)(value);
+        value = (fn || querystringify_1.parse)(value);
       }
 
       url[part] = value;
@@ -1731,7 +1731,7 @@ function set$1(part, value, fn) {
     case 'port':
       url[part] = value;
 
-      if (!index$2(value, url.protocol)) {
+      if (!requiresPort(value, url.protocol)) {
         url.host = url.hostname;
         url[part] = '';
       } else if (value) {
@@ -1796,7 +1796,7 @@ function set$1(part, value, fn) {
  * @api public
  */
 function toString(stringify) {
-  if (!stringify || 'function' !== typeof stringify) stringify = index$4.stringify;
+  if (!stringify || 'function' !== typeof stringify) stringify = querystringify_1.stringify;
 
   var query,
       url = this,
@@ -1830,9 +1830,9 @@ URL$1.prototype = { set: set$1, toString: toString };
 //
 URL$1.extractProtocol = extractProtocol;
 URL$1.location = lolcation;
-URL$1.qs = index$4;
+URL$1.qs = querystringify_1;
 
-var index$1 = URL$1;
+var urlParse = URL$1;
 
 //
 //  The MIT License
@@ -1891,7 +1891,7 @@ var request = External.node('request');
 
 function browserRequest(url, options) {
   return new Promise(function (resolve, reject) {
-    var parsed = new index$1(url, true);
+    var parsed = new urlParse(url, true);
     if (options.query) {
       parsed.set('query', Object.assign({}, parsed.query, options.query));
     }
@@ -3549,7 +3549,7 @@ earcut.flatten = function (data) {
     return result;
 };
 
-var index$7 = TinyQueue;
+var tinyqueue = TinyQueue;
 
 function TinyQueue(data, compare) {
     if (!(this instanceof TinyQueue)) return new TinyQueue(data, compare);
@@ -3635,7 +3635,7 @@ TinyQueue.prototype = {
     }
 };
 
-var index$6 = polylabel;
+var polylabel_1 = polylabel;
 var default_1 = polylabel;
 
 function polylabel(polygon, precision, debug) {
@@ -3657,7 +3657,7 @@ function polylabel(polygon, precision, debug) {
     var h = cellSize / 2;
 
     // a priority queue of cells in order of their "potential" (max distance to polygon)
-    var cellQueue = new index$7(null, compareMax);
+    var cellQueue = new tinyqueue(null, compareMax);
 
     if (cellSize === 0) return [minX, minY];
 
@@ -3786,7 +3786,7 @@ function getSegDistSq(px, py, a, b) {
     return dx * dx + dy * dy;
 }
 
-index$6.default = default_1;
+polylabel_1.default = default_1;
 
 //
 //  The MIT License
@@ -5935,7 +5935,7 @@ var parser$1 = {
 var parserFunction = parser$1.parse;
 parserFunction.parseSVG = parserFunction;
 parserFunction.makeAbsolute = makeSVGPathCommandsAbsolute;
-var index$9 = parserFunction;
+var svgPathParser = parserFunction;
 
 function makeSVGPathCommandsAbsolute(commands) {
 	var subpathStart,
@@ -6074,7 +6074,7 @@ var Path$1 = {
     var x = 0;
     var y = 0;
     var path = void 0;
-    var commands = index$9(input);
+    var commands = svgPathParser(input);
     var paths = commands.reduce(function (paths, current) {
       switch (current.code) {
         case 'M':
@@ -6526,7 +6526,7 @@ var GeographyBuilder = function () {
             return [curve.v1.x, curve.v1.y];
           });
         });
-        return index$6(projected, Math.sqrt(projection.path.area({
+        return polylabel_1(projected, Math.sqrt(projection.path.area({
           type: 'Polygon',
           coordinates: _polygon
         })) * precision);
@@ -6541,7 +6541,7 @@ var GeographyBuilder = function () {
         console.warn('Unable to derive pole of inaccessibility:', level, code);
         return null;
       }
-      return index$6(polygon, Math.sqrt(d3.geoArea({
+      return polylabel_1(polygon, Math.sqrt(d3.geoArea({
         type: 'Polygon',
         coordinates: polygon
       })) * precision);
@@ -7638,7 +7638,7 @@ var charenc_1 = charenc;
 
 // The _isBuffer check is for Safari 5-7 support, because it's missing
 // Object.prototype.constructor. Remove this eventually
-var index$10 = function index(obj) {
+var isBuffer_1 = function isBuffer_1(obj) {
   return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer);
 };
 
@@ -7655,7 +7655,7 @@ var md5 = createCommonjsModule(function (module) {
   (function () {
     var crypt$$1 = crypt,
         utf8 = charenc_1.utf8,
-        isBuffer = index$10,
+        isBuffer = isBuffer_1,
         bin = charenc_1.bin,
 
 
@@ -8223,14 +8223,14 @@ var stringify$3 = function stringify(value, replacer, space) {
 var parse$1 = parse$2;
 var stringify$2 = stringify$3;
 
-var index$13 = {
+var jsonify = {
 	parse: parse$1,
 	stringify: stringify$2
 };
 
-var json = typeof JSON !== 'undefined' ? JSON : index$13;
+var json = typeof JSON !== 'undefined' ? JSON : jsonify;
 
-var index$12 = function index(obj, opts) {
+var jsonStableStringify = function jsonStableStringify(obj, opts) {
     if (!opts) opts = {};
     if (typeof opts === 'function') opts = { cmp: opts };
     var space = opts.space || '';
@@ -8338,7 +8338,7 @@ var objectKeys = Object.keys || function (obj) {
 //
 
 function Hash(object) {
-  return md5(index$12(object));
+  return md5(jsonStableStringify(object));
 }
 
 //

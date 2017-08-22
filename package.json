@@ -73,8 +73,8 @@
   },
   "devDependencies": {
     "@takram/eslint-config-planck": "^0.2.1",
-    "@takram/planck-core": "^0.2.2",
-    "@takram/planck-worker": "^0.2.0",
+    "@takram/planck-core": "^0.2.3",
+    "@takram/planck-worker": "^0.2.1",
     "babel-loader": "^7.1.2",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.0",
