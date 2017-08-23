@@ -283,7 +283,7 @@ var Division = function () {
   createClass(Division, [{
     key: 'properties',
     value: function () {
-      var _ref = asyncToGenerator(regeneratorRuntime.mark(function _callee(projection) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(projection) {
         var properties, code, result, level;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -325,7 +325,7 @@ var Division = function () {
   }, {
     key: 'bounds',
     value: function () {
-      var _ref2 = asyncToGenerator(regeneratorRuntime.mark(function _callee2(projection) {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(projection) {
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -353,7 +353,7 @@ var Division = function () {
   }, {
     key: 'area',
     value: function () {
-      var _ref3 = asyncToGenerator(regeneratorRuntime.mark(function _callee3(projection) {
+      var _ref3 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(projection) {
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -381,7 +381,7 @@ var Division = function () {
   }, {
     key: 'centroid',
     value: function () {
-      var _ref4 = asyncToGenerator(regeneratorRuntime.mark(function _callee4(projection) {
+      var _ref4 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(projection) {
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -409,7 +409,7 @@ var Division = function () {
   }, {
     key: 'poleOfInaccessibility',
     value: function () {
-      var _ref5 = asyncToGenerator(regeneratorRuntime.mark(function _callee5(projection) {
+      var _ref5 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(projection) {
         return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -437,7 +437,7 @@ var Division = function () {
   }, {
     key: 'geometry',
     value: function () {
-      var _ref6 = asyncToGenerator(regeneratorRuntime.mark(function _callee6(name, projection) {
+      var _ref6 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(name, projection) {
         var geometries, code, result, level;
         return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
@@ -479,7 +479,7 @@ var Division = function () {
   }, {
     key: 'shapeGeometry',
     value: function () {
-      var _ref7 = asyncToGenerator(regeneratorRuntime.mark(function _callee7(projection) {
+      var _ref7 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(projection) {
         return regeneratorRuntime.wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
@@ -503,7 +503,7 @@ var Division = function () {
   }, {
     key: 'outlineGeometry',
     value: function () {
-      var _ref8 = asyncToGenerator(regeneratorRuntime.mark(function _callee8(projection) {
+      var _ref8 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(projection) {
         return regeneratorRuntime.wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
@@ -527,7 +527,7 @@ var Division = function () {
   }, {
     key: 'borderGeometry',
     value: function () {
-      var _ref9 = asyncToGenerator(regeneratorRuntime.mark(function _callee9(projection) {
+      var _ref9 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(projection) {
         return regeneratorRuntime.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
@@ -551,7 +551,7 @@ var Division = function () {
   }, {
     key: 'subdivisionGeometry',
     value: function () {
-      var _ref10 = asyncToGenerator(regeneratorRuntime.mark(function _callee10(projection) {
+      var _ref10 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(projection) {
         return regeneratorRuntime.wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
@@ -678,7 +678,7 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
-var index = createCommonjsModule(function (module, exports) {
+var pathBrowserify = createCommonjsModule(function (module, exports) {
   // Copyright Joyent, Inc. and other Node contributors.
   //
   // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1148,18 +1148,18 @@ if (Environment.type === 'node') {
         paths[_key] = arguments[_key];
       }
 
-      return index.resolve.apply(index, ['/'].concat(paths));
+      return pathBrowserify.resolve.apply(pathBrowserify, ['/'].concat(paths));
     },
 
 
-    normalize: index.normalize,
-    join: index.join,
-    relative: index.relative,
-    dirname: index.dirname,
-    basename: index.basename,
-    extname: index.extname,
-    separator: index.sep,
-    delimiter: index.delimiter
+    normalize: pathBrowserify.normalize,
+    join: pathBrowserify.join,
+    relative: pathBrowserify.relative,
+    dirname: pathBrowserify.dirname,
+    basename: pathBrowserify.basename,
+    extname: pathBrowserify.extname,
+    separator: pathBrowserify.sep,
+    delimiter: pathBrowserify.delimiter
   };
 }
 
@@ -1334,7 +1334,7 @@ var tsvParse = tsv.parse;
  * @api private
  */
 
-var index$2 = function required(port, protocol) {
+var requiresPort = function required(port, protocol) {
   protocol = protocol.split(':')[0];
   port = +port;
 
@@ -1430,7 +1430,7 @@ function querystringify(obj, prefix) {
 var stringify = querystringify;
 var parse = querystring;
 
-var index$4 = {
+var querystringify_1 = {
   stringify: stringify,
   parse: parse
 };
@@ -1611,7 +1611,7 @@ function URL$1(address, location, parser) {
     location = null;
   }
 
-  if (parser && 'function' !== typeof parser) parser = index$4.parse;
+  if (parser && 'function' !== typeof parser) parser = querystringify_1.parse;
 
   location = lolcation(location);
 
@@ -1680,7 +1680,7 @@ function URL$1(address, location, parser) {
   // for a given protocol. As the host also contains the port number we're going
   // override it with the hostname which contains no port number.
   //
-  if (!index$2(url.port, url.protocol)) {
+  if (!requiresPort(url.port, url.protocol)) {
     url.host = url.hostname;
     url.port = '';
   }
@@ -1722,7 +1722,7 @@ function set$1(part, value, fn) {
   switch (part) {
     case 'query':
       if ('string' === typeof value && value.length) {
-        value = (fn || index$4.parse)(value);
+        value = (fn || querystringify_1.parse)(value);
       }
 
       url[part] = value;
@@ -1731,7 +1731,7 @@ function set$1(part, value, fn) {
     case 'port':
       url[part] = value;
 
-      if (!index$2(value, url.protocol)) {
+      if (!requiresPort(value, url.protocol)) {
         url.host = url.hostname;
         url[part] = '';
       } else if (value) {
@@ -1796,7 +1796,7 @@ function set$1(part, value, fn) {
  * @api public
  */
 function toString(stringify) {
-  if (!stringify || 'function' !== typeof stringify) stringify = index$4.stringify;
+  if (!stringify || 'function' !== typeof stringify) stringify = querystringify_1.stringify;
 
   var query,
       url = this,
@@ -1830,9 +1830,9 @@ URL$1.prototype = { set: set$1, toString: toString };
 //
 URL$1.extractProtocol = extractProtocol;
 URL$1.location = lolcation;
-URL$1.qs = index$4;
+URL$1.qs = querystringify_1;
 
-var index$1 = URL$1;
+var urlParse = URL$1;
 
 //
 //  The MIT License
@@ -1891,7 +1891,7 @@ var request = External.node('request');
 
 function browserRequest(url, options) {
   return new Promise(function (resolve, reject) {
-    var parsed = new index$1(url, true);
+    var parsed = new urlParse(url, true);
     if (options.query) {
       parsed.set('query', Object.assign({}, parsed.query, options.query));
     }
@@ -2279,7 +2279,7 @@ var DivisionLevel = function () {
   }, {
     key: 'properties',
     value: function () {
-      var _ref = asyncToGenerator(regeneratorRuntime.mark(function _callee(projection) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(projection) {
         var scope, hash, path;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -2312,7 +2312,7 @@ var DivisionLevel = function () {
   }, {
     key: 'geometries',
     value: function () {
-      var _ref2 = asyncToGenerator(regeneratorRuntime.mark(function _callee2(name, projection) {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(name, projection) {
         var scope, hash, geometries;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
@@ -2348,7 +2348,7 @@ var DivisionLevel = function () {
   }, {
     key: 'requestGeometries',
     value: function () {
-      var _ref3 = asyncToGenerator(regeneratorRuntime.mark(function _callee3(name, projection) {
+      var _ref3 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(name, projection) {
         var path, data, buffer, _ref4, _ref5;
 
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
@@ -2518,7 +2518,7 @@ var Geography = function () {
   createClass(Geography, [{
     key: 'init',
     value: function () {
-      var _ref = asyncToGenerator(regeneratorRuntime.mark(function _callee(path, data) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(path, data) {
         var _this = this;
 
         var scope;
@@ -2606,7 +2606,7 @@ var Geography = function () {
   }, {
     key: 'properties',
     value: function () {
-      var _ref2 = asyncToGenerator(regeneratorRuntime.mark(function _callee2(projection) {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(projection) {
         var scope, hash, path;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
@@ -2639,7 +2639,7 @@ var Geography = function () {
   }, {
     key: 'bounds',
     value: function () {
-      var _ref3 = asyncToGenerator(regeneratorRuntime.mark(function _callee3(projection) {
+      var _ref3 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(projection) {
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -2667,7 +2667,7 @@ var Geography = function () {
   }, {
     key: 'area',
     value: function () {
-      var _ref4 = asyncToGenerator(regeneratorRuntime.mark(function _callee4(projection) {
+      var _ref4 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(projection) {
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -2695,7 +2695,7 @@ var Geography = function () {
   }, {
     key: 'centroid',
     value: function () {
-      var _ref5 = asyncToGenerator(regeneratorRuntime.mark(function _callee5(projection) {
+      var _ref5 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(projection) {
         return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -2723,7 +2723,7 @@ var Geography = function () {
   }, {
     key: 'poleOfInaccessibility',
     value: function () {
-      var _ref6 = asyncToGenerator(regeneratorRuntime.mark(function _callee6(projection) {
+      var _ref6 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(projection) {
         return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -2751,7 +2751,7 @@ var Geography = function () {
   }, {
     key: 'geometry',
     value: function () {
-      var _ref7 = asyncToGenerator(regeneratorRuntime.mark(function _callee7(name, projection) {
+      var _ref7 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(name, projection) {
         var scope, hash, geometries;
         return regeneratorRuntime.wrap(function _callee7$(_context7) {
           while (1) {
@@ -2787,7 +2787,7 @@ var Geography = function () {
   }, {
     key: 'requestGeometry',
     value: function () {
-      var _ref8 = asyncToGenerator(regeneratorRuntime.mark(function _callee8(name, projection) {
+      var _ref8 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(name, projection) {
         var path, data, buffer, _ref9, _ref10;
 
         return regeneratorRuntime.wrap(function _callee8$(_context8) {
@@ -2834,7 +2834,7 @@ var Geography = function () {
   }, {
     key: 'shapeGeometry',
     value: function () {
-      var _ref11 = asyncToGenerator(regeneratorRuntime.mark(function _callee9(projection) {
+      var _ref11 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(projection) {
         return regeneratorRuntime.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
@@ -2858,7 +2858,7 @@ var Geography = function () {
   }, {
     key: 'outlineGeometry',
     value: function () {
-      var _ref12 = asyncToGenerator(regeneratorRuntime.mark(function _callee10(projection) {
+      var _ref12 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(projection) {
         return regeneratorRuntime.wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
@@ -3549,7 +3549,7 @@ earcut.flatten = function (data) {
     return result;
 };
 
-var index$7 = TinyQueue;
+var tinyqueue = TinyQueue;
 
 function TinyQueue(data, compare) {
     if (!(this instanceof TinyQueue)) return new TinyQueue(data, compare);
@@ -3635,7 +3635,7 @@ TinyQueue.prototype = {
     }
 };
 
-var index$6 = polylabel;
+var polylabel_1 = polylabel;
 var default_1 = polylabel;
 
 function polylabel(polygon, precision, debug) {
@@ -3657,7 +3657,7 @@ function polylabel(polygon, precision, debug) {
     var h = cellSize / 2;
 
     // a priority queue of cells in order of their "potential" (max distance to polygon)
-    var cellQueue = new index$7(null, compareMax);
+    var cellQueue = new tinyqueue(null, compareMax);
 
     if (cellSize === 0) return [minX, minY];
 
@@ -3786,7 +3786,7 @@ function getSegDistSq(px, py, a, b) {
     return dx * dx + dy * dy;
 }
 
-index$6.default = default_1;
+polylabel_1.default = default_1;
 
 //
 //  The MIT License
@@ -5935,7 +5935,7 @@ var parser$1 = {
 var parserFunction = parser$1.parse;
 parserFunction.parseSVG = parserFunction;
 parserFunction.makeAbsolute = makeSVGPathCommandsAbsolute;
-var index$9 = parserFunction;
+var svgPathParser = parserFunction;
 
 function makeSVGPathCommandsAbsolute(commands) {
 	var subpathStart,
@@ -6074,7 +6074,7 @@ var Path$1 = {
     var x = 0;
     var y = 0;
     var path = void 0;
-    var commands = index$9(input);
+    var commands = svgPathParser(input);
     var paths = commands.reduce(function (paths, current) {
       switch (current.code) {
         case 'M':
@@ -6399,7 +6399,7 @@ var GeographyBuilder = function () {
   createClass(GeographyBuilder, [{
     key: 'init',
     value: function () {
-      var _ref = asyncToGenerator(regeneratorRuntime.mark(function _callee(data) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data) {
         var scope;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -6526,7 +6526,7 @@ var GeographyBuilder = function () {
             return [curve.v1.x, curve.v1.y];
           });
         });
-        return index$6(projected, Math.sqrt(projection.path.area({
+        return polylabel_1(projected, Math.sqrt(projection.path.area({
           type: 'Polygon',
           coordinates: _polygon
         })) * precision);
@@ -6541,7 +6541,7 @@ var GeographyBuilder = function () {
         console.warn('Unable to derive pole of inaccessibility:', level, code);
         return null;
       }
-      return index$6(polygon, Math.sqrt(d3.geoArea({
+      return polylabel_1(polygon, Math.sqrt(d3.geoArea({
         type: 'Polygon',
         coordinates: polygon
       })) * precision);
@@ -7638,7 +7638,7 @@ var charenc_1 = charenc;
 
 // The _isBuffer check is for Safari 5-7 support, because it's missing
 // Object.prototype.constructor. Remove this eventually
-var index$10 = function index(obj) {
+var isBuffer_1 = function isBuffer_1(obj) {
   return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer);
 };
 
@@ -7655,7 +7655,7 @@ var md5 = createCommonjsModule(function (module) {
   (function () {
     var crypt$$1 = crypt,
         utf8 = charenc_1.utf8,
-        isBuffer = index$10,
+        isBuffer = isBuffer_1,
         bin = charenc_1.bin,
 
 
@@ -8223,14 +8223,14 @@ var stringify$3 = function stringify(value, replacer, space) {
 var parse$1 = parse$2;
 var stringify$2 = stringify$3;
 
-var index$13 = {
+var jsonify = {
 	parse: parse$1,
 	stringify: stringify$2
 };
 
-var json = typeof JSON !== 'undefined' ? JSON : index$13;
+var json = typeof JSON !== 'undefined' ? JSON : jsonify;
 
-var index$12 = function index(obj, opts) {
+var jsonStableStringify = function jsonStableStringify(obj, opts) {
     if (!opts) opts = {};
     if (typeof opts === 'function') opts = { cmp: opts };
     var space = opts.space || '';
@@ -8338,7 +8338,7 @@ var objectKeys = Object.keys || function (obj) {
 //
 
 function Hash(object) {
-  return md5(index$12(object));
+  return md5(jsonStableStringify(object));
 }
 
 //
