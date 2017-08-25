@@ -2880,6 +2880,30 @@ var Geography = function () {
       return outlineGeometry;
     }()
   }, {
+    key: 'subdivisionGeometry',
+    value: function () {
+      var _ref13 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(projection) {
+        return regeneratorRuntime.wrap(function _callee11$(_context11) {
+          while (1) {
+            switch (_context11.prev = _context11.next) {
+              case 0:
+                return _context11.abrupt('return', this.geometry('subdivision', projection));
+
+              case 1:
+              case 'end':
+                return _context11.stop();
+            }
+          }
+        }, _callee11, this);
+      }));
+
+      function subdivisionGeometry(_x15) {
+        return _ref13.apply(this, arguments);
+      }
+
+      return subdivisionGeometry;
+    }()
+  }, {
     key: 'identifier',
     get: function get$$1() {
       var scope = internal$3(this);
@@ -6652,11 +6676,32 @@ var GeographyBuilder = function () {
       return result;
     }
   }, {
+    key: 'geographySubdivisionGeometry',
+    value: function geographySubdivisionGeometry(_ref11) {
+      var projection = _ref11.projection;
+
+      var key = codePropertyKeyForLevel(this.levels[0]);
+      var errors = [];
+      var result = this.borderGeometry({
+        projection: projection,
+        object: this.data.objects.geography,
+        filter: function filter(a, b) {
+          return a.properties[key] !== b.properties[key];
+        }
+      }, errors);
+      if (errors.length !== 0) {
+        // Topology mesh can fail if a division doesn't have any adjacent
+        // division. Just return an empty geometry without logging warning.
+        return new Three.BufferGeometry();
+      }
+      return result;
+    }
+  }, {
     key: 'divisionShapes',
-    value: function divisionShapes(_ref11) {
-      var level = _ref11.level,
-          code = _ref11.code,
-          projection = _ref11.projection;
+    value: function divisionShapes(_ref12) {
+      var level = _ref12.level,
+          code = _ref12.code,
+          projection = _ref12.projection;
 
       var geometries = this.data.objects.geography.geometries;
       var errors = [];
@@ -6673,10 +6718,10 @@ var GeographyBuilder = function () {
     }
   }, {
     key: 'divisionShapeGeometry',
-    value: function divisionShapeGeometry(_ref12) {
-      var level = _ref12.level,
-          code = _ref12.code,
-          projection = _ref12.projection;
+    value: function divisionShapeGeometry(_ref13) {
+      var level = _ref13.level,
+          code = _ref13.code,
+          projection = _ref13.projection;
 
       var geometries = this.data.objects.geography.geometries;
       var errors = [];
@@ -6693,10 +6738,10 @@ var GeographyBuilder = function () {
     }
   }, {
     key: 'divisionOutlineGeometry',
-    value: function divisionOutlineGeometry(_ref13) {
-      var level = _ref13.level,
-          code = _ref13.code,
-          projection = _ref13.projection;
+    value: function divisionOutlineGeometry(_ref14) {
+      var level = _ref14.level,
+          code = _ref14.code,
+          projection = _ref14.projection;
 
       var geometries = this.data.objects.geography.geometries;
       var errors = [];
@@ -6713,12 +6758,12 @@ var GeographyBuilder = function () {
     }
   }, {
     key: 'divisionBorderGeometry',
-    value: function divisionBorderGeometry(_ref14) {
+    value: function divisionBorderGeometry(_ref15) {
       var _this = this;
 
-      var level = _ref14.level,
-          code = _ref14.code,
-          projection = _ref14.projection;
+      var level = _ref15.level,
+          code = _ref15.code,
+          projection = _ref15.projection;
 
       var superlevel = function () {
         var index = _this.levels.indexOf(level);
@@ -6756,8 +6801,8 @@ var GeographyBuilder = function () {
         })
       };
 
-      var errors = [];
       var key = codePropertyKeyForLevel(level);
+      var errors = [];
       var result = this.borderGeometry({
         projection: projection,
         object: object,
@@ -6777,19 +6822,19 @@ var GeographyBuilder = function () {
     }
   }, {
     key: 'divisionSubdivisionGeometry',
-    value: function divisionSubdivisionGeometry(_ref15) {
-      var level = _ref15.level,
-          code = _ref15.code,
-          projection = _ref15.projection;
+    value: function divisionSubdivisionGeometry(_ref16) {
+      var level = _ref16.level,
+          code = _ref16.code,
+          projection = _ref16.projection;
 
       var geometries = this.data.objects.geography.geometries;
-      var errors = [];
       var object = {
         type: 'GeometryCollection',
         geometries: geometries.filter(function (geometry) {
           return includesGeometryObject(level, code, geometry);
         })
       };
+      var errors = [];
       var result = this.borderGeometry({
         projection: projection,
         object: object,

@@ -346,6 +346,22 @@ export default class GeographyBuilder {
     return result
   }
 
+  geographySubdivisionGeometry({ projection }) {
+    const key = codePropertyKeyForLevel(this.levels[0])
+    const errors = []
+    const result = this.borderGeometry({
+      projection,
+      object: this.data.objects.geography,
+      filter: (a, b) => a.properties[key] !== b.properties[key],
+    }, errors)
+    if (errors.length !== 0) {
+      // Topology mesh can fail if a division doesn't have any adjacent
+      // division. Just return an empty geometry without logging warning.
+      return new Three.BufferGeometry()
+    }
+    return result
+  }
+
   divisionShapes({ level, code, projection }) {
     const geometries = this.data.objects.geography.geometries
     const errors = []
@@ -430,8 +446,8 @@ export default class GeographyBuilder {
       }),
     }
 
-    const errors = []
     const key = codePropertyKeyForLevel(level)
+    const errors = []
     const result = this.borderGeometry({
       projection,
       object,
@@ -452,13 +468,13 @@ export default class GeographyBuilder {
 
   divisionSubdivisionGeometry({ level, code, projection }) {
     const geometries = this.data.objects.geography.geometries
-    const errors = []
     const object = {
       type: 'GeometryCollection',
       geometries: geometries.filter(geometry => {
         return includesGeometryObject(level, code, geometry)
       }),
     }
+    const errors = []
     const result = this.borderGeometry({
       projection,
       object,

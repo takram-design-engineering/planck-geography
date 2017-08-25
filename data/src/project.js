@@ -138,6 +138,8 @@ async function writeGeographyGeometries(options) {
   const shape = builder.geographyShapeGeometry({ projection })
   console.log(chalk.cyan('Creating outline for geography'))
   const outline = builder.geographyOutlineGeometry({ projection })
+  console.log(chalk.cyan('Creating subdivision for geography'))
+  const subdivision = builder.geographySubdivisionGeometry({ projection })
 
   // Write geometries
   const directory = path.resolve(output, identifier)
@@ -145,6 +147,7 @@ async function writeGeographyGeometries(options) {
   await Promise.all([
     writeGeometry(path.resolve(directory, 'shape'), shape),
     writeGeometry(path.resolve(directory, 'outline'), outline),
+    writeGeometry(path.resolve(directory, 'subdivision'), subdivision),
   ])
 }
 

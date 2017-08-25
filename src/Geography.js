@@ -172,4 +172,8 @@ export default class Geography {
   async outlineGeometry(projection) {
     return this.geometry('outline', projection)
   }
+
+  async subdivisionGeometry(projection) {
+    return this.geometry('subdivision', projection)
+  }
 }

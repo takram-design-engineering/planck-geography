@@ -91,4 +91,11 @@ describe('Geography', function () {
       expect(geometry).instanceof(Three.BufferGeometry)
     })
   })
+
+  describe('#subdivisionGeometry', () => {
+    it('resolves buffer geometry', async () => {
+      const geometry = await geography.subdivisionGeometry(projection)
+      expect(geometry).instanceof(Three.BufferGeometry)
+    })
+  })
 })
