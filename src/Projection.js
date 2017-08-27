@@ -65,7 +65,7 @@ export default class Projection {
     }
     if (flip) {
       // Avoid negating zero
-      result[1] = result[1] || 0
+      result[1] = -result[1] || 0
     }
     return result
   }
