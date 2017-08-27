@@ -2091,17 +2091,15 @@ function _packBufferGeometry5(geometry) {
     byteLength += buffer.byteLength;
   }
   if (scope.attributes) {
-    Object.entries(scope.attributes).forEach(function (entry) {
-      var _entry = slicedToArray(entry, 2),
-          key = _entry[0],
-          attribute = _entry[1];
-
-      var array = geometry.attributes[key].array;
-      var buffer = array.buffer;
-      buffers.push([buffer, byteLength]);
-      attribute.array = [byteLength, array.length];
-      byteLength += buffer.byteLength;
-    });
+    var names = Object.keys(scope.attributes);
+    for (var i = 0; i < names.length; ++i) {
+      var name = names[i];
+      var _array = geometry.attributes[name].array;
+      var _buffer = _array.buffer;
+      buffers.push([_buffer, byteLength]);
+      scope.attributes[name].array = [byteLength, _array.length];
+      byteLength += _buffer.byteLength;
+    }
   }
   data.data = scope;
   return [data, buffers, byteLength];
@@ -2109,39 +2107,40 @@ function _packBufferGeometry5(geometry) {
 
 function _packBufferGeometries(geometries) {
   if (Array.isArray(geometries)) {
-    return geometries.reduce(function (result, geometry) {
-      var _result = slicedToArray(result, 3),
-          data = _result[0],
-          buffers = _result[1],
-          byteOffset = _result[2];
-
-      var _packBufferGeometry = _packBufferGeometry5(geometry, byteOffset),
+    var _data = [];
+    var _buffers = [];
+    var _byteOffset = 0;
+    for (var i = 0; i < geometries.length; ++i) {
+      var _packBufferGeometry = _packBufferGeometry5(geometries[i], _byteOffset),
           _packBufferGeometry2 = slicedToArray(_packBufferGeometry, 3),
           eachData = _packBufferGeometry2[0],
           eachBuffers = _packBufferGeometry2[1],
           eachByteOffset = _packBufferGeometry2[2];
 
-      return [data.concat(eachData), buffers.concat(eachBuffers), eachByteOffset];
-    }, [[], [], 0]);
+      _data.push(eachData);
+      _buffers.push.apply(_buffers, toConsumableArray(eachBuffers));
+      _byteOffset = eachByteOffset;
+    }
+    return [_data, _buffers, _byteOffset];
   }
-  return Object.entries(geometries).reduce(function (result, entry) {
-    var _entry2 = slicedToArray(entry, 2),
-        key = _entry2[0],
-        geometry = _entry2[1];
+  var data = {};
+  var buffers = [];
+  var byteOffset = 0;
+  var names = Object.keys(geometries);
+  for (var _i = 0; _i < names.length; ++_i) {
+    var name = names[_i];
 
-    var _result2 = slicedToArray(result, 3),
-        data = _result2[0],
-        buffers = _result2[1],
-        byteOffset = _result2[2];
-
-    var _packBufferGeometry3 = _packBufferGeometry5(geometry, byteOffset),
+    var _packBufferGeometry3 = _packBufferGeometry5(geometries[name], byteOffset),
         _packBufferGeometry4 = slicedToArray(_packBufferGeometry3, 3),
         eachData = _packBufferGeometry4[0],
         eachBuffers = _packBufferGeometry4[1],
         eachByteOffset = _packBufferGeometry4[2];
 
-    return [Object.assign(data, defineProperty({}, key, eachData)), buffers.concat(eachBuffers), eachByteOffset];
-  }, [{}, [], 0]);
+    data[name] = eachData;
+    buffers.push.apply(buffers, toConsumableArray(eachBuffers));
+    byteOffset = eachByteOffset;
+  }
+  return [data, buffers, byteOffset];
 }
 
 function _unpackBufferGeometry(data, buffer) {
@@ -2153,17 +2152,17 @@ function _unpackBufferGeometry(data, buffer) {
     copy.data.index = _extends({}, copy.data.index, { array: view });
   }
   if (copy.data.attributes) {
-    var entries = Object.entries(copy.data.attributes);
-    copy.data.attributes = entries.reduce(function (attributes, entry) {
-      var _entry3 = slicedToArray(entry, 2),
-          name = _entry3[0],
-          attribute = _entry3[1];
+    var attributes = {};
+    var names = Object.keys(copy.data.attributes);
+    for (var i = 0; i < names.length; ++i) {
+      var name = names[i];
+      var attribute = copy.data.attributes[name];
+      var _type = attribute.type;
 
-      var type = attribute.type;
-
-      var view = new (Function.prototype.bind.apply(Environment.self[type], [null].concat([buffer], toConsumableArray(attribute.array))))();
-      return _extends({}, attributes, defineProperty({}, name, _extends({}, attribute, { array: view })));
-    }, {});
+      var _view = new (Function.prototype.bind.apply(Environment.self[_type], [null].concat([buffer], toConsumableArray(attribute.array))))();
+      attributes[name] = _extends({}, attribute, { array: _view });
+    }
+    copy.data.attributes = attributes;
   }
   return new Three.BufferGeometryLoader().parse(copy);
 }
@@ -2171,13 +2170,13 @@ function _unpackBufferGeometry(data, buffer) {
 function mergeBuffers(buffers, byteLength) {
   var buffer = new ArrayBuffer(byteLength);
   var view = new Uint8Array(buffer);
-  buffers.forEach(function (entry) {
-    var _entry4 = slicedToArray(entry, 2),
-        buffer = _entry4[0],
-        byteOffset = _entry4[1];
+  for (var i = 0; i < buffers.length; ++i) {
+    var _buffers$i = slicedToArray(buffers[i], 2),
+        _buffer2 = _buffers$i[0],
+        byteOffset = _buffers$i[1];
 
-    view.set(new Uint8Array(buffer), byteOffset);
-  });
+    view.set(new Uint8Array(_buffer2), byteOffset);
+  }
   return buffer;
 }
 
@@ -2207,17 +2206,19 @@ var GeometryPack = {
   },
   unpackBufferGeometries: function unpackBufferGeometries(data, buffer) {
     if (Array.isArray(data)) {
-      return data.map(function (data) {
-        return _unpackBufferGeometry(data, buffer);
-      });
+      var _result = [];
+      for (var index = 0; index < data.length; ++index) {
+        _result.push(_unpackBufferGeometry(data, buffer));
+      }
+      return _result;
     }
-    return Object.entries(data).reduce(function (result, entry) {
-      var _entry5 = slicedToArray(entry, 2),
-          key = _entry5[0],
-          data = _entry5[1];
-
-      return Object.assign(result, defineProperty({}, key, _unpackBufferGeometry(data, buffer)));
-    }, {});
+    var result = {};
+    var names = Object.keys(data);
+    for (var i = 0; i < names.length; ++i) {
+      var name = names[i];
+      result[name] = _unpackBufferGeometry(data[name], buffer);
+    }
+    return result;
   }
 };
 
@@ -8456,7 +8457,7 @@ var Projection = function () {
       }
       if (flip) {
         // Avoid negating zero
-        result[1] = result[1] || 0;
+        result[1] = -result[1] || 0;
       }
       return result;
     }

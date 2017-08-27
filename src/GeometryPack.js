@@ -113,10 +113,10 @@ function unpackBufferGeometry(data, buffer) {
 function mergeBuffers(buffers, byteLength) {
   const buffer = new ArrayBuffer(byteLength)
   const view = new Uint8Array(buffer)
-  buffers.forEach(entry => {
-    const [buffer, byteOffset] = entry
+  for (let i = 0; i < buffers.length; ++i) {
+    const [buffer, byteOffset] = buffers[i]
     view.set(new Uint8Array(buffer), byteOffset)
-  })
+  }
   return buffer
 }
 
