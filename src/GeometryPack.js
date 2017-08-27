@@ -39,14 +39,15 @@ function packBufferGeometry(geometry, byteOffset = 0) {
     byteLength += buffer.byteLength
   }
   if (scope.attributes) {
-    Object.entries(scope.attributes).forEach(entry => {
-      const [key, attribute] = entry
-      const array = geometry.attributes[key].array
+    const names = Object.keys(scope.attributes)
+    for (let i = 0; i < names.length; ++i) {
+      const name = names[i]
+      const array = geometry.attributes[name].array
       const buffer = array.buffer
       buffers.push([buffer, byteLength])
-      attribute.array = [byteLength, array.length]
+      scope.attributes[name].array = [byteLength, array.length]
       byteLength += buffer.byteLength
-    })
+    }
   }
   data.data = scope
   return [data, buffers, byteLength]
@@ -54,34 +55,37 @@ function packBufferGeometry(geometry, byteOffset = 0) {
 
 function packBufferGeometries(geometries) {
   if (Array.isArray(geometries)) {
-    return geometries.reduce((result, geometry) => {
-      const [data, buffers, byteOffset] = result
+    const data = []
+    const buffers = []
+    let byteOffset = 0
+    for (let i = 0; i < geometries.length; ++i) {
       const [
         eachData,
         eachBuffers,
         eachByteOffset,
-      ] = packBufferGeometry(geometry, byteOffset)
-      return [
-        data.concat(eachData),
-        buffers.concat(eachBuffers),
-        eachByteOffset,
-      ]
-    }, [[], [], 0])
+      ] = packBufferGeometry(geometries[i], byteOffset)
+      data.push(eachData)
+      buffers.push(...eachBuffers)
+      byteOffset = eachByteOffset
+    }
+    return [data, buffers, byteOffset]
   }
-  return Object.entries(geometries).reduce((result, entry) => {
-    const [key, geometry] = entry
-    const [data, buffers, byteOffset] = result
+  const data = {}
+  const buffers = []
+  let byteOffset = 0
+  const names = Object.keys(geometries)
+  for (let i = 0; i < names.length; ++i) {
+    const name = names[i]
     const [
       eachData,
       eachBuffers,
       eachByteOffset,
-    ] = packBufferGeometry(geometry, byteOffset)
-    return [
-      Object.assign(data, { [key]: eachData }),
-      buffers.concat(eachBuffers),
-      eachByteOffset,
-    ]
-  }, [{}, [], 0])
+    ] = packBufferGeometry(geometries[name], byteOffset)
+    data[name] = eachData
+    buffers.push(...eachBuffers)
+    byteOffset = eachByteOffset
+  }
+  return [data, buffers, byteOffset]
 }
 
 function unpackBufferGeometry(data, buffer) {
@@ -92,13 +96,16 @@ function unpackBufferGeometry(data, buffer) {
     copy.data.index = { ...copy.data.index, array: view }
   }
   if (copy.data.attributes) {
-    const entries = Object.entries(copy.data.attributes)
-    copy.data.attributes = entries.reduce((attributes, entry) => {
-      const [name, attribute] = entry
+    const attributes = {}
+    const names = Object.keys(copy.data.attributes)
+    for (let i = 0; i < names.length; ++i) {
+      const name = names[i]
+      const attribute = copy.data.attributes[name]
       const { type } = attribute
       const view = new Environment.self[type](buffer, ...attribute.array)
-      return { ...attributes, [name]: { ...attribute, array: view } }
-    }, {})
+      attributes[name] = { ...attribute, array: view }
+    }
+    copy.data.attributes = attributes
   }
   return new Three.BufferGeometryLoader().parse(copy)
 }
@@ -132,15 +139,18 @@ export default {
 
   unpackBufferGeometries(data, buffer) {
     if (Array.isArray(data)) {
-      return data.map(data => {
-        return unpackBufferGeometry(data, buffer)
-      })
+      const result = []
+      for (let index = 0; index < data.length; ++index) {
+        result.push(unpackBufferGeometry(data, buffer))
+      }
+      return result
     }
-    return Object.entries(data).reduce((result, entry) => {
-      const [key, data] = entry
-      return Object.assign(result, {
-        [key]: unpackBufferGeometry(data, buffer),
-      })
-    }, {})
+    const result = {}
+    const names = Object.keys(data)
+    for (let i = 0; i < names.length; ++i) {
+      const name = names[i]
+      result[name] = unpackBufferGeometry(data[name], buffer)
+    }
+    return result
   },
 }
