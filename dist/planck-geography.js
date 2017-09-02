@@ -45,6 +45,7 @@ function Namespace() {
   };
 }
 
+var babelHelpers = {};
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
@@ -55,7 +56,118 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
+  }
 
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
+  }
+
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
+
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
+  };
+
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
+
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
+
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
 
 
 
@@ -244,6 +356,8 @@ var toConsumableArray = function (arr) {
     return Array.from(arr);
   }
 };
+
+babelHelpers;
 
 //
 //  The MIT License
@@ -1172,6 +1286,12 @@ var FilePath = _extends({
 
 }, aliases);
 
+var EOL = {};
+var EOF = {};
+var QUOTE = 34;
+var NEWLINE = 10;
+var RETURN = 13;
+
 function objectConverter(columns) {
   return new Function("d", "return {" + columns.map(function (name, i) {
     return JSON.stringify(name) + ": d[" + i + "]";
@@ -1203,7 +1323,7 @@ function inferColumns(rows) {
 
 var dsv = function (delimiter) {
   var reFormat = new RegExp("[\"" + delimiter + "\n\r]"),
-      delimiterCode = delimiter.charCodeAt(0);
+      DELIMITER = delimiter.charCodeAt(0);
 
   function parse(text, f) {
     var convert,
@@ -1217,71 +1337,57 @@ var dsv = function (delimiter) {
   }
 
   function parseRows(text, f) {
-    var EOL = {},
-        // sentinel value for end-of-line
-    EOF = {},
-        // sentinel value for end-of-file
-    rows = [],
+    var rows = [],
         // output rows
     N = text.length,
         I = 0,
         // current character index
     n = 0,
-        // the current line number
+        // current line number
     t,
-        // the current token
-    eol; // is the current token followed by EOL?
+        // current token
+    eof = N <= 0,
+        // current token followed by EOF?
+    eol = false; // current token followed by EOL?
+
+    // Strip the trailing newline.
+    if (text.charCodeAt(N - 1) === NEWLINE) --N;
+    if (text.charCodeAt(N - 1) === RETURN) --N;
 
     function token() {
-      if (I >= N) return EOF; // special case: end of file
-      if (eol) return eol = false, EOL; // special case: end of line
+      if (eof) return EOF;
+      if (eol) return eol = false, EOL;
 
-      // special case: quotes
-      var j = I,
+      // Unescape quotes.
+      var i,
+          j = I,
           c;
-      if (text.charCodeAt(j) === 34) {
-        var i = j;
-        while (i++ < N) {
-          if (text.charCodeAt(i) === 34) {
-            if (text.charCodeAt(i + 1) !== 34) break;
-            ++i;
-          }
+      if (text.charCodeAt(j) === QUOTE) {
+        while (I++ < N && text.charCodeAt(I) !== QUOTE || text.charCodeAt(++I) === QUOTE) {}
+        if ((i = I) >= N) eof = true;else if ((c = text.charCodeAt(I++)) === NEWLINE) eol = true;else if (c === RETURN) {
+          eol = true;if (text.charCodeAt(I) === NEWLINE) ++I;
         }
-        I = i + 2;
-        c = text.charCodeAt(i + 1);
-        if (c === 13) {
-          eol = true;
-          if (text.charCodeAt(i + 2) === 10) ++I;
-        } else if (c === 10) {
-          eol = true;
-        }
-        return text.slice(j + 1, i).replace(/""/g, "\"");
+        return text.slice(j + 1, i - 1).replace(/""/g, "\"");
       }
 
-      // common case: find next delimiter or newline
+      // Find next delimiter or newline.
       while (I < N) {
-        var k = 1;
-        c = text.charCodeAt(I++);
-        if (c === 10) eol = true; // \n
-        else if (c === 13) {
-            eol = true;if (text.charCodeAt(I) === 10) ++I, ++k;
-          } // \r|\r\n
-          else if (c !== delimiterCode) continue;
-        return text.slice(j, I - k);
+        if ((c = text.charCodeAt(i = I++)) === NEWLINE) eol = true;else if (c === RETURN) {
+          eol = true;if (text.charCodeAt(I) === NEWLINE) ++I;
+        } else if (c !== DELIMITER) continue;
+        return text.slice(j, i);
       }
 
-      // special case: last token before EOF
-      return text.slice(j);
+      // Return last token before EOF.
+      return eof = true, text.slice(j, N);
     }
 
     while ((t = token()) !== EOF) {
-      var a = [];
+      var row = [];
       while (t !== EOL && t !== EOF) {
-        a.push(t);
-        t = token();
-      }
-      if (f && (a = f(a, n++)) == null) continue;
-      rows.push(a);
+        row.push(t), t = token();
+      }if (f && (row = f(row, n++)) == null) continue;
+      rows.push(row);
     }
 
     return rows;
@@ -1305,7 +1411,7 @@ var dsv = function (delimiter) {
   }
 
   function formatValue(text) {
-    return text == null ? "" : reFormat.test(text += "") ? "\"" + text.replace(/\"/g, "\"\"") + "\"" : text;
+    return text == null ? "" : reFormat.test(text += "") ? "\"" + text.replace(/"/g, "\"\"") + "\"" : text;
   }
 
   return {
@@ -1323,6 +1429,8 @@ var csvParse = csv.parse;
 var tsv = dsv("\t");
 
 var tsvParse = tsv.parse;
+
+'use strict';
 
 /**
  * Check if we're required to add a port number.
@@ -1361,6 +1469,8 @@ var requiresPort = function required(port, protocol) {
 
   return port !== 0;
 };
+
+'use strict';
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -1434,6 +1544,8 @@ var querystringify_1 = {
   stringify: stringify,
   parse: parse
 };
+
+'use strict';
 
 var protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i;
 var slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//;
@@ -1832,7 +1944,7 @@ URL$1.extractProtocol = extractProtocol;
 URL$1.location = lolcation;
 URL$1.qs = querystringify_1;
 
-var urlParse = URL$1;
+var urlParse$1 = URL$1;
 
 //
 //  The MIT License
@@ -1887,20 +1999,21 @@ var readFile = _External$node.readFile;
 
 var request = External.node('request');
 
-
+var internal$2 = Namespace('Request');
 
 function browserRequest(url, options) {
   return new Promise(function (resolve, reject) {
-    var parsed = new urlParse(url, true);
+    var parsed = new urlParse$1(url, true);
     if (options.query) {
       parsed.set('query', Object.assign({}, parsed.query, options.query));
     }
     var request = new XMLHttpRequest();
     request.open('get', parsed.toString(), true);
     if (options.headers) {
-      Object.entries(options.headers).forEach(function (header) {
-        request.setRequestHeader.apply(request, toConsumableArray(header));
-      });
+      var names = Object.keys(options.headers);
+      for (var i = 0; i < names.length; ++i) {
+        request.setRequestHeader.apply(request, toConsumableArray(options.headers[names[i]]));
+      }
     }
     request.responseType = options.type;
     request.addEventListener('loadend', function (event) {
@@ -1966,10 +2079,6 @@ function performRequest(url, options) {
           throw new Error('Response is unexpectedly not a buffer');
         }
         var buffer = new ArrayBuffer(response.length);
-        var view = new Uint8Array(buffer);
-        for (var i = 0; i < response.length; ++i) {
-          view[i] = response[i];
-        }
         return buffer;
       });
     }
@@ -2935,7 +3044,9 @@ var Geography = function () {
   return Geography;
 }();
 
-var earcut_1 = earcut;
+'use strict';
+
+var earcut_1$1 = earcut;
 
 function earcut(data, holeIndices, dim) {
 
@@ -3574,6 +3685,8 @@ earcut.flatten = function (data) {
     return result;
 };
 
+'use strict';
+
 var tinyqueue = TinyQueue;
 
 function TinyQueue(data, compare) {
@@ -3659,6 +3772,8 @@ TinyQueue.prototype = {
         data[pos] = item;
     }
 };
+
+'use strict';
 
 var polylabel_1 = polylabel;
 var default_1 = polylabel;
@@ -3839,33 +3954,49 @@ polylabel_1.default = default_1;
 
 var Array$1 = {
   min: function min(array, transform) {
-    if (typeof transform !== 'function') {
-      return Math.min.apply(Math, toConsumableArray(array));
-    }
     var result = void 0;
-    array.reduce(function (min, value, index) {
-      var transformed = transform(value, index);
-      if (min > transformed) {
-        result = value;
-        return transformed;
+    var min = Number.POSITIVE_INFINITY;
+    if (typeof transform !== 'function') {
+      for (var index = 0; index < array.length; ++index) {
+        var item = array[index];
+        if (item < min) {
+          result = item;
+          min = item;
+        }
       }
-      return min;
-    }, Number.POSITIVE_INFINITY);
+      return result;
+    }
+    for (var _index = 0; _index < array.length; ++_index) {
+      var _item = array[_index];
+      var transformed = transform(_item, _index);
+      if (transformed < min) {
+        result = _item;
+        min = transformed;
+      }
+    }
     return result;
   },
   max: function max(array, transform) {
-    if (typeof transform !== 'function') {
-      return Math.max.apply(Math, toConsumableArray(array));
-    }
     var result = void 0;
-    array.reduce(function (max, value, index) {
-      var transformed = transform(value, index);
-      if (max < transformed) {
-        result = value;
-        return transformed;
+    var max = Number.NEGATIVE_INFINITY;
+    if (typeof transform !== 'function') {
+      for (var index = 0; index < array.length; ++index) {
+        var item = array[index];
+        if (item > max) {
+          result = item;
+          max = item;
+        }
       }
-      return max;
-    }, Number.NEGATIVE_INFINITY);
+      return result;
+    }
+    for (var _index2 = 0; _index2 < array.length; ++_index2) {
+      var _item2 = array[_index2];
+      var transformed = transform(_item2, _index2);
+      if (transformed > max) {
+        result = _item2;
+        max = transformed;
+      }
+    }
     return result;
   }
 };
@@ -3875,6 +4006,8 @@ var Array$1 = {
  *
  * http://pegjs.org/
  */
+
+"use strict";
 
 function peg$subclass(child, parent) {
   function ctor() {
@@ -4221,7 +4354,6 @@ function peg$parse(input, options) {
           s4 = peg$parsewsp();
         }
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c0(s2);
           s0 = s1;
         } else {
@@ -4291,7 +4423,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4357,7 +4488,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4449,7 +4579,6 @@ function peg$parse(input, options) {
             s4 = null;
           }
           if (s4 !== peg$FAILED) {
-            peg$savedPos = s0;
             s1 = peg$c4(s1, s3, s4);
             s0 = s1;
           } else {
@@ -4486,7 +4615,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c7();
     }
     s0 = s1;
@@ -4517,7 +4645,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parselineto_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -4583,7 +4710,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4621,7 +4747,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsecoordinate_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c13(s1, s3);
           s0 = s1;
         } else {
@@ -4687,7 +4812,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4725,7 +4849,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsecoordinate_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c16(s1, s3);
           s0 = s1;
         } else {
@@ -4767,7 +4890,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsecurveto_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -4833,7 +4955,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4868,7 +4989,6 @@ function peg$parse(input, options) {
           if (s4 !== peg$FAILED) {
             s5 = peg$parsecoordinate_pair();
             if (s5 !== peg$FAILED) {
-              peg$savedPos = s0;
               s1 = peg$c19(s1, s3, s5);
               s0 = s1;
             } else {
@@ -4918,7 +5038,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsesmooth_curveto_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -4984,7 +5103,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -5012,7 +5130,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsecoordinate_pair();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c22(s1, s3);
           s0 = s1;
         } else {
@@ -5054,7 +5171,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsequadratic_bezier_curveto_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -5120,7 +5236,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -5148,7 +5263,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsecoordinate_pair();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c25(s1, s3);
           s0 = s1;
         } else {
@@ -5190,7 +5304,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsesmooth_quadratic_bezier_curveto_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -5256,7 +5369,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -5294,7 +5406,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parseelliptical_arc_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -5360,7 +5471,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -5413,7 +5523,6 @@ function peg$parse(input, options) {
                       if (s10 !== peg$FAILED) {
                         s11 = peg$parsecoordinate_pair();
                         if (s11 !== peg$FAILED) {
-                          peg$savedPos = s0;
                           s1 = peg$c30(s1, s3, s5, s7, s9, s11);
                           s0 = s1;
                         } else {
@@ -5477,7 +5586,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsenumber();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c31(s1, s3);
           s0 = s1;
         } else {
@@ -5505,7 +5613,6 @@ function peg$parse(input, options) {
       s1 = peg$parsedigit_sequence();
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c32(s1);
     }
     s0 = s1;
@@ -5556,7 +5663,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c33(s1);
     }
     s0 = s1;
@@ -5578,7 +5684,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c36(s1);
     }
     s0 = s1;
@@ -5650,7 +5755,6 @@ function peg$parse(input, options) {
         s1 = peg$FAILED;
       }
       if (s1 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c37();
       }
       s0 = s1;
@@ -5715,7 +5819,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c40(s1);
     }
     s0 = s1;
@@ -5785,7 +5888,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c40(s1);
     }
     s0 = s1;
@@ -5830,7 +5932,6 @@ function peg$parse(input, options) {
       s1 = peg$FAILED;
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c40(s1);
     }
     s0 = s1;
@@ -5885,7 +5986,6 @@ function peg$parse(input, options) {
       s1 = peg$FAILED;
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c49(s1);
     }
     s0 = s1;
@@ -5907,7 +6007,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c37();
     }
     s0 = s1;
@@ -5960,7 +6059,7 @@ var parser$1 = {
 var parserFunction = parser$1.parse;
 parserFunction.parseSVG = parserFunction;
 parserFunction.makeAbsolute = makeSVGPathCommandsAbsolute;
-var svgPathParser = parserFunction;
+var svgPathParser$1 = parserFunction;
 
 function makeSVGPathCommandsAbsolute(commands) {
 	var subpathStart,
@@ -6099,7 +6198,7 @@ var Path$1 = {
     var x = 0;
     var y = 0;
     var path = void 0;
-    var commands = svgPathParser(input);
+    var commands = svgPathParser$1(input);
     var paths = commands.reduce(function (paths, current) {
       switch (current.code) {
         case 'M':
@@ -6321,7 +6420,7 @@ function triangulateShape(contour, holes) {
     }, []));
   });
 
-  var result = earcut_1(vertices, holeIndices, 2);
+  var result = earcut_1$1(vertices, holeIndices, 2);
   var groups = [];
   for (var i = 0; i < result.length; i += 3) {
     groups.push(result.slice(i, i + 3));
