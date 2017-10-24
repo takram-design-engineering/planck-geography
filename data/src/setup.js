@@ -96,7 +96,7 @@ async function simplifyTopoJSON(data) {
 
   const result = await promisify(mapshaper.applyCommands)([
     '-i input.json',
-    '-simplify weighted 50%',
+    '-simplify weighted 25%',
     '-o output.json format=topojson',
   ].join(' '), {
     'input.json': data,
@@ -111,10 +111,11 @@ function createCatalog(data, identifier, levels) {
   const neighborIndices = topojson.neighbors(geometries)
 
   return levels.reduce((catalog, level) => {
+    const key = `${level}Code`
+    const capitalLevel = `${level.charAt().toUpperCase()}${level.slice(1)}`
     return {
       ...catalog,
       [level]: geometries.reduce((properties, geometry) => {
-        const key = `${level}Code`
         const code = geometry.properties[key]
         if (code === undefined || code === null) {
           return properties
@@ -139,11 +140,13 @@ function createCatalog(data, identifier, levels) {
           .filter((code, index, codes) => codes.indexOf(code) === index)
 
         // Add properties for this division
-        return properties.concat({
+        const property = {
           code,
           name: geometry.properties[`${level}Name`],
+          localizedName: geometry.properties[`localized${capitalLevel}Name`],
           neighbors,
-        })
+        }
+        return properties.concat(property)
       }, []),
     }
   }, { identifier })

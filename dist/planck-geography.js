@@ -727,6 +727,11 @@ var Division = function () {
       return this.data.name;
     }
   }, {
+    key: 'localizedName',
+    get: function get$$1() {
+      return this.data.localizedName || this.data.name;
+    }
+  }, {
     key: 'neighbors',
     get: function get$$1() {
       var _this2 = this;

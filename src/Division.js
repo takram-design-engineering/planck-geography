@@ -59,6 +59,10 @@ export default class Division {
     return this.data.name
   }
 
+  get localizedName() {
+    return this.data.localizedName || this.data.name
+  }
+
   get neighbors() {
     const scope = internal(this)
     if (scope.neighbors === undefined) {
