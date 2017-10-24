@@ -45,7 +45,6 @@ function Namespace() {
   };
 }
 
-var babelHelpers = {};
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
@@ -356,8 +355,6 @@ var toConsumableArray = function (arr) {
     return Array.from(arr);
   }
 };
-
-babelHelpers;
 
 //
 //  The MIT License
@@ -792,7 +789,7 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
-var pathBrowserify = createCommonjsModule(function (module, exports) {
+var index = createCommonjsModule(function (module, exports) {
   // Copyright Joyent, Inc. and other Node contributors.
   //
   // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1262,18 +1259,18 @@ if (Environment.type === 'node') {
         paths[_key] = arguments[_key];
       }
 
-      return pathBrowserify.resolve.apply(pathBrowserify, ['/'].concat(paths));
+      return index.resolve.apply(index, ['/'].concat(paths));
     },
 
 
-    normalize: pathBrowserify.normalize,
-    join: pathBrowserify.join,
-    relative: pathBrowserify.relative,
-    dirname: pathBrowserify.dirname,
-    basename: pathBrowserify.basename,
-    extname: pathBrowserify.extname,
-    separator: pathBrowserify.sep,
-    delimiter: pathBrowserify.delimiter
+    normalize: index.normalize,
+    join: index.join,
+    relative: index.relative,
+    dirname: index.dirname,
+    basename: index.basename,
+    extname: index.extname,
+    separator: index.sep,
+    delimiter: index.delimiter
   };
 }
 
@@ -1442,7 +1439,7 @@ var tsvParse = tsv.parse;
  * @api private
  */
 
-var requiresPort = function required(port, protocol) {
+var index$2 = function required(port, protocol) {
   protocol = protocol.split(':')[0];
   port = +port;
 
@@ -1540,7 +1537,7 @@ function querystringify(obj, prefix) {
 var stringify = querystringify;
 var parse = querystring;
 
-var querystringify_1 = {
+var index$4 = {
   stringify: stringify,
   parse: parse
 };
@@ -1723,7 +1720,7 @@ function URL$1(address, location, parser) {
     location = null;
   }
 
-  if (parser && 'function' !== typeof parser) parser = querystringify_1.parse;
+  if (parser && 'function' !== typeof parser) parser = index$4.parse;
 
   location = lolcation(location);
 
@@ -1792,7 +1789,7 @@ function URL$1(address, location, parser) {
   // for a given protocol. As the host also contains the port number we're going
   // override it with the hostname which contains no port number.
   //
-  if (!requiresPort(url.port, url.protocol)) {
+  if (!index$2(url.port, url.protocol)) {
     url.host = url.hostname;
     url.port = '';
   }
@@ -1834,7 +1831,7 @@ function set$1(part, value, fn) {
   switch (part) {
     case 'query':
       if ('string' === typeof value && value.length) {
-        value = (fn || querystringify_1.parse)(value);
+        value = (fn || index$4.parse)(value);
       }
 
       url[part] = value;
@@ -1843,7 +1840,7 @@ function set$1(part, value, fn) {
     case 'port':
       url[part] = value;
 
-      if (!requiresPort(value, url.protocol)) {
+      if (!index$2(value, url.protocol)) {
         url.host = url.hostname;
         url[part] = '';
       } else if (value) {
@@ -1908,7 +1905,7 @@ function set$1(part, value, fn) {
  * @api public
  */
 function toString(stringify) {
-  if (!stringify || 'function' !== typeof stringify) stringify = querystringify_1.stringify;
+  if (!stringify || 'function' !== typeof stringify) stringify = index$4.stringify;
 
   var query,
       url = this,
@@ -1942,9 +1939,9 @@ URL$1.prototype = { set: set$1, toString: toString };
 //
 URL$1.extractProtocol = extractProtocol;
 URL$1.location = lolcation;
-URL$1.qs = querystringify_1;
+URL$1.qs = index$4;
 
-var urlParse$1 = URL$1;
+var index$1 = URL$1;
 
 //
 //  The MIT License
@@ -2003,7 +2000,7 @@ var internal$2 = Namespace('Request');
 
 function browserRequest(url, options) {
   return new Promise(function (resolve, reject) {
-    var parsed = new urlParse$1(url, true);
+    var parsed = new index$1(url, true);
     if (options.query) {
       parsed.set('query', Object.assign({}, parsed.query, options.query));
     }
@@ -2079,6 +2076,10 @@ function performRequest(url, options) {
           throw new Error('Response is unexpectedly not a buffer');
         }
         var buffer = new ArrayBuffer(response.length);
+        var view = new Uint8Array(buffer);
+        for (var i = 0; i < response.length; ++i) {
+          view[i] = response[i];
+        }
         return buffer;
       });
     }
@@ -3046,7 +3047,8 @@ var Geography = function () {
 
 'use strict';
 
-var earcut_1$1 = earcut;
+var earcut_1 = earcut;
+var default_1 = earcut;
 
 function earcut(data, holeIndices, dim) {
 
@@ -3059,7 +3061,7 @@ function earcut(data, holeIndices, dim) {
 
     if (!outerNode) return triangles;
 
-    var minX, minY, maxX, maxY, x, y, size;
+    var minX, minY, maxX, maxY, x, y, invSize;
 
     if (hasHoles) outerNode = eliminateHoles(data, holeIndices, outerNode, dim);
 
@@ -3077,11 +3079,12 @@ function earcut(data, holeIndices, dim) {
             if (y > maxY) maxY = y;
         }
 
-        // minX, minY and size are later used to transform coords into integers for z-order calculation
-        size = Math.max(maxX - minX, maxY - minY);
+        // minX, minY and invSize are later used to transform coords into integers for z-order calculation
+        invSize = Math.max(maxX - minX, maxY - minY);
+        invSize = invSize !== 0 ? 1 / invSize : 0;
     }
 
-    earcutLinked(outerNode, triangles, dim, minX, minY, size);
+    earcutLinked(outerNode, triangles, dim, minX, minY, invSize);
 
     return triangles;
 }
@@ -3121,7 +3124,7 @@ function filterPoints(start, end) {
         if (!p.steiner && (equals(p, p.next) || area(p.prev, p, p.next) === 0)) {
             removeNode(p);
             p = end = p.prev;
-            if (p === p.next) return null;
+            if (p === p.next) break;
             again = true;
         } else {
             p = p.next;
@@ -3132,11 +3135,11 @@ function filterPoints(start, end) {
 }
 
 // main ear slicing loop which triangulates a polygon (given as a linked list)
-function earcutLinked(ear, triangles, dim, minX, minY, size, pass) {
+function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
     if (!ear) return;
 
     // interlink polygon nodes in z-order
-    if (!pass && size) indexCurve(ear, minX, minY, size);
+    if (!pass && invSize) indexCurve(ear, minX, minY, invSize);
 
     var stop = ear,
         prev,
@@ -3147,7 +3150,7 @@ function earcutLinked(ear, triangles, dim, minX, minY, size, pass) {
         prev = ear.prev;
         next = ear.next;
 
-        if (size ? isEarHashed(ear, minX, minY, size) : isEar(ear)) {
+        if (invSize ? isEarHashed(ear, minX, minY, invSize) : isEar(ear)) {
             // cut off the triangle
             triangles.push(prev.i / dim);
             triangles.push(ear.i / dim);
@@ -3168,16 +3171,16 @@ function earcutLinked(ear, triangles, dim, minX, minY, size, pass) {
         if (ear === stop) {
             // try filtering points and slicing again
             if (!pass) {
-                earcutLinked(filterPoints(ear), triangles, dim, minX, minY, size, 1);
+                earcutLinked(filterPoints(ear), triangles, dim, minX, minY, invSize, 1);
 
                 // if this didn't work, try curing all small self-intersections locally
             } else if (pass === 1) {
                 ear = cureLocalIntersections(ear, triangles, dim);
-                earcutLinked(ear, triangles, dim, minX, minY, size, 2);
+                earcutLinked(ear, triangles, dim, minX, minY, invSize, 2);
 
                 // as a last resort, try splitting the remaining polygon into two
             } else if (pass === 2) {
-                splitEarcut(ear, triangles, dim, minX, minY, size);
+                splitEarcut(ear, triangles, dim, minX, minY, invSize);
             }
 
             break;
@@ -3204,7 +3207,7 @@ function isEar(ear) {
     return true;
 }
 
-function isEarHashed(ear, minX, minY, size) {
+function isEarHashed(ear, minX, minY, invSize) {
     var a = ear.prev,
         b = ear,
         c = ear.next;
@@ -3218,8 +3221,8 @@ function isEarHashed(ear, minX, minY, size) {
         maxTY = a.y > b.y ? a.y > c.y ? a.y : c.y : b.y > c.y ? b.y : c.y;
 
     // z-order range for the current triangle bbox;
-    var minZ = zOrder(minTX, minTY, minX, minY, size),
-        maxZ = zOrder(maxTX, maxTY, minX, minY, size);
+    var minZ = zOrder(minTX, minTY, minX, minY, invSize),
+        maxZ = zOrder(maxTX, maxTY, minX, minY, invSize);
 
     // first look for points inside the triangle in increasing z-order
     var p = ear.nextZ;
@@ -3266,7 +3269,7 @@ function cureLocalIntersections(start, triangles, dim) {
 }
 
 // try splitting polygon into two and triangulate them independently
-function splitEarcut(start, triangles, dim, minX, minY, size) {
+function splitEarcut(start, triangles, dim, minX, minY, invSize) {
     // look for a valid diagonal that divides the polygon into two
     var a = start;
     do {
@@ -3281,8 +3284,8 @@ function splitEarcut(start, triangles, dim, minX, minY, size) {
                 c = filterPoints(c, c.next);
 
                 // run earcut on each half
-                earcutLinked(a, triangles, dim, minX, minY, size);
-                earcutLinked(c, triangles, dim, minX, minY, size);
+                earcutLinked(a, triangles, dim, minX, minY, invSize);
+                earcutLinked(c, triangles, dim, minX, minY, invSize);
                 return;
             }
             b = b.next;
@@ -3343,7 +3346,7 @@ function findHoleBridge(hole, outerNode) {
     // find a segment intersected by a ray from the hole's leftmost point to the left;
     // segment's endpoint with lesser x will be potential connection point
     do {
-        if (hy <= p.y && hy >= p.next.y) {
+        if (hy <= p.y && hy >= p.next.y && p.next.y !== p.y) {
             var x = p.x + (hy - p.y) * (p.next.x - p.x) / (p.next.y - p.y);
             if (x <= hx && x > qx) {
                 qx = x;
@@ -3374,7 +3377,7 @@ function findHoleBridge(hole, outerNode) {
     p = m.next;
 
     while (p !== stop) {
-        if (hx >= p.x && p.x >= mx && pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
+        if (hx >= p.x && p.x >= mx && hx !== p.x && pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
 
             tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
 
@@ -3391,10 +3394,10 @@ function findHoleBridge(hole, outerNode) {
 }
 
 // interlink polygon nodes in z-order
-function indexCurve(start, minX, minY, size) {
+function indexCurve(start, minX, minY, invSize) {
     var p = start;
     do {
-        if (p.z === null) p.z = zOrder(p.x, p.y, minX, minY, size);
+        if (p.z === null) p.z = zOrder(p.x, p.y, minX, minY, invSize);
         p.prevZ = p.prev;
         p.nextZ = p.next;
         p = p.next;
@@ -3434,20 +3437,11 @@ function sortLinked(list) {
                 q = q.nextZ;
                 if (!q) break;
             }
-
             qSize = inSize;
 
             while (pSize > 0 || qSize > 0 && q) {
 
-                if (pSize === 0) {
-                    e = q;
-                    q = q.nextZ;
-                    qSize--;
-                } else if (qSize === 0 || !q) {
-                    e = p;
-                    p = p.nextZ;
-                    pSize--;
-                } else if (p.z <= q.z) {
+                if (pSize !== 0 && (qSize === 0 || !q || p.z <= q.z)) {
                     e = p;
                     p = p.nextZ;
                     pSize--;
@@ -3473,11 +3467,11 @@ function sortLinked(list) {
     return list;
 }
 
-// z-order of a point given coords and size of the data bounding box
-function zOrder(x, y, minX, minY, size) {
+// z-order of a point given coords and inverse of the longer side of data bbox
+function zOrder(x, y, minX, minY, invSize) {
     // coords are transformed into non-negative 15-bit integer range
-    x = 32767 * (x - minX) / size;
-    y = 32767 * (y - minY) / size;
+    x = 32767 * (x - minX) * invSize;
+    y = 32767 * (y - minY) * invSize;
 
     x = (x | x << 8) & 0x00FF00FF;
     x = (x | x << 4) & 0x0F0F0F0F;
@@ -3553,7 +3547,7 @@ function middleInside(a, b) {
         px = (a.x + b.x) / 2,
         py = (a.y + b.y) / 2;
     do {
-        if (p.y > py !== p.next.y > py && px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x) inside = !inside;
+        if (p.y > py !== p.next.y > py && p.next.y !== p.y && px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x) inside = !inside;
         p = p.next;
     } while (p !== a);
 
@@ -3685,9 +3679,11 @@ earcut.flatten = function (data) {
     return result;
 };
 
+earcut_1.default = default_1;
+
 'use strict';
 
-var tinyqueue = TinyQueue;
+var index$7 = TinyQueue;
 
 function TinyQueue(data, compare) {
     if (!(this instanceof TinyQueue)) return new TinyQueue(data, compare);
@@ -3775,8 +3771,8 @@ TinyQueue.prototype = {
 
 'use strict';
 
-var polylabel_1 = polylabel;
-var default_1 = polylabel;
+var index$6 = polylabel;
+var default_1$1 = polylabel;
 
 function polylabel(polygon, precision, debug) {
     precision = precision || 1.0;
@@ -3797,7 +3793,7 @@ function polylabel(polygon, precision, debug) {
     var h = cellSize / 2;
 
     // a priority queue of cells in order of their "potential" (max distance to polygon)
-    var cellQueue = new tinyqueue(null, compareMax);
+    var cellQueue = new index$7(null, compareMax);
 
     if (cellSize === 0) return [minX, minY];
 
@@ -3926,7 +3922,7 @@ function getSegDistSq(px, py, a, b) {
     return dx * dx + dy * dy;
 }
 
-polylabel_1.default = default_1;
+index$6.default = default_1$1;
 
 //
 //  The MIT License
@@ -6059,7 +6055,7 @@ var parser$1 = {
 var parserFunction = parser$1.parse;
 parserFunction.parseSVG = parserFunction;
 parserFunction.makeAbsolute = makeSVGPathCommandsAbsolute;
-var svgPathParser$1 = parserFunction;
+var index$9 = parserFunction;
 
 function makeSVGPathCommandsAbsolute(commands) {
 	var subpathStart,
@@ -6198,7 +6194,7 @@ var Path$1 = {
     var x = 0;
     var y = 0;
     var path = void 0;
-    var commands = svgPathParser$1(input);
+    var commands = index$9(input);
     var paths = commands.reduce(function (paths, current) {
       switch (current.code) {
         case 'M':
@@ -6420,7 +6416,7 @@ function triangulateShape(contour, holes) {
     }, []));
   });
 
-  var result = earcut_1$1(vertices, holeIndices, 2);
+  var result = earcut_1(vertices, holeIndices, 2);
   var groups = [];
   for (var i = 0; i < result.length; i += 3) {
     groups.push(result.slice(i, i + 3));
@@ -6650,7 +6646,7 @@ var GeographyBuilder = function () {
             return [curve.v1.x, curve.v1.y];
           });
         });
-        return polylabel_1(projected, Math.sqrt(projection.path.area({
+        return index$6(projected, Math.sqrt(projection.path.area({
           type: 'Polygon',
           coordinates: _polygon
         })) * precision);
@@ -6665,7 +6661,7 @@ var GeographyBuilder = function () {
         console.warn('Unable to derive pole of inaccessibility:', level, code);
         return null;
       }
-      return polylabel_1(polygon, Math.sqrt(d3.geoArea({
+      return index$6(polygon, Math.sqrt(d3.geoArea({
         type: 'Polygon',
         coordinates: polygon
       })) * precision);
@@ -7783,7 +7779,7 @@ var charenc_1 = charenc;
 
 // The _isBuffer check is for Safari 5-7 support, because it's missing
 // Object.prototype.constructor. Remove this eventually
-var isBuffer_1 = function isBuffer_1(obj) {
+var index$10 = function index(obj) {
   return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer);
 };
 
@@ -7800,7 +7796,7 @@ var md5 = createCommonjsModule(function (module) {
   (function () {
     var crypt$$1 = crypt,
         utf8 = charenc_1.utf8,
-        isBuffer = isBuffer_1,
+        isBuffer = index$10,
         bin = charenc_1.bin,
 
 
@@ -8368,14 +8364,14 @@ var stringify$3 = function stringify(value, replacer, space) {
 var parse$1 = parse$2;
 var stringify$2 = stringify$3;
 
-var jsonify = {
+var index$13 = {
 	parse: parse$1,
 	stringify: stringify$2
 };
 
-var json = typeof JSON !== 'undefined' ? JSON : jsonify;
+var json = typeof JSON !== 'undefined' ? JSON : index$13;
 
-var jsonStableStringify = function jsonStableStringify(obj, opts) {
+var index$12 = function index(obj, opts) {
     if (!opts) opts = {};
     if (typeof opts === 'function') opts = { cmp: opts };
     var space = opts.space || '';
@@ -8483,7 +8479,7 @@ var objectKeys = Object.keys || function (obj) {
 //
 
 function Hash(object) {
-  return md5(jsonStableStringify(object));
+  return md5(index$12(object));
 }
 
 //
