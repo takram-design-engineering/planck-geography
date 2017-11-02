@@ -84,7 +84,7 @@ export default class DivisionLevel {
     scope.divisions = {
       ...scope.divisions,
       ...this.data.reduce((divisions, data) => {
-        const code = data.code
+        const { code } = data
         if (scope.divisions[code] === undefined) {
           return { ...divisions, [code]: new Division(this, code) }
         }
@@ -105,7 +105,7 @@ export default class DivisionLevel {
   get superlevel() {
     const scope = internal(this)
     if (scope.superlevel === undefined) {
-      const levels = this.geography.levels
+      const { levels } = this.geography
       const index = levels.indexOf(this)
       if (index === -1) {
         throw new Error('Could not find levels for geography')
@@ -118,7 +118,7 @@ export default class DivisionLevel {
   get sublevel() {
     const scope = internal(this)
     if (scope.sublevel === undefined) {
-      const levels = this.geography.levels
+      const { levels } = this.geography
       const index = levels.indexOf(this)
       if (index === -1) {
         throw new Error('Could not find levels for geography')

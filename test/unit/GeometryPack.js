@@ -29,7 +29,7 @@ import chai from 'chai'
 
 import { GeometryPack } from '../..'
 
-const expect = chai.expect
+const { expect } = chai
 
 describe('GeometryPack', () => {
   it('', () => {

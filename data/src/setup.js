@@ -107,7 +107,7 @@ async function simplifyTopoJSON(data) {
 function createCatalog(data, identifier, levels) {
   console.log(chalk.cyan('Creating catalog'))
 
-  const geometries = data.objects.geography.geometries
+  const { geometries } = data.objects.geography
   const neighborIndices = topojson.neighbors(geometries)
 
   return levels.reduce((catalog, level) => {

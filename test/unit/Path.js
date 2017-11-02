@@ -29,7 +29,7 @@ import chai from 'chai'
 
 import { Path } from '../..'
 
-const expect = chai.expect
+const { expect } = chai
 
 describe('Path', () => {
   describe('#winding', () => {

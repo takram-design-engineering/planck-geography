@@ -28,7 +28,7 @@ import chai from 'chai'
 
 import { JapanRegionalMesh } from '../..'
 
-const expect = chai.expect
+const { expect } = chai
 
 describe('JapanRegionalMesh', () => {
   it('has 6 levels', () => {

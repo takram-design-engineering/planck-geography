@@ -114,12 +114,12 @@ export default class Projection {
   }
 
   sun(time) {
-    const origin = this.origin
+    const { origin } = this
     return suncalc.getPosition(time, origin[1], origin[0])
   }
 
   moon(time) {
-    const origin = this.origin
+    const { origin } = this
     return suncalc.getMoonPosition(time, origin[1], origin[0])
   }
 

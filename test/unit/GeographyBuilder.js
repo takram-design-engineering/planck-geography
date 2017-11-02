@@ -31,7 +31,7 @@ import chai from 'chai'
 import { FilePath } from '@takram/planck-core'
 import { GeographyBuilder, Projection } from '../..'
 
-const expect = chai.expect
+const { expect } = chai
 
 describe('GeographyBuilder', function () {
   const projection = new Projection({

@@ -338,7 +338,7 @@ export class JapanRegionalMesh {
 
   center(code) {
     const origin = this.origin(code)
-    const size = this.size
+    const { size } = this
     return [origin[0] + size[0] / 2, origin[1] + size[1] / 2]
   }
 

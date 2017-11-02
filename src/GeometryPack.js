@@ -32,8 +32,8 @@ function packBufferGeometry(geometry, byteOffset = 0) {
   const buffers = []
   let byteLength = byteOffset
   if (scope.index) {
-    const array = geometry.index.array
-    const buffer = array.buffer
+    const { array } = geometry.index
+    const { buffer } = array
     buffers.push([buffer, byteLength])
     scope.index.array = [byteLength, array.length]
     byteLength += buffer.byteLength
@@ -42,8 +42,8 @@ function packBufferGeometry(geometry, byteOffset = 0) {
     const names = Object.keys(scope.attributes)
     for (let i = 0; i < names.length; ++i) {
       const name = names[i]
-      const array = geometry.attributes[name].array
-      const buffer = array.buffer
+      const { array } = geometry.attributes[name]
+      const { buffer } = array
       buffers.push([buffer, byteLength])
       scope.attributes[name].array = [byteLength, array.length]
       byteLength += buffer.byteLength

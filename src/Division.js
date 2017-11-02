@@ -75,7 +75,7 @@ export default class Division {
 
   async properties(projection) {
     const properties = await this.level.properties(projection)
-    const code = this.code
+    const { code } = this
     const result = properties[code]
     if (result === undefined) {
       const level = this.level.identifier
@@ -102,7 +102,7 @@ export default class Division {
 
   async geometry(name, projection) {
     const geometries = await this.level.geometries(name, projection)
-    const code = this.code
+    const { code } = this
     const result = geometries[code]
     if (result === undefined) {
       const level = this.level.identifier
@@ -137,7 +137,7 @@ export default class Division {
   get superdivision() {
     const scope = internal(this)
     if (scope.superdivision === undefined) {
-      const superlevel = this.level.superlevel
+      const { superlevel } = this.level
       if (!superlevel) {
         scope.superdivision = null
       } else {
@@ -152,7 +152,7 @@ export default class Division {
   get subdivisions() {
     const scope = internal(this)
     if (scope.subdivisions === undefined) {
-      const sublevel = this.level.sublevel
+      const { sublevel } = this.level
       if (!sublevel) {
         scope.subdivisions = []
       } else {

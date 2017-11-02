@@ -113,7 +113,9 @@ async function writeGeometries(file, geometries) {
 }
 
 async function writeGeographyProperties(options) {
-  const { output, identifier, builder, projection } = options
+  const {
+    output, identifier, builder, projection,
+  } = options
 
   // Create properties
   console.log(chalk.cyan('Creating properties for geography'))
@@ -131,7 +133,9 @@ async function writeGeographyProperties(options) {
 }
 
 async function writeGeographyGeometries(options) {
-  const { output, identifier, builder, projection } = options
+  const {
+    output, identifier, builder, projection,
+  } = options
 
   // Create geometries
   console.log(chalk.cyan('Creating shape for geography'))
@@ -159,7 +163,9 @@ async function writeGeography(options) {
 }
 
 async function writeDivisionsProperties(options) {
-  const { catalog, output, identifier, builder, projection, level } = options
+  const {
+    catalog, output, identifier, builder, projection, level,
+  } = options
   const codes = catalog[level].map(entry => entry.code)
 
   // Create properties
@@ -182,7 +188,9 @@ async function writeDivisionsProperties(options) {
 }
 
 async function writeDivisionsGeometries(options) {
-  const { catalog, output, identifier, builder, projection, level } = options
+  const {
+    catalog, output, identifier, builder, projection, level,
+  } = options
   const codes = catalog[level].map(entry => entry.code)
 
   // Create geometries
@@ -308,5 +316,7 @@ export default async function project(options) {
   if (options.rotates) {
     rotates = JSON.parse(options.rotates)
   }
-  await main({ ...options, levels, origin, rotates })
+  await main({
+    ...options, levels, origin, rotates,
+  })
 }

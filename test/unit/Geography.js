@@ -30,7 +30,7 @@ import chai from 'chai'
 import { Environment } from '@takram/planck-core'
 import { JapanGeography, Projection } from '../..'
 
-const expect = chai.expect
+const { expect } = chai
 
 // eslint-disable-next-line func-names
 describe('Geography', function () {

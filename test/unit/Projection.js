@@ -28,7 +28,7 @@ import chai from 'chai'
 
 import { Projection } from '../..'
 
-const expect = chai.expect
+const { expect } = chai
 
 describe('Projection', () => {
   it('initializes', () => {
@@ -112,7 +112,7 @@ describe('Projection', () => {
   describe('#projector', () => {
     it('returns newly-created d3 projection', () => {
       const projection = new Projection()
-      const projector = projection.projector
+      const { projector } = projection
       expect(projector).not.equal(projection.projection)
       expect(projector([90 / Math.PI, 0])).deep.equal([5000, 0])
       expect(projector([-90 / Math.PI, 0])).deep.equal([-5000, 0])

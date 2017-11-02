@@ -184,7 +184,7 @@ export default class GeographyBuilder {
   }
 
   property(name, { level, code, projection }) {
-    let geometries = this.data.objects.geography.geometries
+    let { geometries } = this.data.objects.geography
     if (level) {
       geometries = geometries.filter(geometry => {
         return includesGeometryObject(level, code, geometry)
@@ -209,8 +209,10 @@ export default class GeographyBuilder {
     return this.property('centroid', options)
   }
 
-  poleOfInaccessibility({ level, code, projection, precision = 0.01 }) {
-    let geometries = this.data.objects.geography.geometries
+  poleOfInaccessibility({
+    level, code, projection, precision = 0.01,
+  }) {
+    let { geometries } = this.data.objects.geography
     if (level) {
       geometries = geometries.filter(geometry => {
         return includesGeometryObject(level, code, geometry)
@@ -308,7 +310,7 @@ export default class GeographyBuilder {
   }
 
   geographyShapes({ projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapes({
       projection,
@@ -321,7 +323,7 @@ export default class GeographyBuilder {
   }
 
   geographyShapeGeometry({ projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapeGeometry({
       projection,
@@ -334,7 +336,7 @@ export default class GeographyBuilder {
   }
 
   geographyOutlineGeometry({ projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.outlineGeometry({
       projection,
@@ -363,7 +365,7 @@ export default class GeographyBuilder {
   }
 
   divisionShapes({ level, code, projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapes({
       projection,
@@ -378,7 +380,7 @@ export default class GeographyBuilder {
   }
 
   divisionShapeGeometry({ level, code, projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapeGeometry({
       projection,
@@ -393,7 +395,7 @@ export default class GeographyBuilder {
   }
 
   divisionOutlineGeometry({ level, code, projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.outlineGeometry({
       projection,
@@ -419,7 +421,7 @@ export default class GeographyBuilder {
     })()
 
     // Reduce geometries to find neighbors if superlevel exists
-    let geometries = this.data.objects.geography.geometries
+    let { geometries } = this.data.objects.geography
     if (superlevel) {
       geometries = geometries.filter(geometry => {
         return includesGeometryObject(superlevel, code, geometry)
@@ -467,7 +469,7 @@ export default class GeographyBuilder {
   }
 
   divisionSubdivisionGeometry({ level, code, projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const object = {
       type: 'GeometryCollection',
       geometries: geometries.filter(geometry => {

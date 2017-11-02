@@ -34,7 +34,7 @@ function cross(a, b) {
 function crossings(a, b, point) {
   if ((a.x < point.x && point.x <= b.x) ||
       (b.x < point.x && point.x <= a.x)) {
-    let y = a.y
+    let { y } = a
     if (a.x !== b.x) {
       y = a.y + (b.y - a.y) * (point.x - a.x) / (b.x - a.x)
     }
@@ -94,8 +94,7 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x = current.x
-            y = current.y
+            ({ x, y } = current)
           }
           if (path && path.curves.length === 0) {
             paths.pop()
@@ -114,8 +113,7 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x = current.x
-            y = current.y
+            ({ x, y } = current)
           }
           if (flip) {
             path.lineTo(x, -y)
@@ -128,7 +126,7 @@ export default {
           if (current.relative === true) {
             y += current.y
           } else {
-            y = current.y
+            ({ y } = current)
           }
           if (flip) {
             path.lineTo(x, -y)
@@ -141,7 +139,7 @@ export default {
           if (current.relative === true) {
             x += current.x
           } else {
-            x = current.x
+            ({ x } = current)
           }
           if (flip) {
             path.lineTo(x, -y)
@@ -159,12 +157,9 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x1 = current.x1
-            y1 = current.y1
-            x2 = current.x2
-            y2 = current.y2
-            x = current.x
-            y = current.y
+            ({
+              x1, y1, x2, y2, x, y,
+            } = current)
           }
           if (flip) {
             path.bezierCurveTo(x1, -y1, x2, -y2, x, -y)
@@ -182,10 +177,9 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x2 = current.x2
-            y2 = current.y2
-            x = current.x
-            y = current.y
+            ({
+              x2, y2, x, y,
+            } = current)
           }
           if (flip) {
             path.bezierCurveTo(x1, -y1, x2, -y2, x, -y)
@@ -201,10 +195,9 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x1 = current.x1
-            y1 = current.y1
-            x = current.x
-            y = current.y
+            ({
+              x1, y1, x, y,
+            } = current)
           }
           if (flip) {
             path.quadraticCurveTo(x1, -y1, x, -y)
@@ -220,8 +213,7 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x = current.x
-            y = current.y
+            ({ x, y } = current)
           }
           if (flip) {
             path.quadraticCurveTo(x1, -y1, x, -y)
