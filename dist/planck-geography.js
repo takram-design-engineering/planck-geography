@@ -752,6 +752,7 @@ var Division = function () {
       var scope = internal(this);
       if (scope.superdivision === undefined) {
         var superlevel = this.level.superlevel;
+
         if (!superlevel) {
           scope.superdivision = null;
         } else {
@@ -770,6 +771,7 @@ var Division = function () {
       var scope = internal(this);
       if (scope.subdivisions === undefined) {
         var sublevel = this.level.sublevel;
+
         if (!sublevel) {
           scope.subdivisions = [];
         } else {
@@ -1068,6 +1070,7 @@ switch (environmentType) {
     environmentSelf = window;
     break;
   case 'worker':
+    // eslint-disable-next-line no-restricted-globals
     environmentSelf = self;
     break;
   case 'node':
@@ -1116,7 +1119,12 @@ function branchingImport(arg) {
     id = arg;
     name = arg;
   } else {
-    id = Object.keys(arg)[0];
+    var _Object$keys = Object.keys(arg);
+
+    var _Object$keys2 = slicedToArray(_Object$keys, 1);
+
+    id = _Object$keys2[0];
+
     name = arg[id];
   }
   if (process.browser) {
@@ -1233,6 +1241,7 @@ function currentScriptPath() {
         return currentScript && currentScript.src || undefined;
       }
     case 'worker':
+      // eslint-disable-next-line no-restricted-globals
       return self.location.href;
     case 'node':
       return __filename;
@@ -2102,8 +2111,7 @@ function parseArguments() {
       options = args[1];
 
   if (typeof url !== 'string') {
-    options = url;
-    url = options.url;
+    options = url;url = options.url.url;
   }
   if (typeof url !== 'string') {
     throw new Error('The first argument or options.url must be a string');
@@ -2201,6 +2209,7 @@ function _packBufferGeometry5(geometry) {
   if (scope.index) {
     var array = geometry.index.array;
     var buffer = array.buffer;
+
     buffers.push([buffer, byteLength]);
     scope.index.array = [byteLength, array.length];
     byteLength += buffer.byteLength;
@@ -2211,6 +2220,7 @@ function _packBufferGeometry5(geometry) {
       var name = names[i];
       var _array = geometry.attributes[name].array;
       var _buffer = _array.buffer;
+
       buffers.push([_buffer, byteLength]);
       scope.attributes[name].array = [byteLength, _array.length];
       byteLength += _buffer.byteLength;
@@ -2543,6 +2553,7 @@ var DivisionLevel = function () {
       var scope = internal$1(this);
       scope.divisions = _extends({}, scope.divisions, this.data.reduce(function (divisions, data) {
         var code = data.code;
+
         if (scope.divisions[code] === undefined) {
           return _extends({}, divisions, defineProperty({}, code, new Division(_this, code)));
         }
@@ -2567,6 +2578,7 @@ var DivisionLevel = function () {
       var scope = internal$1(this);
       if (scope.superlevel === undefined) {
         var levels = this.geography.levels;
+
         var index = levels.indexOf(this);
         if (index === -1) {
           throw new Error('Could not find levels for geography');
@@ -2581,6 +2593,7 @@ var DivisionLevel = function () {
       var scope = internal$1(this);
       if (scope.sublevel === undefined) {
         var levels = this.geography.levels;
+
         var index = levels.indexOf(this);
         if (index === -1) {
           throw new Error('Could not find levels for geography');
@@ -6149,6 +6162,7 @@ function cross(a, b) {
 function crossings(a, b, point) {
   if (a.x < point.x && point.x <= b.x || b.x < point.x && point.x <= a.x) {
     var y = a.y;
+
     if (a.x !== b.x) {
       y = a.y + (b.y - a.y) * (point.x - a.x) / (b.x - a.x);
     }
@@ -6572,8 +6586,8 @@ var GeographyBuilder = function () {
       var level = _ref2.level,
           code = _ref2.code,
           projection = _ref2.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       if (level) {
         geometries = geometries.filter(function (geometry) {
           return includesGeometryObject(level, code, geometry);
@@ -6608,8 +6622,8 @@ var GeographyBuilder = function () {
           projection = _ref3.projection,
           _ref3$precision = _ref3.precision,
           precision = _ref3$precision === undefined ? 0.01 : _ref3$precision;
-
       var geometries = this.data.objects.geography.geometries;
+
       if (level) {
         geometries = geometries.filter(function (geometry) {
           return includesGeometryObject(level, code, geometry);
@@ -6732,8 +6746,8 @@ var GeographyBuilder = function () {
     key: 'geographyShapes',
     value: function geographyShapes(_ref8) {
       var projection = _ref8.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.shapes({
         projection: projection,
@@ -6748,8 +6762,8 @@ var GeographyBuilder = function () {
     key: 'geographyShapeGeometry',
     value: function geographyShapeGeometry(_ref9) {
       var projection = _ref9.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.shapeGeometry({
         projection: projection,
@@ -6764,8 +6778,8 @@ var GeographyBuilder = function () {
     key: 'geographyOutlineGeometry',
     value: function geographyOutlineGeometry(_ref10) {
       var projection = _ref10.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.outlineGeometry({
         projection: projection,
@@ -6803,8 +6817,8 @@ var GeographyBuilder = function () {
       var level = _ref12.level,
           code = _ref12.code,
           projection = _ref12.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.shapes({
         projection: projection,
@@ -6823,8 +6837,8 @@ var GeographyBuilder = function () {
       var level = _ref13.level,
           code = _ref13.code,
           projection = _ref13.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.shapeGeometry({
         projection: projection,
@@ -6843,8 +6857,8 @@ var GeographyBuilder = function () {
       var level = _ref14.level,
           code = _ref14.code,
           projection = _ref14.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.outlineGeometry({
         projection: projection,
@@ -6878,6 +6892,7 @@ var GeographyBuilder = function () {
 
       // Reduce geometries to find neighbors if superlevel exists
       var geometries = this.data.objects.geography.geometries;
+
       if (superlevel) {
         geometries = geometries.filter(function (geometry) {
           return includesGeometryObject(superlevel, code, geometry);
@@ -6927,8 +6942,8 @@ var GeographyBuilder = function () {
       var level = _ref16.level,
           code = _ref16.code,
           projection = _ref16.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       var object = {
         type: 'GeometryCollection',
         geometries: geometries.filter(function (geometry) {
@@ -7289,6 +7304,7 @@ var JapanRegionalMesh = function () {
     value: function center(code) {
       var origin = this.origin(code);
       var size = this.size;
+
       return [origin[0] + size[0] / 2, origin[1] + size[1] / 2];
     }
   }, {
@@ -8579,12 +8595,14 @@ var Projection = function () {
     key: 'sun',
     value: function sun(time) {
       var origin = this.origin;
+
       return suncalc.getPosition(time, origin[1], origin[0]);
     }
   }, {
     key: 'moon',
     value: function moon(time) {
       var origin = this.origin;
+
       return suncalc.getMoonPosition(time, origin[1], origin[0]);
     }
   }, {
