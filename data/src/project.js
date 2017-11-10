@@ -170,16 +170,18 @@ async function writeDivisionsProperties(options) {
 
   // Create properties
   console.log(chalk.cyan(`Creating properties for ${level}`))
-  const properties = codes.map(code => {
+  const properties = codes.reduce((result, code) => {
     const options = { projection, level, code }
     return {
-      code,
-      bounds: builder.bounds(options),
-      area: builder.area(options),
-      centroid: builder.centroid(options),
-      poleOfInaccessibility: builder.poleOfInaccessibility(options),
+      ...result,
+      [code]: {
+        bounds: builder.bounds(options),
+        area: builder.area(options),
+        centroid: builder.centroid(options),
+        poleOfInaccessibility: builder.poleOfInaccessibility(options),
+      }
     }
-  })
+  }, {})
 
   // Write properties
   const directory = path.resolve(output, identifier, level)
