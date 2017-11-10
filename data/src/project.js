@@ -179,7 +179,7 @@ async function writeDivisionsProperties(options) {
         area: builder.area(options),
         centroid: builder.centroid(options),
         poleOfInaccessibility: builder.poleOfInaccessibility(options),
-      }
+      },
     }
   }, {})
 
