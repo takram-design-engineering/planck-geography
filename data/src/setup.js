@@ -1,26 +1,5 @@
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 /* eslint-disable no-console */
 
@@ -96,7 +75,7 @@ async function simplifyTopoJSON(data) {
 
   const result = await promisify(mapshaper.applyCommands)([
     '-i input.json',
-    '-simplify weighted 50%',
+    '-simplify weighted 25%',
     '-o output.json format=topojson',
   ].join(' '), {
     'input.json': data,
@@ -107,14 +86,15 @@ async function simplifyTopoJSON(data) {
 function createCatalog(data, identifier, levels) {
   console.log(chalk.cyan('Creating catalog'))
 
-  const geometries = data.objects.geography.geometries
+  const { geometries } = data.objects.geography
   const neighborIndices = topojson.neighbors(geometries)
 
   return levels.reduce((catalog, level) => {
+    const key = `${level}Code`
+    const capitalLevel = `${level.charAt().toUpperCase()}${level.slice(1)}`
     return {
       ...catalog,
       [level]: geometries.reduce((properties, geometry) => {
-        const key = `${level}Code`
         const code = geometry.properties[key]
         if (code === undefined || code === null) {
           return properties
@@ -139,11 +119,13 @@ function createCatalog(data, identifier, levels) {
           .filter((code, index, codes) => codes.indexOf(code) === index)
 
         // Add properties for this division
-        return properties.concat({
+        const property = {
           code,
           name: geometry.properties[`${level}Name`],
+          localizedName: geometry.properties[`localized${capitalLevel}Name`],
           neighbors,
-        })
+        }
+        return properties.concat(property)
       }, []),
     }
   }, { identifier })

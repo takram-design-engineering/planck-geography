@@ -1,26 +1,5 @@
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 /* eslint-disable no-console */
 
@@ -184,7 +163,7 @@ export default class GeographyBuilder {
   }
 
   property(name, { level, code, projection }) {
-    let geometries = this.data.objects.geography.geometries
+    let { geometries } = this.data.objects.geography
     if (level) {
       geometries = geometries.filter(geometry => {
         return includesGeometryObject(level, code, geometry)
@@ -209,8 +188,10 @@ export default class GeographyBuilder {
     return this.property('centroid', options)
   }
 
-  poleOfInaccessibility({ level, code, projection, precision = 0.01 }) {
-    let geometries = this.data.objects.geography.geometries
+  poleOfInaccessibility({
+    level, code, projection, precision = 0.01,
+  }) {
+    let { geometries } = this.data.objects.geography
     if (level) {
       geometries = geometries.filter(geometry => {
         return includesGeometryObject(level, code, geometry)
@@ -308,7 +289,7 @@ export default class GeographyBuilder {
   }
 
   geographyShapes({ projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapes({
       projection,
@@ -321,7 +302,7 @@ export default class GeographyBuilder {
   }
 
   geographyShapeGeometry({ projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapeGeometry({
       projection,
@@ -334,7 +315,7 @@ export default class GeographyBuilder {
   }
 
   geographyOutlineGeometry({ projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.outlineGeometry({
       projection,
@@ -346,8 +327,24 @@ export default class GeographyBuilder {
     return result
   }
 
+  geographySubdivisionGeometry({ projection }) {
+    const key = codePropertyKeyForLevel(this.levels[0])
+    const errors = []
+    const result = this.borderGeometry({
+      projection,
+      object: this.data.objects.geography,
+      filter: (a, b) => a.properties[key] !== b.properties[key],
+    }, errors)
+    if (errors.length !== 0) {
+      // Topology mesh can fail if a division doesn't have any adjacent
+      // division. Just return an empty geometry without logging warning.
+      return new Three.BufferGeometry()
+    }
+    return result
+  }
+
   divisionShapes({ level, code, projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapes({
       projection,
@@ -362,7 +359,7 @@ export default class GeographyBuilder {
   }
 
   divisionShapeGeometry({ level, code, projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapeGeometry({
       projection,
@@ -377,7 +374,7 @@ export default class GeographyBuilder {
   }
 
   divisionOutlineGeometry({ level, code, projection }) {
-    const geometries = this.data.objects.geography.geometries
+    const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.outlineGeometry({
       projection,
@@ -403,7 +400,7 @@ export default class GeographyBuilder {
     })()
 
     // Reduce geometries to find neighbors if superlevel exists
-    let geometries = this.data.objects.geography.geometries
+    let { geometries } = this.data.objects.geography
     if (superlevel) {
       geometries = geometries.filter(geometry => {
         return includesGeometryObject(superlevel, code, geometry)
@@ -430,8 +427,8 @@ export default class GeographyBuilder {
       }),
     }
 
-    const errors = []
     const key = codePropertyKeyForLevel(level)
+    const errors = []
     const result = this.borderGeometry({
       projection,
       object,
@@ -451,14 +448,14 @@ export default class GeographyBuilder {
   }
 
   divisionSubdivisionGeometry({ level, code, projection }) {
-    const geometries = this.data.objects.geography.geometries
-    const errors = []
+    const { geometries } = this.data.objects.geography
     const object = {
       type: 'GeometryCollection',
       geometries: geometries.filter(geometry => {
         return includesGeometryObject(level, code, geometry)
       }),
     }
+    const errors = []
     const result = this.borderGeometry({
       projection,
       object,

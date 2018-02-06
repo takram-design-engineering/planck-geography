@@ -1,26 +1,5 @@
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 import Namespace from '@takram/planck-core/src/Namespace'
 
@@ -59,6 +38,10 @@ export default class Division {
     return this.data.name
   }
 
+  get localizedName() {
+    return this.data.localizedName || this.data.name
+  }
+
   get neighbors() {
     const scope = internal(this)
     if (scope.neighbors === undefined) {
@@ -71,7 +54,7 @@ export default class Division {
 
   async properties(projection) {
     const properties = await this.level.properties(projection)
-    const code = this.code
+    const { code } = this
     const result = properties[code]
     if (result === undefined) {
       const level = this.level.identifier
@@ -98,7 +81,7 @@ export default class Division {
 
   async geometry(name, projection) {
     const geometries = await this.level.geometries(name, projection)
-    const code = this.code
+    const { code } = this
     const result = geometries[code]
     if (result === undefined) {
       const level = this.level.identifier
@@ -133,7 +116,7 @@ export default class Division {
   get superdivision() {
     const scope = internal(this)
     if (scope.superdivision === undefined) {
-      const superlevel = this.level.superlevel
+      const { superlevel } = this.level
       if (!superlevel) {
         scope.superdivision = null
       } else {
@@ -148,7 +131,7 @@ export default class Division {
   get subdivisions() {
     const scope = internal(this)
     if (scope.subdivisions === undefined) {
-      const sublevel = this.level.sublevel
+      const { sublevel } = this.level
       if (!sublevel) {
         scope.subdivisions = []
       } else {

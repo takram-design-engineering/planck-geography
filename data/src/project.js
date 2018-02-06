@@ -1,26 +1,5 @@
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 /* eslint-disable no-console */
 
@@ -113,7 +92,9 @@ async function writeGeometries(file, geometries) {
 }
 
 async function writeGeographyProperties(options) {
-  const { output, identifier, builder, projection } = options
+  const {
+    output, identifier, builder, projection,
+  } = options
 
   // Create properties
   console.log(chalk.cyan('Creating properties for geography'))
@@ -131,13 +112,17 @@ async function writeGeographyProperties(options) {
 }
 
 async function writeGeographyGeometries(options) {
-  const { output, identifier, builder, projection } = options
+  const {
+    output, identifier, builder, projection,
+  } = options
 
   // Create geometries
   console.log(chalk.cyan('Creating shape for geography'))
   const shape = builder.geographyShapeGeometry({ projection })
   console.log(chalk.cyan('Creating outline for geography'))
   const outline = builder.geographyOutlineGeometry({ projection })
+  console.log(chalk.cyan('Creating subdivision for geography'))
+  const subdivision = builder.geographySubdivisionGeometry({ projection })
 
   // Write geometries
   const directory = path.resolve(output, identifier)
@@ -145,6 +130,7 @@ async function writeGeographyGeometries(options) {
   await Promise.all([
     writeGeometry(path.resolve(directory, 'shape'), shape),
     writeGeometry(path.resolve(directory, 'outline'), outline),
+    writeGeometry(path.resolve(directory, 'subdivision'), subdivision),
   ])
 }
 
@@ -156,21 +142,25 @@ async function writeGeography(options) {
 }
 
 async function writeDivisionsProperties(options) {
-  const { catalog, output, identifier, builder, projection, level } = options
+  const {
+    catalog, output, identifier, builder, projection, level,
+  } = options
   const codes = catalog[level].map(entry => entry.code)
 
   // Create properties
   console.log(chalk.cyan(`Creating properties for ${level}`))
-  const properties = codes.map(code => {
+  const properties = codes.reduce((result, code) => {
     const options = { projection, level, code }
     return {
-      code,
-      bounds: builder.bounds(options),
-      area: builder.area(options),
-      centroid: builder.centroid(options),
-      poleOfInaccessibility: builder.poleOfInaccessibility(options),
+      ...result,
+      [code]: {
+        bounds: builder.bounds(options),
+        area: builder.area(options),
+        centroid: builder.centroid(options),
+        poleOfInaccessibility: builder.poleOfInaccessibility(options),
+      },
     }
-  })
+  }, {})
 
   // Write properties
   const directory = path.resolve(output, identifier, level)
@@ -179,7 +169,9 @@ async function writeDivisionsProperties(options) {
 }
 
 async function writeDivisionsGeometries(options) {
-  const { catalog, output, identifier, builder, projection, level } = options
+  const {
+    catalog, output, identifier, builder, projection, level,
+  } = options
   const codes = catalog[level].map(entry => entry.code)
 
   // Create geometries
@@ -305,5 +297,7 @@ export default async function project(options) {
   if (options.rotates) {
     rotates = JSON.parse(options.rotates)
   }
-  await main({ ...options, levels, origin, rotates })
+  await main({
+    ...options, levels, origin, rotates,
+  })
 }

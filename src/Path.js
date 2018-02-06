@@ -1,26 +1,5 @@
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 import * as Three from 'three'
 import parser from 'svg-path-parser'
@@ -34,7 +13,7 @@ function cross(a, b) {
 function crossings(a, b, point) {
   if ((a.x < point.x && point.x <= b.x) ||
       (b.x < point.x && point.x <= a.x)) {
-    let y = a.y
+    let { y } = a
     if (a.x !== b.x) {
       y = a.y + (b.y - a.y) * (point.x - a.x) / (b.x - a.x)
     }
@@ -94,8 +73,7 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x = current.x
-            y = current.y
+            ({ x, y } = current)
           }
           if (path && path.curves.length === 0) {
             paths.pop()
@@ -114,8 +92,7 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x = current.x
-            y = current.y
+            ({ x, y } = current)
           }
           if (flip) {
             path.lineTo(x, -y)
@@ -128,7 +105,7 @@ export default {
           if (current.relative === true) {
             y += current.y
           } else {
-            y = current.y
+            ({ y } = current)
           }
           if (flip) {
             path.lineTo(x, -y)
@@ -141,7 +118,7 @@ export default {
           if (current.relative === true) {
             x += current.x
           } else {
-            x = current.x
+            ({ x } = current)
           }
           if (flip) {
             path.lineTo(x, -y)
@@ -159,12 +136,9 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x1 = current.x1
-            y1 = current.y1
-            x2 = current.x2
-            y2 = current.y2
-            x = current.x
-            y = current.y
+            ({
+              x1, y1, x2, y2, x, y,
+            } = current)
           }
           if (flip) {
             path.bezierCurveTo(x1, -y1, x2, -y2, x, -y)
@@ -182,10 +156,9 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x2 = current.x2
-            y2 = current.y2
-            x = current.x
-            y = current.y
+            ({
+              x2, y2, x, y,
+            } = current)
           }
           if (flip) {
             path.bezierCurveTo(x1, -y1, x2, -y2, x, -y)
@@ -201,10 +174,9 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x1 = current.x1
-            y1 = current.y1
-            x = current.x
-            y = current.y
+            ({
+              x1, y1, x, y,
+            } = current)
           }
           if (flip) {
             path.quadraticCurveTo(x1, -y1, x, -y)
@@ -220,8 +192,7 @@ export default {
             x += current.x
             y += current.y
           } else {
-            x = current.x
-            y = current.y
+            ({ x, y } = current)
           }
           if (flip) {
             path.quadraticCurveTo(x1, -y1, x, -y)

@@ -4,31 +4,10 @@
 	(factory((global.Planck = global.Planck || {}),global.THREE,global.d3,global.d3,global.d3));
 }(this, (function (exports,Three,d3Array,d3Geo,d3GeoProjection) { 'use strict';
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-function Namespace() {
+function createNamespace() {
   var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
 
   var symbol = Symbol(name);
@@ -245,31 +224,10 @@ var toConsumableArray = function (arr) {
   }
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-var internal = Namespace('Division');
+var internal = createNamespace('Division');
 
 var Division = function () {
   function Division(level, code) {
@@ -616,6 +574,11 @@ var Division = function () {
       return this.data.name;
     }
   }, {
+    key: 'localizedName',
+    get: function get$$1() {
+      return this.data.localizedName || this.data.name;
+    }
+  }, {
     key: 'neighbors',
     get: function get$$1() {
       var _this2 = this;
@@ -636,6 +599,7 @@ var Division = function () {
       var scope = internal(this);
       if (scope.superdivision === undefined) {
         var superlevel = this.level.superlevel;
+
         if (!superlevel) {
           scope.superdivision = null;
         } else {
@@ -654,6 +618,7 @@ var Division = function () {
       var scope = internal(this);
       if (scope.subdivisions === undefined) {
         var sublevel = this.level.sublevel;
+
         if (!sublevel) {
           scope.subdivisions = [];
         } else {
@@ -678,7 +643,7 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
-var pathBrowserify = createCommonjsModule(function (module, exports) {
+var index = createCommonjsModule(function (module, exports) {
   // Copyright Joyent, Inc. and other Node contributors.
   //
   // Permission is hereby granted, free of charge, to any person obtaining a
@@ -900,95 +865,73 @@ var pathBrowserify = createCommonjsModule(function (module, exports) {
   };
 });
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+var index_1 = index.resolve;
+var index_2 = index.normalize;
+var index_3 = index.isAbsolute;
+var index_4 = index.join;
+var index_5 = index.relative;
+var index_6 = index.sep;
+var index_7 = index.delimiter;
+var index_8 = index.dirname;
+var index_9 = index.basename;
+var index_10 = index.extname;
 
-var environmentType = function () {
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
+
+var isBrowser = function () {
   try {
     // eslint-disable-next-line no-new-func
     if (new Function('return this === window')()) {
-      return 'browser';
+      return true;
     }
   } catch (error) {}
+  return false;
+}();
+
+var isWorker = !isBrowser && function () {
   try {
     // eslint-disable-next-line no-new-func
     if (new Function('return this === self')()) {
-      return 'worker';
+      return true;
     }
   } catch (error) {}
+  return false;
+}();
+
+var isNode = !isBrowser && !isWorker && function () {
   try {
     // eslint-disable-next-line no-new-func
     if (new Function('return this === global')()) {
-      return 'node';
+      return true;
     }
   } catch (error) {}
+  return false;
+}();
+
+var globalScope = function () {
+  if (isBrowser) {
+    return window;
+  }
+  if (isWorker) {
+    // eslint-disable-next-line no-restricted-globals
+    return self;
+  }
+  if (isNode) {
+    return global;
+  }
   return undefined;
 }();
 
-var environmentSelf = void 0;
-switch (environmentType) {
-  case 'browser':
-    environmentSelf = window;
-    break;
-  case 'worker':
-    environmentSelf = self;
-    break;
-  case 'node':
-    environmentSelf = global;
-    break;
-  default:
-    break;
-}
-
-var Environment = {
-  type: environmentType,
-  self: environmentSelf
+var Global = {
+  isBrowser: isBrowser,
+  isWorker: isWorker,
+  isNode: isNode,
+  scope: globalScope
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 function branchingImport(arg) {
   // Assuming `process.browser` is defined via DefinePlugin on webpack, this
@@ -1000,14 +943,19 @@ function branchingImport(arg) {
     id = arg;
     name = arg;
   } else {
-    id = Object.keys(arg)[0];
+    var _Object$keys = Object.keys(arg);
+
+    var _Object$keys2 = slicedToArray(_Object$keys, 1);
+
+    id = _Object$keys2[0];
+
     name = arg[id];
   }
   if (process.browser) {
-    return Environment.self[name];
+    return globalScope[name];
     // eslint-disable-next-line no-else-return
   } else {
-    if (Environment.type !== 'node') {
+    if (!isNode) {
       return undefined;
     }
     try {
@@ -1021,13 +969,13 @@ function branchingImport(arg) {
 function runtimeImport(id) {
   // This will throw error on browser, in which `process` is typically not
   // defined in the global scope. Re-importing after defining `process.browser`
-  // in the global scope will evaluate the conditional in `branchingImport` for
-  // rollup's bundles.
+  // in the global scope will evaluate the conditional in
+  // `branchingImport` for rollup's bundles.
   try {
     return branchingImport(id);
   } catch (e) {
-    Environment.self.process = {
-      browser: Environment.type !== 'node'
+    globalScope.process = {
+      browser: !isNode
     };
   }
   return branchingImport(id);
@@ -1044,7 +992,7 @@ function importOptional(id) {
 function importRequired(id) {
   var module = runtimeImport(id);
   if (module === undefined) {
-    if (Environment.type === 'node') {
+    if (isNode) {
       throw new Error('Could not resolve module "' + id + '"');
     } else {
       throw new Error('"' + id + '" isn\u2019t defined in the global scope');
@@ -1056,7 +1004,7 @@ function importRequired(id) {
 function importNode(id) {
   var module = runtimeImport(id);
   if (module === undefined) {
-    if (Environment.type === 'node') {
+    if (isNode) {
       throw new Error('Could not resolve module "' + id + '"');
     }
     return {};
@@ -1067,7 +1015,7 @@ function importNode(id) {
 function importBrowser(id) {
   var module = runtimeImport(id);
   if (module === undefined) {
-    if (Environment.type !== 'node') {
+    if (!isNode) {
       throw new Error('"' + id + '" isn\u2019t defined in the global scope');
     }
     return {};
@@ -1075,102 +1023,79 @@ function importBrowser(id) {
   return module;
 }
 
-var External = {
+Object.assign(runtimeImport, {
   optional: importOptional,
   required: importRequired,
-  browser: importBrowser,
-  node: importNode
+  node: importNode,
+  browser: importBrowser
+});
+
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
+
+var nodePath = importNode('path');
+
+
+
+var resolve = function () {
+  return isNode ? nodePath.resolve : function resolve() {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return index.resolve.apply(index, ['/'].concat(args));
+  };
+}();
+
+var normalize = function () {
+  return isNode ? nodePath.normalize : index.normalize;
+}();
+
+var join = function () {
+  return isNode ? nodePath.join : index.join;
+}();
+
+var relative = function () {
+  return isNode ? nodePath.relative : index.relative;
+}();
+
+var dirname = function () {
+  return isNode ? nodePath.dirname : index.dirname;
+}();
+
+var basename = function () {
+  return isNode ? nodePath.basename : index.basename;
+}();
+
+var extname = function () {
+  return isNode ? nodePath.extname : index.extname;
+}();
+
+var delimiter = function () {
+  return isNode ? nodePath.delimiter : index.delimiter;
+}();
+
+var sep = function () {
+  return isNode ? nodePath.sep : index.sep;
+}();
+
+var FilePath = {
+  resolve: resolve,
+  normalize: normalize,
+  join: join,
+  relative: relative,
+  dirname: dirname,
+  basename: basename,
+  extname: extname,
+  delimiter: delimiter,
+  sep: sep
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
-
-var nodePath = External.node('path');
-
-function currentScriptPath() {
-  switch (Environment.type) {
-    case 'browser':
-      {
-        // eslint-disable-next-line no-underscore-dangle
-        var currentScript = document.currentScript || document._currentScript;
-        return currentScript && currentScript.src || undefined;
-      }
-    case 'worker':
-      return self.location.href;
-    case 'node':
-      return __filename;
-    default:
-      break;
-  }
-  return undefined;
-}
-
-var initialScriptPath = currentScriptPath();
-
-var aliases = void 0;
-if (Environment.type === 'node') {
-  aliases = {
-    resolve: nodePath.resolve,
-    normalize: nodePath.normalize,
-    join: nodePath.join,
-    relative: nodePath.relative,
-    dirname: nodePath.dirname,
-    basename: nodePath.basename,
-    extname: nodePath.extname,
-    separator: nodePath.sep,
-    delimiter: nodePath.delimiter
-  };
-} else {
-  aliases = {
-    resolve: function resolve() {
-      for (var _len = arguments.length, paths = Array(_len), _key = 0; _key < _len; _key++) {
-        paths[_key] = arguments[_key];
-      }
-
-      return pathBrowserify.resolve.apply(pathBrowserify, ['/'].concat(paths));
-    },
-
-
-    normalize: pathBrowserify.normalize,
-    join: pathBrowserify.join,
-    relative: pathBrowserify.relative,
-    dirname: pathBrowserify.dirname,
-    basename: pathBrowserify.basename,
-    extname: pathBrowserify.extname,
-    separator: pathBrowserify.sep,
-    delimiter: pathBrowserify.delimiter
-  };
-}
-
-var FilePath = _extends({
-  self: initialScriptPath,
-
-  get current() {
-    return currentScriptPath();
-  }
-
-}, aliases);
+var EOL = {};
+var EOF = {};
+var QUOTE = 34;
+var NEWLINE = 10;
+var RETURN = 13;
 
 function objectConverter(columns) {
   return new Function("d", "return {" + columns.map(function (name, i) {
@@ -1201,9 +1126,9 @@ function inferColumns(rows) {
   return columns;
 }
 
-var dsv = function (delimiter) {
+function dsv (delimiter) {
   var reFormat = new RegExp("[\"" + delimiter + "\n\r]"),
-      delimiterCode = delimiter.charCodeAt(0);
+      DELIMITER = delimiter.charCodeAt(0);
 
   function parse(text, f) {
     var convert,
@@ -1212,76 +1137,62 @@ var dsv = function (delimiter) {
       if (convert) return convert(row, i - 1);
       columns = row, convert = f ? customConverter(row, f) : objectConverter(row);
     });
-    rows.columns = columns;
+    rows.columns = columns || [];
     return rows;
   }
 
   function parseRows(text, f) {
-    var EOL = {},
-        // sentinel value for end-of-line
-    EOF = {},
-        // sentinel value for end-of-file
-    rows = [],
+    var rows = [],
         // output rows
     N = text.length,
         I = 0,
         // current character index
     n = 0,
-        // the current line number
+        // current line number
     t,
-        // the current token
-    eol; // is the current token followed by EOL?
+        // current token
+    eof = N <= 0,
+        // current token followed by EOF?
+    eol = false; // current token followed by EOL?
+
+    // Strip the trailing newline.
+    if (text.charCodeAt(N - 1) === NEWLINE) --N;
+    if (text.charCodeAt(N - 1) === RETURN) --N;
 
     function token() {
-      if (I >= N) return EOF; // special case: end of file
-      if (eol) return eol = false, EOL; // special case: end of line
+      if (eof) return EOF;
+      if (eol) return eol = false, EOL;
 
-      // special case: quotes
-      var j = I,
+      // Unescape quotes.
+      var i,
+          j = I,
           c;
-      if (text.charCodeAt(j) === 34) {
-        var i = j;
-        while (i++ < N) {
-          if (text.charCodeAt(i) === 34) {
-            if (text.charCodeAt(i + 1) !== 34) break;
-            ++i;
-          }
+      if (text.charCodeAt(j) === QUOTE) {
+        while (I++ < N && text.charCodeAt(I) !== QUOTE || text.charCodeAt(++I) === QUOTE) {}
+        if ((i = I) >= N) eof = true;else if ((c = text.charCodeAt(I++)) === NEWLINE) eol = true;else if (c === RETURN) {
+          eol = true;if (text.charCodeAt(I) === NEWLINE) ++I;
         }
-        I = i + 2;
-        c = text.charCodeAt(i + 1);
-        if (c === 13) {
-          eol = true;
-          if (text.charCodeAt(i + 2) === 10) ++I;
-        } else if (c === 10) {
-          eol = true;
-        }
-        return text.slice(j + 1, i).replace(/""/g, "\"");
+        return text.slice(j + 1, i - 1).replace(/""/g, "\"");
       }
 
-      // common case: find next delimiter or newline
+      // Find next delimiter or newline.
       while (I < N) {
-        var k = 1;
-        c = text.charCodeAt(I++);
-        if (c === 10) eol = true; // \n
-        else if (c === 13) {
-            eol = true;if (text.charCodeAt(I) === 10) ++I, ++k;
-          } // \r|\r\n
-          else if (c !== delimiterCode) continue;
-        return text.slice(j, I - k);
+        if ((c = text.charCodeAt(i = I++)) === NEWLINE) eol = true;else if (c === RETURN) {
+          eol = true;if (text.charCodeAt(I) === NEWLINE) ++I;
+        } else if (c !== DELIMITER) continue;
+        return text.slice(j, i);
       }
 
-      // special case: last token before EOF
-      return text.slice(j);
+      // Return last token before EOF.
+      return eof = true, text.slice(j, N);
     }
 
     while ((t = token()) !== EOF) {
-      var a = [];
+      var row = [];
       while (t !== EOL && t !== EOF) {
-        a.push(t);
-        t = token();
-      }
-      if (f && (a = f(a, n++)) == null) continue;
-      rows.push(a);
+        row.push(t), t = token();
+      }if (f && (row = f(row, n++)) == null) continue;
+      rows.push(row);
     }
 
     return rows;
@@ -1305,7 +1216,7 @@ var dsv = function (delimiter) {
   }
 
   function formatValue(text) {
-    return text == null ? "" : reFormat.test(text += "") ? "\"" + text.replace(/\"/g, "\"\"") + "\"" : text;
+    return text == null ? "" : reFormat.test(text += "") ? "\"" + text.replace(/"/g, "\"\"") + "\"" : text;
   }
 
   return {
@@ -1314,7 +1225,7 @@ var dsv = function (delimiter) {
     format: format,
     formatRows: formatRows
   };
-};
+}
 
 var csv = dsv(",");
 
@@ -1334,7 +1245,7 @@ var tsvParse = tsv.parse;
  * @api private
  */
 
-var requiresPort = function required(port, protocol) {
+var index$1 = function required(port, protocol) {
   protocol = protocol.split(':')[0];
   port = +port;
 
@@ -1430,7 +1341,7 @@ function querystringify(obj, prefix) {
 var stringify = querystringify;
 var parse = querystring;
 
-var querystringify_1 = {
+var index$3 = {
   stringify: stringify,
   parse: parse
 };
@@ -1489,9 +1400,9 @@ function lolcation(loc) {
       key;
 
   if ('blob:' === loc.protocol) {
-    finaldestination = new URL$1(unescape(loc.pathname), {});
+    finaldestination = new URL(unescape(loc.pathname), {});
   } else if ('string' === type) {
-    finaldestination = new URL$1(loc, {});
+    finaldestination = new URL(loc, {});
     for (key in ignore) {
       delete finaldestination[key];
     }
@@ -1542,7 +1453,7 @@ function extractProtocol(address) {
  * @return {String} Resolved pathname.
  * @api private
  */
-function resolve(relative, base) {
+function resolve$1(relative, base) {
   var path = (base || '/').split('/').slice(0, -1).concat(relative.split('/')),
       i = path.length,
       last = path[i - 1],
@@ -1579,9 +1490,9 @@ function resolve(relative, base) {
  * @param {Boolean|Function} parser Parser for the query string.
  * @api public
  */
-function URL$1(address, location, parser) {
-  if (!(this instanceof URL$1)) {
-    return new URL$1(address, location, parser);
+function URL(address, location, parser) {
+  if (!(this instanceof URL)) {
+    return new URL(address, location, parser);
   }
 
   var relative,
@@ -1611,7 +1522,7 @@ function URL$1(address, location, parser) {
     location = null;
   }
 
-  if (parser && 'function' !== typeof parser) parser = querystringify_1.parse;
+  if (parser && 'function' !== typeof parser) parser = index$3.parse;
 
   location = lolcation(location);
 
@@ -1672,7 +1583,7 @@ function URL$1(address, location, parser) {
   // If the URL is relative, resolve the pathname against the base URL.
   //
   if (relative && location.slashes && url.pathname.charAt(0) !== '/' && (url.pathname !== '' || location.pathname !== '')) {
-    url.pathname = resolve(url.pathname, location.pathname);
+    url.pathname = resolve$1(url.pathname, location.pathname);
   }
 
   //
@@ -1680,7 +1591,7 @@ function URL$1(address, location, parser) {
   // for a given protocol. As the host also contains the port number we're going
   // override it with the hostname which contains no port number.
   //
-  if (!requiresPort(url.port, url.protocol)) {
+  if (!index$1(url.port, url.protocol)) {
     url.host = url.hostname;
     url.port = '';
   }
@@ -1722,7 +1633,7 @@ function set$1(part, value, fn) {
   switch (part) {
     case 'query':
       if ('string' === typeof value && value.length) {
-        value = (fn || querystringify_1.parse)(value);
+        value = (fn || index$3.parse)(value);
       }
 
       url[part] = value;
@@ -1731,7 +1642,7 @@ function set$1(part, value, fn) {
     case 'port':
       url[part] = value;
 
-      if (!requiresPort(value, url.protocol)) {
+      if (!index$1(value, url.protocol)) {
         url.host = url.hostname;
         url[part] = '';
       } else if (value) {
@@ -1767,8 +1678,13 @@ function set$1(part, value, fn) {
       break;
 
     case 'pathname':
-      url.pathname = value.length && value.charAt(0) !== '/' ? '/' + value : value;
-
+    case 'hash':
+      if (value) {
+        var char = part === 'pathname' ? '/' : '#';
+        url[part] = value.charAt(0) !== char ? char + value : value;
+      } else {
+        url[part] = value;
+      }
       break;
 
     default:
@@ -1796,7 +1712,7 @@ function set$1(part, value, fn) {
  * @api public
  */
 function toString(stringify) {
-  if (!stringify || 'function' !== typeof stringify) stringify = querystringify_1.stringify;
+  if (!stringify || 'function' !== typeof stringify) stringify = index$3.stringify;
 
   var query,
       url = this,
@@ -1822,116 +1738,95 @@ function toString(stringify) {
   return result;
 }
 
-URL$1.prototype = { set: set$1, toString: toString };
+URL.prototype = { set: set$1, toString: toString };
 
 //
 // Expose the URL parser and some additional properties that might be useful for
 // others or testing.
 //
-URL$1.extractProtocol = extractProtocol;
-URL$1.location = lolcation;
-URL$1.qs = querystringify_1;
+URL.extractProtocol = extractProtocol;
+URL.location = lolcation;
+URL.qs = index$3;
 
-var urlParse = URL$1;
+var index$5 = URL;
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-var _External$node = External.node('fs');
-var readFile = _External$node.readFile;
+var _importNode = importNode('fs');
+var readFile = _importNode.readFile;
 
-var request = External.node('request');
+var request = importNode('request');
 
 
 
 function browserRequest(url, options) {
-  return new Promise(function (resolve, reject) {
-    var parsed = new urlParse(url, true);
-    if (options.query) {
-      parsed.set('query', Object.assign({}, parsed.query, options.query));
+  var resolve = void 0;
+  var reject = void 0;
+  var promise = new Promise(function () {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
-    var request = new XMLHttpRequest();
-    request.open('get', parsed.toString(), true);
-    if (options.headers) {
-      Object.entries(options.headers).forEach(function (header) {
-        request.setRequestHeader.apply(request, toConsumableArray(header));
-      });
-    }
-    request.responseType = options.type;
-    request.addEventListener('loadend', function (event) {
-      if (request.status < 200 || request.status >= 300) {
-        reject(request.status);
-        return;
-      }
-      if (request.response === null && options.type === 'json') {
-        reject(new Error('Could not parse JSON'));
-        return;
-      }
-      resolve(request.response);
-    }, false);
-    request.send();
+
+    resolve = args[0];
+    reject = args[1];
   });
+  var parsed = new index$5(url, true);
+  if (options.query) {
+    parsed.set('query', Object.assign({}, parsed.query, options.query));
+  }
+  var request = new XMLHttpRequest();
+  request.open('get', parsed.toString(), true);
+  if (options.headers) {
+    var names = Object.keys(options.headers);
+    for (var i = 0; i < names.length; ++i) {
+      request.setRequestHeader.apply(request, toConsumableArray(options.headers[names[i]]));
+    }
+  }
+  request.responseType = options.type;
+  request.addEventListener('loadend', function (event) {
+    if (request.status < 200 || request.status >= 300) {
+      reject(request.status);
+      return;
+    }
+    if (request.response === null && options.type === 'json') {
+      reject(new Error('Could not parse JSON'));
+      return;
+    }
+    resolve(request.response);
+  }, false);
+  request.send();
+  promise.abort = function () {
+    request.abort();
+  };
+  return promise;
 }
 
 function nodeRequest(url, options) {
+  var resolve = void 0;
+  var reject = void 0;
+  var promise = new Promise(function () {
+    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+
+    resolve = args[0];
+    reject = args[1];
+  });
   if (options.local) {
-    return new Promise(function (resolve, reject) {
-      readFile(url, options.encoding, function (error, response) {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve(response);
-      });
+    readFile(url, options.encoding, function (error, response) {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(response);
     });
-  }
-  return new Promise(function (resolve, reject) {
-    request({
+    promise.abort = function () {}; // TODO: Support abortion
+  } else {
+    var stream = request({
       url: url,
       headers: options.headers || {},
       qs: options.query || {},
@@ -1946,22 +1841,33 @@ function nodeRequest(url, options) {
       }
       resolve(response.body);
     });
-  });
+    stream.on('abort', function () {
+      reject(0);
+    });
+    promise.abort = function () {
+      stream.abort();
+    };
+  }
+  return promise;
 }
 
 function performRequest(url, options) {
-  if (Environment.type === 'node') {
-    var promise = nodeRequest(url, options);
+  if (isNode) {
+    var _request = nodeRequest(url, options);
     if (options.type === 'json') {
-      return promise.then(function (response) {
+      var promise = _request.then(function (response) {
         if (typeof response !== 'string') {
           throw new Error('Response is unexpectedly not a string');
         }
         return JSON.parse(response);
       });
+      promise.abort = function () {
+        _request.abort();
+      };
+      return promise;
     }
     if (options.type === 'arraybuffer') {
-      return promise.then(function (response) {
+      var _promise = _request.then(function (response) {
         if (!(response instanceof Buffer)) {
           throw new Error('Response is unexpectedly not a buffer');
         }
@@ -1972,23 +1878,27 @@ function performRequest(url, options) {
         }
         return buffer;
       });
+      _promise.abort = function () {
+        _request.abort();
+      };
+      return _promise;
     }
-    return promise;
+    return _request;
   }
   return browserRequest(url, options);
 }
 
 function parseArguments() {
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
+  for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+    args[_key3] = arguments[_key3];
   }
 
   var url = args[0],
       options = args[1];
 
   if (typeof url !== 'string') {
-    options = url;
-    url = options.url;
+    options = url;var _options = options;
+    url = _options.url;
   }
   if (typeof url !== 'string') {
     throw new Error('The first argument or options.url must be a string');
@@ -2001,80 +1911,79 @@ function parseArguments() {
   return [url, options];
 }
 
-var Request = {
-  text: function text() {
-    var _parseArguments = parseArguments.apply(undefined, arguments),
-        _parseArguments2 = slicedToArray(_parseArguments, 2),
-        url = _parseArguments2[0],
-        options = _parseArguments2[1];
+function requestText() {
+  var _parseArguments = parseArguments.apply(undefined, arguments),
+      _parseArguments2 = slicedToArray(_parseArguments, 2),
+      url = _parseArguments2[0],
+      options = _parseArguments2[1];
 
-    options.type = 'text';
-    return performRequest(url, options);
-  },
-  json: function json() {
-    var _parseArguments3 = parseArguments.apply(undefined, arguments),
-        _parseArguments4 = slicedToArray(_parseArguments3, 2),
-        url = _parseArguments4[0],
-        options = _parseArguments4[1];
+  options.type = 'text';
+  return performRequest(url, options);
+}
 
-    options.type = 'json';
-    return performRequest(url, options);
-  },
-  buffer: function buffer() {
-    var _parseArguments5 = parseArguments.apply(undefined, arguments),
-        _parseArguments6 = slicedToArray(_parseArguments5, 2),
-        url = _parseArguments6[0],
-        options = _parseArguments6[1];
+function requestJSON() {
+  var _parseArguments3 = parseArguments.apply(undefined, arguments),
+      _parseArguments4 = slicedToArray(_parseArguments3, 2),
+      url = _parseArguments4[0],
+      options = _parseArguments4[1];
 
-    options.type = 'arraybuffer';
-    options.encoding = null;
-    return performRequest(url, options);
-  },
-  csv: function csv() {
-    var _parseArguments7 = parseArguments.apply(undefined, arguments),
-        _parseArguments8 = slicedToArray(_parseArguments7, 2),
-        url = _parseArguments8[0],
-        options = _parseArguments8[1];
+  options.type = 'json';
+  return performRequest(url, options);
+}
 
-    return this.text(url, options).then(function (response) {
-      return csvParse(response, options.row);
-    });
-  },
-  tsv: function tsv() {
-    var _parseArguments9 = parseArguments.apply(undefined, arguments),
-        _parseArguments10 = slicedToArray(_parseArguments9, 2),
-        url = _parseArguments10[0],
-        options = _parseArguments10[1];
+function requestBuffer() {
+  var _parseArguments5 = parseArguments.apply(undefined, arguments),
+      _parseArguments6 = slicedToArray(_parseArguments5, 2),
+      url = _parseArguments6[0],
+      options = _parseArguments6[1];
 
-    return this.text(url, options).then(function (response) {
-      return tsvParse(response, options.row);
-    });
-  }
-};
+  options.type = 'arraybuffer';
+  options.encoding = null;
+  return performRequest(url, options);
+}
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+function requestCSV() {
+  var _parseArguments7 = parseArguments.apply(undefined, arguments),
+      _parseArguments8 = slicedToArray(_parseArguments7, 2),
+      url = _parseArguments8[0],
+      options = _parseArguments8[1];
+
+  var request = this.text(url, options);
+  var promise = request.then(function (response) {
+    return csvParse(response, options.row);
+  });
+  promise.abort = function () {
+    request.abort();
+  };
+  return promise;
+}
+
+function requestTSV() {
+  var _parseArguments9 = parseArguments.apply(undefined, arguments),
+      _parseArguments10 = slicedToArray(_parseArguments9, 2),
+      url = _parseArguments10[0],
+      options = _parseArguments10[1];
+
+  var request = this.text(url, options);
+  var promise = request.then(function (response) {
+    return tsvParse(response, options.row);
+  });
+  promise.abort = function () {
+    request.abort();
+  };
+  return promise;
+}
+
+Object.assign(performRequest, {
+  text: requestText,
+  json: requestJSON,
+  buffer: requestBuffer,
+  csv: requestCSV,
+  tsv: requestTSV
+});
+
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 function _packBufferGeometry5(geometry) {
   var byteOffset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -2086,22 +1995,22 @@ function _packBufferGeometry5(geometry) {
   if (scope.index) {
     var array = geometry.index.array;
     var buffer = array.buffer;
+
     buffers.push([buffer, byteLength]);
     scope.index.array = [byteLength, array.length];
     byteLength += buffer.byteLength;
   }
   if (scope.attributes) {
-    Object.entries(scope.attributes).forEach(function (entry) {
-      var _entry = slicedToArray(entry, 2),
-          key = _entry[0],
-          attribute = _entry[1];
+    var names = Object.keys(scope.attributes);
+    for (var i = 0; i < names.length; ++i) {
+      var name = names[i];
+      var _array = geometry.attributes[name].array;
+      var _buffer = _array.buffer;
 
-      var array = geometry.attributes[key].array;
-      var buffer = array.buffer;
-      buffers.push([buffer, byteLength]);
-      attribute.array = [byteLength, array.length];
-      byteLength += buffer.byteLength;
-    });
+      buffers.push([_buffer, byteLength]);
+      scope.attributes[name].array = [byteLength, _array.length];
+      byteLength += _buffer.byteLength;
+    }
   }
   data.data = scope;
   return [data, buffers, byteLength];
@@ -2109,39 +2018,40 @@ function _packBufferGeometry5(geometry) {
 
 function _packBufferGeometries(geometries) {
   if (Array.isArray(geometries)) {
-    return geometries.reduce(function (result, geometry) {
-      var _result = slicedToArray(result, 3),
-          data = _result[0],
-          buffers = _result[1],
-          byteOffset = _result[2];
-
-      var _packBufferGeometry = _packBufferGeometry5(geometry, byteOffset),
+    var _data = [];
+    var _buffers = [];
+    var _byteOffset = 0;
+    for (var i = 0; i < geometries.length; ++i) {
+      var _packBufferGeometry = _packBufferGeometry5(geometries[i], _byteOffset),
           _packBufferGeometry2 = slicedToArray(_packBufferGeometry, 3),
           eachData = _packBufferGeometry2[0],
           eachBuffers = _packBufferGeometry2[1],
           eachByteOffset = _packBufferGeometry2[2];
 
-      return [data.concat(eachData), buffers.concat(eachBuffers), eachByteOffset];
-    }, [[], [], 0]);
+      _data.push(eachData);
+      _buffers.push.apply(_buffers, toConsumableArray(eachBuffers));
+      _byteOffset = eachByteOffset;
+    }
+    return [_data, _buffers, _byteOffset];
   }
-  return Object.entries(geometries).reduce(function (result, entry) {
-    var _entry2 = slicedToArray(entry, 2),
-        key = _entry2[0],
-        geometry = _entry2[1];
+  var data = {};
+  var buffers = [];
+  var byteOffset = 0;
+  var names = Object.keys(geometries);
+  for (var _i = 0; _i < names.length; ++_i) {
+    var name = names[_i];
 
-    var _result2 = slicedToArray(result, 3),
-        data = _result2[0],
-        buffers = _result2[1],
-        byteOffset = _result2[2];
-
-    var _packBufferGeometry3 = _packBufferGeometry5(geometry, byteOffset),
+    var _packBufferGeometry3 = _packBufferGeometry5(geometries[name], byteOffset),
         _packBufferGeometry4 = slicedToArray(_packBufferGeometry3, 3),
         eachData = _packBufferGeometry4[0],
         eachBuffers = _packBufferGeometry4[1],
         eachByteOffset = _packBufferGeometry4[2];
 
-    return [Object.assign(data, defineProperty({}, key, eachData)), buffers.concat(eachBuffers), eachByteOffset];
-  }, [{}, [], 0]);
+    data[name] = eachData;
+    buffers.push.apply(buffers, toConsumableArray(eachBuffers));
+    byteOffset = eachByteOffset;
+  }
+  return [data, buffers, byteOffset];
 }
 
 function _unpackBufferGeometry(data, buffer) {
@@ -2149,21 +2059,21 @@ function _unpackBufferGeometry(data, buffer) {
   if (copy.data.index) {
     var type = copy.data.index.type;
 
-    var view = new (Function.prototype.bind.apply(Environment.self[type], [null].concat([buffer], toConsumableArray(copy.data.index.array))))();
+    var view = new (Function.prototype.bind.apply(Global.scope[type], [null].concat([buffer], toConsumableArray(copy.data.index.array))))();
     copy.data.index = _extends({}, copy.data.index, { array: view });
   }
   if (copy.data.attributes) {
-    var entries = Object.entries(copy.data.attributes);
-    copy.data.attributes = entries.reduce(function (attributes, entry) {
-      var _entry3 = slicedToArray(entry, 2),
-          name = _entry3[0],
-          attribute = _entry3[1];
+    var attributes = {};
+    var names = Object.keys(copy.data.attributes);
+    for (var i = 0; i < names.length; ++i) {
+      var name = names[i];
+      var attribute = copy.data.attributes[name];
+      var _type = attribute.type;
 
-      var type = attribute.type;
-
-      var view = new (Function.prototype.bind.apply(Environment.self[type], [null].concat([buffer], toConsumableArray(attribute.array))))();
-      return _extends({}, attributes, defineProperty({}, name, _extends({}, attribute, { array: view })));
-    }, {});
+      var _view = new (Function.prototype.bind.apply(Global.scope[_type], [null].concat([buffer], toConsumableArray(attribute.array))))();
+      attributes[name] = _extends({}, attribute, { array: _view });
+    }
+    copy.data.attributes = attributes;
   }
   return new Three.BufferGeometryLoader().parse(copy);
 }
@@ -2171,13 +2081,13 @@ function _unpackBufferGeometry(data, buffer) {
 function mergeBuffers(buffers, byteLength) {
   var buffer = new ArrayBuffer(byteLength);
   var view = new Uint8Array(buffer);
-  buffers.forEach(function (entry) {
-    var _entry4 = slicedToArray(entry, 2),
-        buffer = _entry4[0],
-        byteOffset = _entry4[1];
+  for (var i = 0; i < buffers.length; ++i) {
+    var _buffers$i = slicedToArray(buffers[i], 2),
+        _buffer2 = _buffers$i[0],
+        byteOffset = _buffers$i[1];
 
-    view.set(new Uint8Array(buffer), byteOffset);
-  });
+    view.set(new Uint8Array(_buffer2), byteOffset);
+  }
   return buffer;
 }
 
@@ -2207,51 +2117,32 @@ var GeometryPack = {
   },
   unpackBufferGeometries: function unpackBufferGeometries(data, buffer) {
     if (Array.isArray(data)) {
-      return data.map(function (data) {
-        return _unpackBufferGeometry(data, buffer);
-      });
+      var _result = [];
+      for (var index = 0; index < data.length; ++index) {
+        _result.push(_unpackBufferGeometry(data, buffer));
+      }
+      return _result;
     }
-    return Object.entries(data).reduce(function (result, entry) {
-      var _entry5 = slicedToArray(entry, 2),
-          key = _entry5[0],
-          data = _entry5[1];
-
-      return Object.assign(result, defineProperty({}, key, _unpackBufferGeometry(data, buffer)));
-    }, {});
+    var result = {};
+    var names = Object.keys(data);
+    for (var i = 0; i < names.length; ++i) {
+      var name = names[i];
+      result[name] = _unpackBufferGeometry(data[name], buffer);
+    }
+    return result;
   }
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-var internal$1 = Namespace('DivisionLevel');
+var internal$2 = createNamespace('DivisionLevel');
 
 var DivisionLevel = function () {
   function DivisionLevel(identifier, coder) {
     classCallCheck(this, DivisionLevel);
 
-    var scope = internal$1(this);
+    var scope = internal$2(this);
     scope.identifier = identifier;
     scope.coder = coder;
     scope.divisions = {};
@@ -2262,13 +2153,13 @@ var DivisionLevel = function () {
   createClass(DivisionLevel, [{
     key: 'init',
     value: function init(geography) {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       scope.geography = geography;
     }
   }, {
     key: 'division',
     value: function division(code) {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       var division = scope.divisions[code];
       if (division === undefined) {
         division = new Division(this, code);
@@ -2285,13 +2176,13 @@ var DivisionLevel = function () {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                scope = internal$1(this);
+                scope = internal$2(this);
                 hash = projection ? projection.hash : null;
 
                 if (scope.properties[hash] === undefined) {
                   path = FilePath.join(FilePath.dirname(this.geography.path), hash || '', this.geography.identifier, this.identifier, 'properties.json');
 
-                  scope.properties[hash] = Request.json(path, { local: true });
+                  scope.properties[hash] = performRequest.json(path, { local: true });
                 }
                 return _context.abrupt('return', scope.properties[hash]);
 
@@ -2318,7 +2209,7 @@ var DivisionLevel = function () {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                scope = internal$1(this);
+                scope = internal$2(this);
                 hash = projection ? projection.hash : null;
                 geometries = scope.geometries[hash];
 
@@ -2360,7 +2251,7 @@ var DivisionLevel = function () {
                 buffer = void 0;
                 _context3.prev = 3;
                 _context3.next = 6;
-                return Promise.all([Request.json(path + '.json'), Request.buffer(path + '.buffer')]);
+                return Promise.all([performRequest.json(path + '.json'), performRequest.buffer(path + '.buffer')]);
 
               case 6:
                 _ref4 = _context3.sent;
@@ -2395,25 +2286,25 @@ var DivisionLevel = function () {
   }, {
     key: 'identifier',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       return scope.identifier;
     }
   }, {
     key: 'coder',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       return scope.coder;
     }
   }, {
     key: 'geography',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       return scope.geography;
     }
   }, {
     key: 'data',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       if (scope.data === undefined) {
         scope.data = this.geography.data[this.identifier];
       }
@@ -2424,9 +2315,10 @@ var DivisionLevel = function () {
     get: function get$$1() {
       var _this = this;
 
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       scope.divisions = _extends({}, scope.divisions, this.data.reduce(function (divisions, data) {
         var code = data.code;
+
         if (scope.divisions[code] === undefined) {
           return _extends({}, divisions, defineProperty({}, code, new Division(_this, code)));
         }
@@ -2437,7 +2329,7 @@ var DivisionLevel = function () {
   }, {
     key: 'codes',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       if (scope.codes === undefined) {
         scope.codes = this.data.map(function (data) {
           return data.code;
@@ -2448,9 +2340,10 @@ var DivisionLevel = function () {
   }, {
     key: 'superlevel',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       if (scope.superlevel === undefined) {
         var levels = this.geography.levels;
+
         var index = levels.indexOf(this);
         if (index === -1) {
           throw new Error('Could not find levels for geography');
@@ -2462,9 +2355,10 @@ var DivisionLevel = function () {
   }, {
     key: 'sublevel',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       if (scope.sublevel === undefined) {
         var levels = this.geography.levels;
+
         var index = levels.indexOf(this);
         if (index === -1) {
           throw new Error('Could not find levels for geography');
@@ -2477,31 +2371,10 @@ var DivisionLevel = function () {
   return DivisionLevel;
 }();
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-var internal$3 = Namespace('Geography');
+var internal$3 = createNamespace('Geography');
 
 var Geography = function () {
   function Geography(identifier) {
@@ -2545,7 +2418,7 @@ var Geography = function () {
 
               case 8:
                 _context.next = 10;
-                return Request.json(path, { local: true });
+                return performRequest.json(path, { local: true });
 
               case 10:
                 scope.data = _context.sent;
@@ -2618,7 +2491,7 @@ var Geography = function () {
                 if (scope.properties[hash] === undefined) {
                   path = FilePath.join(FilePath.dirname(this.path), hash || '', this.identifier, 'properties.json');
 
-                  scope.properties[hash] = Request.json(path, { local: true });
+                  scope.properties[hash] = performRequest.json(path, { local: true });
                 }
                 return _context2.abrupt('return', scope.properties[hash]);
 
@@ -2799,7 +2672,7 @@ var Geography = function () {
                 buffer = void 0;
                 _context8.prev = 3;
                 _context8.next = 6;
-                return Promise.all([Request.json(path + '.json'), Request.buffer(path + '.buffer')]);
+                return Promise.all([performRequest.json(path + '.json'), performRequest.buffer(path + '.buffer')]);
 
               case 6:
                 _ref9 = _context8.sent;
@@ -2880,6 +2753,30 @@ var Geography = function () {
       return outlineGeometry;
     }()
   }, {
+    key: 'subdivisionGeometry',
+    value: function () {
+      var _ref13 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(projection) {
+        return regeneratorRuntime.wrap(function _callee11$(_context11) {
+          while (1) {
+            switch (_context11.prev = _context11.next) {
+              case 0:
+                return _context11.abrupt('return', this.geometry('subdivision', projection));
+
+              case 1:
+              case 'end':
+                return _context11.stop();
+            }
+          }
+        }, _callee11, this);
+      }));
+
+      function subdivisionGeometry(_x15) {
+        return _ref13.apply(this, arguments);
+      }
+
+      return subdivisionGeometry;
+    }()
+  }, {
     key: 'identifier',
     get: function get$$1() {
       var scope = internal$3(this);
@@ -2911,6 +2808,7 @@ var Geography = function () {
 }();
 
 var earcut_1 = earcut;
+var default_1 = earcut;
 
 function earcut(data, holeIndices, dim) {
 
@@ -2923,7 +2821,7 @@ function earcut(data, holeIndices, dim) {
 
     if (!outerNode) return triangles;
 
-    var minX, minY, maxX, maxY, x, y, size;
+    var minX, minY, maxX, maxY, x, y, invSize;
 
     if (hasHoles) outerNode = eliminateHoles(data, holeIndices, outerNode, dim);
 
@@ -2941,11 +2839,12 @@ function earcut(data, holeIndices, dim) {
             if (y > maxY) maxY = y;
         }
 
-        // minX, minY and size are later used to transform coords into integers for z-order calculation
-        size = Math.max(maxX - minX, maxY - minY);
+        // minX, minY and invSize are later used to transform coords into integers for z-order calculation
+        invSize = Math.max(maxX - minX, maxY - minY);
+        invSize = invSize !== 0 ? 1 / invSize : 0;
     }
 
-    earcutLinked(outerNode, triangles, dim, minX, minY, size);
+    earcutLinked(outerNode, triangles, dim, minX, minY, invSize);
 
     return triangles;
 }
@@ -2985,7 +2884,7 @@ function filterPoints(start, end) {
         if (!p.steiner && (equals(p, p.next) || area(p.prev, p, p.next) === 0)) {
             removeNode(p);
             p = end = p.prev;
-            if (p === p.next) return null;
+            if (p === p.next) break;
             again = true;
         } else {
             p = p.next;
@@ -2996,11 +2895,11 @@ function filterPoints(start, end) {
 }
 
 // main ear slicing loop which triangulates a polygon (given as a linked list)
-function earcutLinked(ear, triangles, dim, minX, minY, size, pass) {
+function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
     if (!ear) return;
 
     // interlink polygon nodes in z-order
-    if (!pass && size) indexCurve(ear, minX, minY, size);
+    if (!pass && invSize) indexCurve(ear, minX, minY, invSize);
 
     var stop = ear,
         prev,
@@ -3011,7 +2910,7 @@ function earcutLinked(ear, triangles, dim, minX, minY, size, pass) {
         prev = ear.prev;
         next = ear.next;
 
-        if (size ? isEarHashed(ear, minX, minY, size) : isEar(ear)) {
+        if (invSize ? isEarHashed(ear, minX, minY, invSize) : isEar(ear)) {
             // cut off the triangle
             triangles.push(prev.i / dim);
             triangles.push(ear.i / dim);
@@ -3032,16 +2931,16 @@ function earcutLinked(ear, triangles, dim, minX, minY, size, pass) {
         if (ear === stop) {
             // try filtering points and slicing again
             if (!pass) {
-                earcutLinked(filterPoints(ear), triangles, dim, minX, minY, size, 1);
+                earcutLinked(filterPoints(ear), triangles, dim, minX, minY, invSize, 1);
 
                 // if this didn't work, try curing all small self-intersections locally
             } else if (pass === 1) {
                 ear = cureLocalIntersections(ear, triangles, dim);
-                earcutLinked(ear, triangles, dim, minX, minY, size, 2);
+                earcutLinked(ear, triangles, dim, minX, minY, invSize, 2);
 
                 // as a last resort, try splitting the remaining polygon into two
             } else if (pass === 2) {
-                splitEarcut(ear, triangles, dim, minX, minY, size);
+                splitEarcut(ear, triangles, dim, minX, minY, invSize);
             }
 
             break;
@@ -3068,7 +2967,7 @@ function isEar(ear) {
     return true;
 }
 
-function isEarHashed(ear, minX, minY, size) {
+function isEarHashed(ear, minX, minY, invSize) {
     var a = ear.prev,
         b = ear,
         c = ear.next;
@@ -3082,23 +2981,31 @@ function isEarHashed(ear, minX, minY, size) {
         maxTY = a.y > b.y ? a.y > c.y ? a.y : c.y : b.y > c.y ? b.y : c.y;
 
     // z-order range for the current triangle bbox;
-    var minZ = zOrder(minTX, minTY, minX, minY, size),
-        maxZ = zOrder(maxTX, maxTY, minX, minY, size);
+    var minZ = zOrder(minTX, minTY, minX, minY, invSize),
+        maxZ = zOrder(maxTX, maxTY, minX, minY, invSize);
 
-    // first look for points inside the triangle in increasing z-order
-    var p = ear.nextZ;
+    var p = ear.prevZ,
+        n = ear.nextZ;
 
-    while (p && p.z <= maxZ) {
+    // look for points inside the triangle in both directions
+    while (p && p.z >= minZ && n && n.z <= maxZ) {
         if (p !== ear.prev && p !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
-        p = p.nextZ;
+        p = p.prevZ;
+
+        if (n !== ear.prev && n !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
+        n = n.nextZ;
     }
 
-    // then look for points in decreasing z-order
-    p = ear.prevZ;
-
+    // look for remaining points in decreasing z-order
     while (p && p.z >= minZ) {
         if (p !== ear.prev && p !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
         p = p.prevZ;
+    }
+
+    // look for remaining points in increasing z-order
+    while (n && n.z <= maxZ) {
+        if (n !== ear.prev && n !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
+        n = n.nextZ;
     }
 
     return true;
@@ -3130,7 +3037,7 @@ function cureLocalIntersections(start, triangles, dim) {
 }
 
 // try splitting polygon into two and triangulate them independently
-function splitEarcut(start, triangles, dim, minX, minY, size) {
+function splitEarcut(start, triangles, dim, minX, minY, invSize) {
     // look for a valid diagonal that divides the polygon into two
     var a = start;
     do {
@@ -3145,8 +3052,8 @@ function splitEarcut(start, triangles, dim, minX, minY, size) {
                 c = filterPoints(c, c.next);
 
                 // run earcut on each half
-                earcutLinked(a, triangles, dim, minX, minY, size);
-                earcutLinked(c, triangles, dim, minX, minY, size);
+                earcutLinked(a, triangles, dim, minX, minY, invSize);
+                earcutLinked(c, triangles, dim, minX, minY, invSize);
                 return;
             }
             b = b.next;
@@ -3207,7 +3114,7 @@ function findHoleBridge(hole, outerNode) {
     // find a segment intersected by a ray from the hole's leftmost point to the left;
     // segment's endpoint with lesser x will be potential connection point
     do {
-        if (hy <= p.y && hy >= p.next.y) {
+        if (hy <= p.y && hy >= p.next.y && p.next.y !== p.y) {
             var x = p.x + (hy - p.y) * (p.next.x - p.x) / (p.next.y - p.y);
             if (x <= hx && x > qx) {
                 qx = x;
@@ -3238,7 +3145,7 @@ function findHoleBridge(hole, outerNode) {
     p = m.next;
 
     while (p !== stop) {
-        if (hx >= p.x && p.x >= mx && pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
+        if (hx >= p.x && p.x >= mx && hx !== p.x && pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
 
             tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
 
@@ -3255,10 +3162,10 @@ function findHoleBridge(hole, outerNode) {
 }
 
 // interlink polygon nodes in z-order
-function indexCurve(start, minX, minY, size) {
+function indexCurve(start, minX, minY, invSize) {
     var p = start;
     do {
-        if (p.z === null) p.z = zOrder(p.x, p.y, minX, minY, size);
+        if (p.z === null) p.z = zOrder(p.x, p.y, minX, minY, invSize);
         p.prevZ = p.prev;
         p.nextZ = p.next;
         p = p.next;
@@ -3298,20 +3205,11 @@ function sortLinked(list) {
                 q = q.nextZ;
                 if (!q) break;
             }
-
             qSize = inSize;
 
             while (pSize > 0 || qSize > 0 && q) {
 
-                if (pSize === 0) {
-                    e = q;
-                    q = q.nextZ;
-                    qSize--;
-                } else if (qSize === 0 || !q) {
-                    e = p;
-                    p = p.nextZ;
-                    pSize--;
-                } else if (p.z <= q.z) {
+                if (pSize !== 0 && (qSize === 0 || !q || p.z <= q.z)) {
                     e = p;
                     p = p.nextZ;
                     pSize--;
@@ -3337,11 +3235,11 @@ function sortLinked(list) {
     return list;
 }
 
-// z-order of a point given coords and size of the data bounding box
-function zOrder(x, y, minX, minY, size) {
+// z-order of a point given coords and inverse of the longer side of data bbox
+function zOrder(x, y, minX, minY, invSize) {
     // coords are transformed into non-negative 15-bit integer range
-    x = 32767 * (x - minX) / size;
-    y = 32767 * (y - minY) / size;
+    x = 32767 * (x - minX) * invSize;
+    y = 32767 * (y - minY) * invSize;
 
     x = (x | x << 8) & 0x00FF00FF;
     x = (x | x << 4) & 0x0F0F0F0F;
@@ -3417,7 +3315,7 @@ function middleInside(a, b) {
         px = (a.x + b.x) / 2,
         py = (a.y + b.y) / 2;
     do {
-        if (p.y > py !== p.next.y > py && px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x) inside = !inside;
+        if (p.y > py !== p.next.y > py && p.next.y !== p.y && px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x) inside = !inside;
         p = p.next;
     } while (p !== a);
 
@@ -3549,7 +3447,9 @@ earcut.flatten = function (data) {
     return result;
 };
 
-var tinyqueue = TinyQueue;
+earcut_1.default = default_1;
+
+var index$6 = TinyQueue;
 
 function TinyQueue(data, compare) {
     if (!(this instanceof TinyQueue)) return new TinyQueue(data, compare);
@@ -3635,8 +3535,8 @@ TinyQueue.prototype = {
     }
 };
 
-var polylabel_1 = polylabel;
-var default_1 = polylabel;
+var index$8 = polylabel;
+var default_1$1 = polylabel;
 
 function polylabel(polygon, precision, debug) {
     precision = precision || 1.0;
@@ -3657,7 +3557,7 @@ function polylabel(polygon, precision, debug) {
     var h = cellSize / 2;
 
     // a priority queue of cells in order of their "potential" (max distance to polygon)
-    var cellQueue = new tinyqueue(null, compareMax);
+    var cellQueue = new index$6(null, compareMax);
 
     if (cellSize === 0) return [minX, minY];
 
@@ -3786,63 +3686,62 @@ function getSegDistSq(px, py, a, b) {
     return dx * dx + dy * dy;
 }
 
-polylabel_1.default = default_1;
+index$8.default = default_1$1;
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-var Array$1 = {
-  min: function min(array, transform) {
-    if (typeof transform !== 'function') {
-      return Math.min.apply(Math, toConsumableArray(array));
-    }
-    var result = void 0;
-    array.reduce(function (min, value, index) {
-      var transformed = transform(value, index);
-      if (min > transformed) {
-        result = value;
-        return transformed;
+function min(array, transform) {
+  var result = void 0;
+  var min = Number.POSITIVE_INFINITY;
+  if (typeof transform !== 'function') {
+    for (var index = 0; index < array.length; ++index) {
+      var item = array[index];
+      if (item < min) {
+        result = item;
+        min = item;
       }
-      return min;
-    }, Number.POSITIVE_INFINITY);
-    return result;
-  },
-  max: function max(array, transform) {
-    if (typeof transform !== 'function') {
-      return Math.max.apply(Math, toConsumableArray(array));
     }
-    var result = void 0;
-    array.reduce(function (max, value, index) {
-      var transformed = transform(value, index);
-      if (max < transformed) {
-        result = value;
-        return transformed;
-      }
-      return max;
-    }, Number.NEGATIVE_INFINITY);
     return result;
   }
+  for (var _index = 0; _index < array.length; ++_index) {
+    var _item = array[_index];
+    var transformed = transform(_item, _index);
+    if (transformed < min) {
+      result = _item;
+      min = transformed;
+    }
+  }
+  return result;
+}
+
+function max(array, transform) {
+  var result = void 0;
+  var max = Number.NEGATIVE_INFINITY;
+  if (typeof transform !== 'function') {
+    for (var index = 0; index < array.length; ++index) {
+      var item = array[index];
+      if (item > max) {
+        result = item;
+        max = item;
+      }
+    }
+    return result;
+  }
+  for (var _index2 = 0; _index2 < array.length; ++_index2) {
+    var _item2 = array[_index2];
+    var transformed = transform(_item2, _index2);
+    if (transformed > max) {
+      result = _item2;
+      max = transformed;
+    }
+  }
+  return result;
+}
+
+var Array$1 = {
+  min: min,
+  max: max
 };
 
 /*
@@ -4196,7 +4095,6 @@ function peg$parse(input, options) {
           s4 = peg$parsewsp();
         }
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c0(s2);
           s0 = s1;
         } else {
@@ -4266,7 +4164,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4332,7 +4229,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4424,7 +4320,6 @@ function peg$parse(input, options) {
             s4 = null;
           }
           if (s4 !== peg$FAILED) {
-            peg$savedPos = s0;
             s1 = peg$c4(s1, s3, s4);
             s0 = s1;
           } else {
@@ -4461,7 +4356,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c7();
     }
     s0 = s1;
@@ -4492,7 +4386,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parselineto_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -4558,7 +4451,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4596,7 +4488,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsecoordinate_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c13(s1, s3);
           s0 = s1;
         } else {
@@ -4662,7 +4553,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4700,7 +4590,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsecoordinate_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c16(s1, s3);
           s0 = s1;
         } else {
@@ -4742,7 +4631,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsecurveto_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -4808,7 +4696,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4843,7 +4730,6 @@ function peg$parse(input, options) {
           if (s4 !== peg$FAILED) {
             s5 = peg$parsecoordinate_pair();
             if (s5 !== peg$FAILED) {
-              peg$savedPos = s0;
               s1 = peg$c19(s1, s3, s5);
               s0 = s1;
             } else {
@@ -4893,7 +4779,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsesmooth_curveto_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -4959,7 +4844,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -4987,7 +4871,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsecoordinate_pair();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c22(s1, s3);
           s0 = s1;
         } else {
@@ -5029,7 +4912,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsequadratic_bezier_curveto_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -5095,7 +4977,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -5123,7 +5004,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsecoordinate_pair();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c25(s1, s3);
           s0 = s1;
         } else {
@@ -5165,7 +5045,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsesmooth_quadratic_bezier_curveto_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -5231,7 +5110,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -5269,7 +5147,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parseelliptical_arc_argument_sequence();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c10(s1, s3);
           s0 = s1;
         } else {
@@ -5335,7 +5212,6 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c1(s1, s2);
         s0 = s1;
       } else {
@@ -5388,7 +5264,6 @@ function peg$parse(input, options) {
                       if (s10 !== peg$FAILED) {
                         s11 = peg$parsecoordinate_pair();
                         if (s11 !== peg$FAILED) {
-                          peg$savedPos = s0;
                           s1 = peg$c30(s1, s3, s5, s7, s9, s11);
                           s0 = s1;
                         } else {
@@ -5452,7 +5327,6 @@ function peg$parse(input, options) {
       if (s2 !== peg$FAILED) {
         s3 = peg$parsenumber();
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
           s1 = peg$c31(s1, s3);
           s0 = s1;
         } else {
@@ -5480,7 +5354,6 @@ function peg$parse(input, options) {
       s1 = peg$parsedigit_sequence();
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c32(s1);
     }
     s0 = s1;
@@ -5531,7 +5404,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c33(s1);
     }
     s0 = s1;
@@ -5553,7 +5425,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c36(s1);
     }
     s0 = s1;
@@ -5625,7 +5496,6 @@ function peg$parse(input, options) {
         s1 = peg$FAILED;
       }
       if (s1 !== peg$FAILED) {
-        peg$savedPos = s0;
         s1 = peg$c37();
       }
       s0 = s1;
@@ -5690,7 +5560,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c40(s1);
     }
     s0 = s1;
@@ -5760,7 +5629,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c40(s1);
     }
     s0 = s1;
@@ -5805,7 +5673,6 @@ function peg$parse(input, options) {
       s1 = peg$FAILED;
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c40(s1);
     }
     s0 = s1;
@@ -5860,7 +5727,6 @@ function peg$parse(input, options) {
       s1 = peg$FAILED;
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c49(s1);
     }
     s0 = s1;
@@ -5882,7 +5748,6 @@ function peg$parse(input, options) {
       }
     }
     if (s1 !== peg$FAILED) {
-      peg$savedPos = s0;
       s1 = peg$c37();
     }
     s0 = s1;
@@ -5925,17 +5790,17 @@ function peg$parse(input, options) {
   }
 }
 
-var parser$1 = {
+var parser = {
   SyntaxError: peg$SyntaxError,
   parse: peg$parse
 };
 
 // v1.0 exported just the parser function. To maintain backwards compatibility,
 // we export additional named features as properties of that function.
-var parserFunction = parser$1.parse;
+var parserFunction = parser.parse;
 parserFunction.parseSVG = parserFunction;
 parserFunction.makeAbsolute = makeSVGPathCommandsAbsolute;
-var svgPathParser = parserFunction;
+var index$9 = parserFunction;
 
 function makeSVGPathCommandsAbsolute(commands) {
 	var subpathStart,
@@ -5959,29 +5824,8 @@ function makeSVGPathCommandsAbsolute(commands) {
 	return commands;
 }
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 function ImplementationError(message) {
   this.message = message;
@@ -5993,29 +5837,8 @@ ImplementationError.prototype.name = 'ImplementationError';
 ImplementationError.prototype.message = '';
 ImplementationError.prototype.constructor = ImplementationError;
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 function cross(a, b) {
   return a.x * b.y - a.y * b.x;
@@ -6024,6 +5847,7 @@ function cross(a, b) {
 function crossings(a, b, point) {
   if (a.x < point.x && point.x <= b.x || b.x < point.x && point.x <= a.x) {
     var y = a.y;
+
     if (a.x !== b.x) {
       y = a.y + (b.y - a.y) * (point.x - a.x) / (b.x - a.x);
     }
@@ -6034,7 +5858,7 @@ function crossings(a, b, point) {
   return 0;
 }
 
-var Path$1 = {
+var Path = {
   winding: function winding(curves) {
     if (curves.length < 3) {
       return undefined;
@@ -6074,7 +5898,7 @@ var Path$1 = {
     var x = 0;
     var y = 0;
     var path = void 0;
-    var commands = svgPathParser(input);
+    var commands = index$9(input);
     var paths = commands.reduce(function (paths, current) {
       switch (current.code) {
         case 'M':
@@ -6243,34 +6067,13 @@ var Path$1 = {
   }
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 /* eslint-disable no-console */
 
 var d3 = Object.assign({}, d3Array, d3Geo);
-var topojson = External.optional('topojson');
+var topojson = runtimeImport.optional('topojson');
 
 function codePropertyKeyForLevel(level) {
   return level + 'Code';
@@ -6316,7 +6119,7 @@ function convertPolygonsToShapes(polygons, projection) {
       errors.push(index);
       return shapes;
     }
-    var path = Path$1.parse(svg, true);
+    var path = Path.parse(svg, true);
     var paths = void 0;
     if (path instanceof Three.Shape) {
       paths = path.curves;
@@ -6325,7 +6128,7 @@ function convertPolygonsToShapes(polygons, projection) {
     }
     var shape = new Three.Shape();
     paths.forEach(function (path) {
-      var winding = Path$1.winding(path.curves);
+      var winding = Path.winding(path.curves);
       if (winding === 'ccw') {
         shape.add(path);
       } else if (winding === 'cw') {
@@ -6386,7 +6189,7 @@ function convertShapesToLineSegmentGeometry(shapes) {
   return convertLinesToGeometry(lines);
 }
 
-var internal$4 = Namespace('GeographyBuilder');
+var internal$4 = createNamespace('GeographyBuilder');
 
 var GeographyBuilder = function () {
   function GeographyBuilder(levels) {
@@ -6413,7 +6216,7 @@ var GeographyBuilder = function () {
                 }
 
                 _context.next = 4;
-                return Request.json(data, { local: true });
+                return performRequest.json(data, { local: true });
 
               case 4:
                 scope.data = _context.sent;
@@ -6447,8 +6250,8 @@ var GeographyBuilder = function () {
       var level = _ref2.level,
           code = _ref2.code,
           projection = _ref2.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       if (level) {
         geometries = geometries.filter(function (geometry) {
           return includesGeometryObject(level, code, geometry);
@@ -6483,8 +6286,8 @@ var GeographyBuilder = function () {
           projection = _ref3.projection,
           _ref3$precision = _ref3.precision,
           precision = _ref3$precision === undefined ? 0.01 : _ref3$precision;
-
       var geometries = this.data.objects.geography.geometries;
+
       if (level) {
         geometries = geometries.filter(function (geometry) {
           return includesGeometryObject(level, code, geometry);
@@ -6510,7 +6313,7 @@ var GeographyBuilder = function () {
           console.warn('Unable to derive pole of inaccessibility:', level, code);
           return null;
         }
-        var path = Path$1.parse(svg, true);
+        var path = Path.parse(svg, true);
         if (!path) {
           console.warn('Unable to derive pole of inaccessibility:', level, code);
           return null;
@@ -6526,7 +6329,7 @@ var GeographyBuilder = function () {
             return [curve.v1.x, curve.v1.y];
           });
         });
-        return polylabel_1(projected, Math.sqrt(projection.path.area({
+        return index$8(projected, Math.sqrt(projection.path.area({
           type: 'Polygon',
           coordinates: _polygon
         })) * precision);
@@ -6541,7 +6344,7 @@ var GeographyBuilder = function () {
         console.warn('Unable to derive pole of inaccessibility:', level, code);
         return null;
       }
-      return polylabel_1(polygon, Math.sqrt(d3.geoArea({
+      return index$8(polygon, Math.sqrt(d3.geoArea({
         type: 'Polygon',
         coordinates: polygon
       })) * precision);
@@ -6592,7 +6395,7 @@ var GeographyBuilder = function () {
         errors.push(0);
         return convertLinesToGeometry([]);
       }
-      var path = Path$1.parse(svg, true);
+      var path = Path.parse(svg, true);
       var lines = void 0;
       if (path instanceof Three.Shape) {
         lines = path.curves.reduce(function (lines, path) {
@@ -6607,8 +6410,8 @@ var GeographyBuilder = function () {
     key: 'geographyShapes',
     value: function geographyShapes(_ref8) {
       var projection = _ref8.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.shapes({
         projection: projection,
@@ -6623,8 +6426,8 @@ var GeographyBuilder = function () {
     key: 'geographyShapeGeometry',
     value: function geographyShapeGeometry(_ref9) {
       var projection = _ref9.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.shapeGeometry({
         projection: projection,
@@ -6639,8 +6442,8 @@ var GeographyBuilder = function () {
     key: 'geographyOutlineGeometry',
     value: function geographyOutlineGeometry(_ref10) {
       var projection = _ref10.projection;
-
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.outlineGeometry({
         projection: projection,
@@ -6652,13 +6455,34 @@ var GeographyBuilder = function () {
       return result;
     }
   }, {
-    key: 'divisionShapes',
-    value: function divisionShapes(_ref11) {
-      var level = _ref11.level,
-          code = _ref11.code,
-          projection = _ref11.projection;
+    key: 'geographySubdivisionGeometry',
+    value: function geographySubdivisionGeometry(_ref11) {
+      var projection = _ref11.projection;
 
+      var key = codePropertyKeyForLevel(this.levels[0]);
+      var errors = [];
+      var result = this.borderGeometry({
+        projection: projection,
+        object: this.data.objects.geography,
+        filter: function filter(a, b) {
+          return a.properties[key] !== b.properties[key];
+        }
+      }, errors);
+      if (errors.length !== 0) {
+        // Topology mesh can fail if a division doesn't have any adjacent
+        // division. Just return an empty geometry without logging warning.
+        return new Three.BufferGeometry();
+      }
+      return result;
+    }
+  }, {
+    key: 'divisionShapes',
+    value: function divisionShapes(_ref12) {
+      var level = _ref12.level,
+          code = _ref12.code,
+          projection = _ref12.projection;
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.shapes({
         projection: projection,
@@ -6673,12 +6497,12 @@ var GeographyBuilder = function () {
     }
   }, {
     key: 'divisionShapeGeometry',
-    value: function divisionShapeGeometry(_ref12) {
-      var level = _ref12.level,
-          code = _ref12.code,
-          projection = _ref12.projection;
-
+    value: function divisionShapeGeometry(_ref13) {
+      var level = _ref13.level,
+          code = _ref13.code,
+          projection = _ref13.projection;
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.shapeGeometry({
         projection: projection,
@@ -6693,12 +6517,12 @@ var GeographyBuilder = function () {
     }
   }, {
     key: 'divisionOutlineGeometry',
-    value: function divisionOutlineGeometry(_ref13) {
-      var level = _ref13.level,
-          code = _ref13.code,
-          projection = _ref13.projection;
-
+    value: function divisionOutlineGeometry(_ref14) {
+      var level = _ref14.level,
+          code = _ref14.code,
+          projection = _ref14.projection;
       var geometries = this.data.objects.geography.geometries;
+
       var errors = [];
       var result = this.outlineGeometry({
         projection: projection,
@@ -6713,12 +6537,12 @@ var GeographyBuilder = function () {
     }
   }, {
     key: 'divisionBorderGeometry',
-    value: function divisionBorderGeometry(_ref14) {
+    value: function divisionBorderGeometry(_ref15) {
       var _this = this;
 
-      var level = _ref14.level,
-          code = _ref14.code,
-          projection = _ref14.projection;
+      var level = _ref15.level,
+          code = _ref15.code,
+          projection = _ref15.projection;
 
       var superlevel = function () {
         var index = _this.levels.indexOf(level);
@@ -6732,6 +6556,7 @@ var GeographyBuilder = function () {
 
       // Reduce geometries to find neighbors if superlevel exists
       var geometries = this.data.objects.geography.geometries;
+
       if (superlevel) {
         geometries = geometries.filter(function (geometry) {
           return includesGeometryObject(superlevel, code, geometry);
@@ -6756,8 +6581,8 @@ var GeographyBuilder = function () {
         })
       };
 
-      var errors = [];
       var key = codePropertyKeyForLevel(level);
+      var errors = [];
       var result = this.borderGeometry({
         projection: projection,
         object: object,
@@ -6777,19 +6602,19 @@ var GeographyBuilder = function () {
     }
   }, {
     key: 'divisionSubdivisionGeometry',
-    value: function divisionSubdivisionGeometry(_ref15) {
-      var level = _ref15.level,
-          code = _ref15.code,
-          projection = _ref15.projection;
-
+    value: function divisionSubdivisionGeometry(_ref16) {
+      var level = _ref16.level,
+          code = _ref16.code,
+          projection = _ref16.projection;
       var geometries = this.data.objects.geography.geometries;
-      var errors = [];
+
       var object = {
         type: 'GeometryCollection',
         geometries: geometries.filter(function (geometry) {
           return includesGeometryObject(level, code, geometry);
         })
       };
+      var errors = [];
       var result = this.borderGeometry({
         projection: projection,
         object: object,
@@ -6820,29 +6645,8 @@ var GeographyBuilder = function () {
   return GeographyBuilder;
 }();
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 var JapanGeography = function (_Geography) {
   inherits(JapanGeography, _Geography);
@@ -6862,29 +6666,8 @@ var JapanGeography = function (_Geography) {
   return JapanGeography;
 }(Geography);
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 function modulo(numerator, denominator) {
   return {
@@ -7117,7 +6900,7 @@ var codeToPointConverters = {
   }
 };
 
-var internal$5 = Namespace('JapanRegionalMesh');
+var internal$5 = createNamespace('JapanRegionalMesh');
 
 var JapanRegionalMesh = function () {
   function JapanRegionalMesh(name, size) {
@@ -7143,6 +6926,7 @@ var JapanRegionalMesh = function () {
     value: function center(code) {
       var origin = this.origin(code);
       var size = this.size;
+
       return [origin[0] + size[0] / 2, origin[1] + size[1] / 2];
     }
   }, {
@@ -7178,10 +6962,6 @@ var suncalc = createCommonjsModule(function (module, exports) {
     */
 
     (function () {
-        'use strict';
-
-        // shortcuts for easier to read formulas
-
         var PI = Math.PI,
             sin = Math.sin,
             cos = Math.cos,
@@ -7638,7 +7418,7 @@ var charenc_1 = charenc;
 
 // The _isBuffer check is for Safari 5-7 support, because it's missing
 // Object.prototype.constructor. Remove this eventually
-var isBuffer_1 = function isBuffer_1(obj) {
+var index$10 = function index(obj) {
   return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer);
 };
 
@@ -7655,7 +7435,7 @@ var md5 = createCommonjsModule(function (module) {
   (function () {
     var crypt$$1 = crypt,
         utf8 = charenc_1.utf8,
-        isBuffer = isBuffer_1,
+        isBuffer = index$10,
         bin = charenc_1.bin,
 
 
@@ -8033,7 +7813,7 @@ value = function value() {
 // Return the json_parse function. It will have access to all of the above
 // functions and variables.
 
-var parse$2 = function parse(source, reviver) {
+var parse$1 = function parse(source, reviver) {
     var result;
 
     text = source;
@@ -8191,7 +7971,7 @@ function str(key, holder) {
     }
 }
 
-var stringify$3 = function stringify(value, replacer, space) {
+var stringify$1 = function stringify(value, replacer, space) {
     var i;
     gap = '';
     indent = '';
@@ -8220,17 +8000,17 @@ var stringify$3 = function stringify(value, replacer, space) {
     return str('', { '': value });
 };
 
-var parse$1 = parse$2;
-var stringify$2 = stringify$3;
+var parse$3 = parse$1;
+var stringify$3 = stringify$1;
 
-var jsonify = {
-	parse: parse$1,
-	stringify: stringify$2
+var index$12 = {
+	parse: parse$3,
+	stringify: stringify$3
 };
 
-var json = typeof JSON !== 'undefined' ? JSON : jsonify;
+var json = typeof JSON !== 'undefined' ? JSON : index$12;
 
-var jsonStableStringify = function jsonStableStringify(obj, opts) {
+var index$14 = function index(obj, opts) {
     if (!opts) opts = {};
     if (typeof opts === 'function') opts = { cmp: opts };
     var space = opts.space || '';
@@ -8313,61 +8093,19 @@ var objectKeys = Object.keys || function (obj) {
     return keys;
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-function Hash(object) {
-  return md5(jsonStableStringify(object));
+function generateHash(object) {
+  return md5(index$14(object));
 }
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 var d3$1 = Object.assign({}, d3Array, d3Geo, d3GeoProjection);
 
-var internal$6 = Namespace('Projection');
+var internal$6 = createNamespace('Projection');
 
 var Projection = function () {
   function Projection() {
@@ -8411,7 +8149,7 @@ var Projection = function () {
       }
       if (flip) {
         // Avoid negating zero
-        result[1] = result[1] || 0;
+        result[1] = -result[1] || 0;
       }
       return result;
     }
@@ -8433,12 +8171,14 @@ var Projection = function () {
     key: 'sun',
     value: function sun(time) {
       var origin = this.origin;
+
       return suncalc.getPosition(time, origin[1], origin[0]);
     }
   }, {
     key: 'moon',
     value: function moon(time) {
       var origin = this.origin;
+
       return suncalc.getMoonPosition(time, origin[1], origin[0]);
     }
   }, {
@@ -8517,7 +8257,7 @@ var Projection = function () {
     get: function get$$1() {
       var scope = internal$6(this);
       if (scope.hash === undefined) {
-        scope.hash = Hash(this.toJSON());
+        scope.hash = generateHash(this.toJSON());
       }
       return scope.hash;
     }
@@ -8525,29 +8265,8 @@ var Projection = function () {
   return Projection;
 }();
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 var USGeography = function (_Geography) {
   inherits(USGeography, _Geography);
@@ -8567,29 +8286,8 @@ var USGeography = function (_Geography) {
   return USGeography;
 }(Geography);
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 var WorldGeography = function (_Geography) {
   inherits(WorldGeography, _Geography);
@@ -8602,29 +8300,8 @@ var WorldGeography = function (_Geography) {
   return WorldGeography;
 }(Geography);
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 exports.Division = Division;
 exports.DivisionLevel = DivisionLevel;
@@ -8633,7 +8310,7 @@ exports.GeographyBuilder = GeographyBuilder;
 exports.GeometryPack = GeometryPack;
 exports.JapanGeography = JapanGeography;
 exports.JapanRegionalMesh = JapanRegionalMesh$1;
-exports.Path = Path$1;
+exports.Path = Path;
 exports.Projection = Projection;
 exports.USGeography = USGeography;
 exports.WorldGeography = WorldGeography;
