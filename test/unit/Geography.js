@@ -6,7 +6,7 @@ import 'source-map-support/register'
 import * as Three from 'three'
 import chai from 'chai'
 
-import { Environment } from '@takram/planck-core'
+import { Global } from '@takram/planck-core'
 import { JapanGeography, Projection } from '../..'
 
 const { expect } = chai
@@ -14,7 +14,7 @@ const { expect } = chai
 // eslint-disable-next-line func-names
 describe('Geography', function () {
   this.timeout(300000)
-  if (Environment.type === 'node') {
+  if (Global.isNode) {
     return
   }
 

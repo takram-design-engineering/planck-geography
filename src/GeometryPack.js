@@ -3,7 +3,7 @@
 
 import * as Three from 'three'
 
-import Environment from '@takram/planck-core/src/Environment'
+import Global from '@takram/planck-core/src/Global'
 
 function packBufferGeometry(geometry, byteOffset = 0) {
   const data = geometry.toJSON()
@@ -71,7 +71,7 @@ function unpackBufferGeometry(data, buffer) {
   const copy = { ...data, data: { ...data.data } }
   if (copy.data.index) {
     const { type } = copy.data.index
-    const view = new Environment.self[type](buffer, ...copy.data.index.array)
+    const view = new Global.scope[type](buffer, ...copy.data.index.array)
     copy.data.index = { ...copy.data.index, array: view }
   }
   if (copy.data.attributes) {
@@ -81,7 +81,7 @@ function unpackBufferGeometry(data, buffer) {
       const name = names[i]
       const attribute = copy.data.attributes[name]
       const { type } = attribute
-      const view = new Environment.self[type](buffer, ...attribute.array)
+      const view = new Global.scope[type](buffer, ...attribute.array)
       attributes[name] = { ...attribute, array: view }
     }
     copy.data.attributes = attributes
