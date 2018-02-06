@@ -4,31 +4,10 @@
 	(factory((global.Planck = global.Planck || {}),global.THREE,global.d3,global.d3,global.d3));
 }(this, (function (exports,Three,d3Array,d3Geo,d3GeoProjection) { 'use strict';
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-function Namespace() {
+function createNamespace() {
   var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
 
   var symbol = Symbol(name);
@@ -55,118 +34,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
-var asyncGenerator = function () {
-  function AwaitValue(value) {
-    this.value = value;
-  }
 
-  function AsyncGenerator(gen) {
-    var front, back;
-
-    function send(key, arg) {
-      return new Promise(function (resolve, reject) {
-        var request = {
-          key: key,
-          arg: arg,
-          resolve: resolve,
-          reject: reject,
-          next: null
-        };
-
-        if (back) {
-          back = back.next = request;
-        } else {
-          front = back = request;
-          resume(key, arg);
-        }
-      });
-    }
-
-    function resume(key, arg) {
-      try {
-        var result = gen[key](arg);
-        var value = result.value;
-
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(function (arg) {
-            resume("next", arg);
-          }, function (arg) {
-            resume("throw", arg);
-          });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
-      } catch (err) {
-        settle("throw", err);
-      }
-    }
-
-    function settle(type, value) {
-      switch (type) {
-        case "return":
-          front.resolve({
-            value: value,
-            done: true
-          });
-          break;
-
-        case "throw":
-          front.reject(value);
-          break;
-
-        default:
-          front.resolve({
-            value: value,
-            done: false
-          });
-          break;
-      }
-
-      front = front.next;
-
-      if (front) {
-        resume(front.key, front.arg);
-      } else {
-        back = null;
-      }
-    }
-
-    this._invoke = send;
-
-    if (typeof gen.return !== "function") {
-      this.return = undefined;
-    }
-  }
-
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
-      return this;
-    };
-  }
-
-  AsyncGenerator.prototype.next = function (arg) {
-    return this._invoke("next", arg);
-  };
-
-  AsyncGenerator.prototype.throw = function (arg) {
-    return this._invoke("throw", arg);
-  };
-
-  AsyncGenerator.prototype.return = function (arg) {
-    return this._invoke("return", arg);
-  };
-
-  return {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
-  };
-}();
 
 
 
@@ -356,31 +224,10 @@ var toConsumableArray = function (arr) {
   }
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-var internal = Namespace('Division');
+var internal = createNamespace('Division');
 
 var Division = function () {
   function Division(level, code) {
@@ -1018,96 +865,73 @@ var index = createCommonjsModule(function (module, exports) {
   };
 });
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+var index_1 = index.resolve;
+var index_2 = index.normalize;
+var index_3 = index.isAbsolute;
+var index_4 = index.join;
+var index_5 = index.relative;
+var index_6 = index.sep;
+var index_7 = index.delimiter;
+var index_8 = index.dirname;
+var index_9 = index.basename;
+var index_10 = index.extname;
 
-var environmentType = function () {
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
+
+var isBrowser = function () {
   try {
     // eslint-disable-next-line no-new-func
     if (new Function('return this === window')()) {
-      return 'browser';
+      return true;
     }
   } catch (error) {}
+  return false;
+}();
+
+var isWorker = !isBrowser && function () {
   try {
     // eslint-disable-next-line no-new-func
     if (new Function('return this === self')()) {
-      return 'worker';
+      return true;
     }
   } catch (error) {}
+  return false;
+}();
+
+var isNode = !isBrowser && !isWorker && function () {
   try {
     // eslint-disable-next-line no-new-func
     if (new Function('return this === global')()) {
-      return 'node';
+      return true;
     }
   } catch (error) {}
+  return false;
+}();
+
+var globalScope = function () {
+  if (isBrowser) {
+    return window;
+  }
+  if (isWorker) {
+    // eslint-disable-next-line no-restricted-globals
+    return self;
+  }
+  if (isNode) {
+    return global;
+  }
   return undefined;
 }();
 
-var environmentSelf = void 0;
-switch (environmentType) {
-  case 'browser':
-    environmentSelf = window;
-    break;
-  case 'worker':
-    // eslint-disable-next-line no-restricted-globals
-    environmentSelf = self;
-    break;
-  case 'node':
-    environmentSelf = global;
-    break;
-  default:
-    break;
-}
-
-var Environment = {
-  type: environmentType,
-  self: environmentSelf
+var Global = {
+  isBrowser: isBrowser,
+  isWorker: isWorker,
+  isNode: isNode,
+  scope: globalScope
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 function branchingImport(arg) {
   // Assuming `process.browser` is defined via DefinePlugin on webpack, this
@@ -1128,10 +952,10 @@ function branchingImport(arg) {
     name = arg[id];
   }
   if (process.browser) {
-    return Environment.self[name];
+    return globalScope[name];
     // eslint-disable-next-line no-else-return
   } else {
-    if (Environment.type !== 'node') {
+    if (!isNode) {
       return undefined;
     }
     try {
@@ -1145,13 +969,13 @@ function branchingImport(arg) {
 function runtimeImport(id) {
   // This will throw error on browser, in which `process` is typically not
   // defined in the global scope. Re-importing after defining `process.browser`
-  // in the global scope will evaluate the conditional in `branchingImport` for
-  // rollup's bundles.
+  // in the global scope will evaluate the conditional in
+  // `branchingImport` for rollup's bundles.
   try {
     return branchingImport(id);
   } catch (e) {
-    Environment.self.process = {
-      browser: Environment.type !== 'node'
+    globalScope.process = {
+      browser: !isNode
     };
   }
   return branchingImport(id);
@@ -1168,7 +992,7 @@ function importOptional(id) {
 function importRequired(id) {
   var module = runtimeImport(id);
   if (module === undefined) {
-    if (Environment.type === 'node') {
+    if (isNode) {
       throw new Error('Could not resolve module "' + id + '"');
     } else {
       throw new Error('"' + id + '" isn\u2019t defined in the global scope');
@@ -1180,7 +1004,7 @@ function importRequired(id) {
 function importNode(id) {
   var module = runtimeImport(id);
   if (module === undefined) {
-    if (Environment.type === 'node') {
+    if (isNode) {
       throw new Error('Could not resolve module "' + id + '"');
     }
     return {};
@@ -1191,7 +1015,7 @@ function importNode(id) {
 function importBrowser(id) {
   var module = runtimeImport(id);
   if (module === undefined) {
-    if (Environment.type !== 'node') {
+    if (!isNode) {
       throw new Error('"' + id + '" isn\u2019t defined in the global scope');
     }
     return {};
@@ -1199,103 +1023,73 @@ function importBrowser(id) {
   return module;
 }
 
-var External = {
+Object.assign(runtimeImport, {
   optional: importOptional,
   required: importRequired,
-  browser: importBrowser,
-  node: importNode
+  node: importNode,
+  browser: importBrowser
+});
+
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
+
+var nodePath = importNode('path');
+
+
+
+var resolve = function () {
+  return isNode ? nodePath.resolve : function resolve() {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return index.resolve.apply(index, ['/'].concat(args));
+  };
+}();
+
+var normalize = function () {
+  return isNode ? nodePath.normalize : index.normalize;
+}();
+
+var join = function () {
+  return isNode ? nodePath.join : index.join;
+}();
+
+var relative = function () {
+  return isNode ? nodePath.relative : index.relative;
+}();
+
+var dirname = function () {
+  return isNode ? nodePath.dirname : index.dirname;
+}();
+
+var basename = function () {
+  return isNode ? nodePath.basename : index.basename;
+}();
+
+var extname = function () {
+  return isNode ? nodePath.extname : index.extname;
+}();
+
+var delimiter = function () {
+  return isNode ? nodePath.delimiter : index.delimiter;
+}();
+
+var sep = function () {
+  return isNode ? nodePath.sep : index.sep;
+}();
+
+var FilePath = {
+  resolve: resolve,
+  normalize: normalize,
+  join: join,
+  relative: relative,
+  dirname: dirname,
+  basename: basename,
+  extname: extname,
+  delimiter: delimiter,
+  sep: sep
 };
-
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
-
-var nodePath = External.node('path');
-
-function currentScriptPath() {
-  switch (Environment.type) {
-    case 'browser':
-      {
-        // eslint-disable-next-line no-underscore-dangle
-        var currentScript = document.currentScript || document._currentScript;
-        return currentScript && currentScript.src || undefined;
-      }
-    case 'worker':
-      // eslint-disable-next-line no-restricted-globals
-      return self.location.href;
-    case 'node':
-      return __filename;
-    default:
-      break;
-  }
-  return undefined;
-}
-
-var initialScriptPath = currentScriptPath();
-
-var aliases = void 0;
-if (Environment.type === 'node') {
-  aliases = {
-    resolve: nodePath.resolve,
-    normalize: nodePath.normalize,
-    join: nodePath.join,
-    relative: nodePath.relative,
-    dirname: nodePath.dirname,
-    basename: nodePath.basename,
-    extname: nodePath.extname,
-    separator: nodePath.sep,
-    delimiter: nodePath.delimiter
-  };
-} else {
-  aliases = {
-    resolve: function resolve() {
-      for (var _len = arguments.length, paths = Array(_len), _key = 0; _key < _len; _key++) {
-        paths[_key] = arguments[_key];
-      }
-
-      return index.resolve.apply(index, ['/'].concat(paths));
-    },
-
-
-    normalize: index.normalize,
-    join: index.join,
-    relative: index.relative,
-    dirname: index.dirname,
-    basename: index.basename,
-    extname: index.extname,
-    separator: index.sep,
-    delimiter: index.delimiter
-  };
-}
-
-var FilePath = _extends({
-  self: initialScriptPath,
-
-  get current() {
-    return currentScriptPath();
-  }
-
-}, aliases);
 
 var EOL = {};
 var EOF = {};
@@ -1332,7 +1126,7 @@ function inferColumns(rows) {
   return columns;
 }
 
-var dsv = function (delimiter) {
+function dsv (delimiter) {
   var reFormat = new RegExp("[\"" + delimiter + "\n\r]"),
       DELIMITER = delimiter.charCodeAt(0);
 
@@ -1343,7 +1137,7 @@ var dsv = function (delimiter) {
       if (convert) return convert(row, i - 1);
       columns = row, convert = f ? customConverter(row, f) : objectConverter(row);
     });
-    rows.columns = columns;
+    rows.columns = columns || [];
     return rows;
   }
 
@@ -1431,7 +1225,7 @@ var dsv = function (delimiter) {
     format: format,
     formatRows: formatRows
   };
-};
+}
 
 var csv = dsv(",");
 
@@ -1440,8 +1234,6 @@ var csvParse = csv.parse;
 var tsv = dsv("\t");
 
 var tsvParse = tsv.parse;
-
-'use strict';
 
 /**
  * Check if we're required to add a port number.
@@ -1453,7 +1245,7 @@ var tsvParse = tsv.parse;
  * @api private
  */
 
-var index$2 = function required(port, protocol) {
+var index$1 = function required(port, protocol) {
   protocol = protocol.split(':')[0];
   port = +port;
 
@@ -1480,8 +1272,6 @@ var index$2 = function required(port, protocol) {
 
   return port !== 0;
 };
-
-'use strict';
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -1551,12 +1341,10 @@ function querystringify(obj, prefix) {
 var stringify = querystringify;
 var parse = querystring;
 
-var index$4 = {
+var index$3 = {
   stringify: stringify,
   parse: parse
 };
-
-'use strict';
 
 var protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i;
 var slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//;
@@ -1612,9 +1400,9 @@ function lolcation(loc) {
       key;
 
   if ('blob:' === loc.protocol) {
-    finaldestination = new URL$1(unescape(loc.pathname), {});
+    finaldestination = new URL(unescape(loc.pathname), {});
   } else if ('string' === type) {
-    finaldestination = new URL$1(loc, {});
+    finaldestination = new URL(loc, {});
     for (key in ignore) {
       delete finaldestination[key];
     }
@@ -1665,7 +1453,7 @@ function extractProtocol(address) {
  * @return {String} Resolved pathname.
  * @api private
  */
-function resolve(relative, base) {
+function resolve$1(relative, base) {
   var path = (base || '/').split('/').slice(0, -1).concat(relative.split('/')),
       i = path.length,
       last = path[i - 1],
@@ -1702,9 +1490,9 @@ function resolve(relative, base) {
  * @param {Boolean|Function} parser Parser for the query string.
  * @api public
  */
-function URL$1(address, location, parser) {
-  if (!(this instanceof URL$1)) {
-    return new URL$1(address, location, parser);
+function URL(address, location, parser) {
+  if (!(this instanceof URL)) {
+    return new URL(address, location, parser);
   }
 
   var relative,
@@ -1734,7 +1522,7 @@ function URL$1(address, location, parser) {
     location = null;
   }
 
-  if (parser && 'function' !== typeof parser) parser = index$4.parse;
+  if (parser && 'function' !== typeof parser) parser = index$3.parse;
 
   location = lolcation(location);
 
@@ -1795,7 +1583,7 @@ function URL$1(address, location, parser) {
   // If the URL is relative, resolve the pathname against the base URL.
   //
   if (relative && location.slashes && url.pathname.charAt(0) !== '/' && (url.pathname !== '' || location.pathname !== '')) {
-    url.pathname = resolve(url.pathname, location.pathname);
+    url.pathname = resolve$1(url.pathname, location.pathname);
   }
 
   //
@@ -1803,7 +1591,7 @@ function URL$1(address, location, parser) {
   // for a given protocol. As the host also contains the port number we're going
   // override it with the hostname which contains no port number.
   //
-  if (!index$2(url.port, url.protocol)) {
+  if (!index$1(url.port, url.protocol)) {
     url.host = url.hostname;
     url.port = '';
   }
@@ -1845,7 +1633,7 @@ function set$1(part, value, fn) {
   switch (part) {
     case 'query':
       if ('string' === typeof value && value.length) {
-        value = (fn || index$4.parse)(value);
+        value = (fn || index$3.parse)(value);
       }
 
       url[part] = value;
@@ -1854,7 +1642,7 @@ function set$1(part, value, fn) {
     case 'port':
       url[part] = value;
 
-      if (!index$2(value, url.protocol)) {
+      if (!index$1(value, url.protocol)) {
         url.host = url.hostname;
         url[part] = '';
       } else if (value) {
@@ -1890,8 +1678,13 @@ function set$1(part, value, fn) {
       break;
 
     case 'pathname':
-      url.pathname = value.length && value.charAt(0) !== '/' ? '/' + value : value;
-
+    case 'hash':
+      if (value) {
+        var char = part === 'pathname' ? '/' : '#';
+        url[part] = value.charAt(0) !== char ? char + value : value;
+      } else {
+        url[part] = value;
+      }
       break;
 
     default:
@@ -1919,7 +1712,7 @@ function set$1(part, value, fn) {
  * @api public
  */
 function toString(stringify) {
-  if (!stringify || 'function' !== typeof stringify) stringify = index$4.stringify;
+  if (!stringify || 'function' !== typeof stringify) stringify = index$3.stringify;
 
   var query,
       url = this,
@@ -1945,117 +1738,95 @@ function toString(stringify) {
   return result;
 }
 
-URL$1.prototype = { set: set$1, toString: toString };
+URL.prototype = { set: set$1, toString: toString };
 
 //
 // Expose the URL parser and some additional properties that might be useful for
 // others or testing.
 //
-URL$1.extractProtocol = extractProtocol;
-URL$1.location = lolcation;
-URL$1.qs = index$4;
+URL.extractProtocol = extractProtocol;
+URL.location = lolcation;
+URL.qs = index$3;
 
-var index$1 = URL$1;
+var index$5 = URL;
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-var _External$node = External.node('fs');
-var readFile = _External$node.readFile;
+var _importNode = importNode('fs');
+var readFile = _importNode.readFile;
 
-var request = External.node('request');
+var request = importNode('request');
 
-var internal$2 = Namespace('Request');
+
 
 function browserRequest(url, options) {
-  return new Promise(function (resolve, reject) {
-    var parsed = new index$1(url, true);
-    if (options.query) {
-      parsed.set('query', Object.assign({}, parsed.query, options.query));
+  var resolve = void 0;
+  var reject = void 0;
+  var promise = new Promise(function () {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
-    var request = new XMLHttpRequest();
-    request.open('get', parsed.toString(), true);
-    if (options.headers) {
-      var names = Object.keys(options.headers);
-      for (var i = 0; i < names.length; ++i) {
-        request.setRequestHeader.apply(request, toConsumableArray(options.headers[names[i]]));
-      }
-    }
-    request.responseType = options.type;
-    request.addEventListener('loadend', function (event) {
-      if (request.status < 200 || request.status >= 300) {
-        reject(request.status);
-        return;
-      }
-      if (request.response === null && options.type === 'json') {
-        reject(new Error('Could not parse JSON'));
-        return;
-      }
-      resolve(request.response);
-    }, false);
-    request.send();
+
+    resolve = args[0];
+    reject = args[1];
   });
+  var parsed = new index$5(url, true);
+  if (options.query) {
+    parsed.set('query', Object.assign({}, parsed.query, options.query));
+  }
+  var request = new XMLHttpRequest();
+  request.open('get', parsed.toString(), true);
+  if (options.headers) {
+    var names = Object.keys(options.headers);
+    for (var i = 0; i < names.length; ++i) {
+      request.setRequestHeader.apply(request, toConsumableArray(options.headers[names[i]]));
+    }
+  }
+  request.responseType = options.type;
+  request.addEventListener('loadend', function (event) {
+    if (request.status < 200 || request.status >= 300) {
+      reject(request.status);
+      return;
+    }
+    if (request.response === null && options.type === 'json') {
+      reject(new Error('Could not parse JSON'));
+      return;
+    }
+    resolve(request.response);
+  }, false);
+  request.send();
+  promise.abort = function () {
+    request.abort();
+  };
+  return promise;
 }
 
 function nodeRequest(url, options) {
+  var resolve = void 0;
+  var reject = void 0;
+  var promise = new Promise(function () {
+    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+
+    resolve = args[0];
+    reject = args[1];
+  });
   if (options.local) {
-    return new Promise(function (resolve, reject) {
-      readFile(url, options.encoding, function (error, response) {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve(response);
-      });
+    readFile(url, options.encoding, function (error, response) {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(response);
     });
-  }
-  return new Promise(function (resolve, reject) {
-    request({
+    promise.abort = function () {}; // TODO: Support abortion
+  } else {
+    var stream = request({
       url: url,
       headers: options.headers || {},
       qs: options.query || {},
@@ -2070,22 +1841,33 @@ function nodeRequest(url, options) {
       }
       resolve(response.body);
     });
-  });
+    stream.on('abort', function () {
+      reject(0);
+    });
+    promise.abort = function () {
+      stream.abort();
+    };
+  }
+  return promise;
 }
 
 function performRequest(url, options) {
-  if (Environment.type === 'node') {
-    var promise = nodeRequest(url, options);
+  if (isNode) {
+    var _request = nodeRequest(url, options);
     if (options.type === 'json') {
-      return promise.then(function (response) {
+      var promise = _request.then(function (response) {
         if (typeof response !== 'string') {
           throw new Error('Response is unexpectedly not a string');
         }
         return JSON.parse(response);
       });
+      promise.abort = function () {
+        _request.abort();
+      };
+      return promise;
     }
     if (options.type === 'arraybuffer') {
-      return promise.then(function (response) {
+      var _promise = _request.then(function (response) {
         if (!(response instanceof Buffer)) {
           throw new Error('Response is unexpectedly not a buffer');
         }
@@ -2096,22 +1878,27 @@ function performRequest(url, options) {
         }
         return buffer;
       });
+      _promise.abort = function () {
+        _request.abort();
+      };
+      return _promise;
     }
-    return promise;
+    return _request;
   }
   return browserRequest(url, options);
 }
 
 function parseArguments() {
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
+  for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+    args[_key3] = arguments[_key3];
   }
 
   var url = args[0],
       options = args[1];
 
   if (typeof url !== 'string') {
-    options = url;url = options.url.url;
+    options = url;var _options = options;
+    url = _options.url;
   }
   if (typeof url !== 'string') {
     throw new Error('The first argument or options.url must be a string');
@@ -2124,80 +1911,79 @@ function parseArguments() {
   return [url, options];
 }
 
-var Request = {
-  text: function text() {
-    var _parseArguments = parseArguments.apply(undefined, arguments),
-        _parseArguments2 = slicedToArray(_parseArguments, 2),
-        url = _parseArguments2[0],
-        options = _parseArguments2[1];
+function requestText() {
+  var _parseArguments = parseArguments.apply(undefined, arguments),
+      _parseArguments2 = slicedToArray(_parseArguments, 2),
+      url = _parseArguments2[0],
+      options = _parseArguments2[1];
 
-    options.type = 'text';
-    return performRequest(url, options);
-  },
-  json: function json() {
-    var _parseArguments3 = parseArguments.apply(undefined, arguments),
-        _parseArguments4 = slicedToArray(_parseArguments3, 2),
-        url = _parseArguments4[0],
-        options = _parseArguments4[1];
+  options.type = 'text';
+  return performRequest(url, options);
+}
 
-    options.type = 'json';
-    return performRequest(url, options);
-  },
-  buffer: function buffer() {
-    var _parseArguments5 = parseArguments.apply(undefined, arguments),
-        _parseArguments6 = slicedToArray(_parseArguments5, 2),
-        url = _parseArguments6[0],
-        options = _parseArguments6[1];
+function requestJSON() {
+  var _parseArguments3 = parseArguments.apply(undefined, arguments),
+      _parseArguments4 = slicedToArray(_parseArguments3, 2),
+      url = _parseArguments4[0],
+      options = _parseArguments4[1];
 
-    options.type = 'arraybuffer';
-    options.encoding = null;
-    return performRequest(url, options);
-  },
-  csv: function csv() {
-    var _parseArguments7 = parseArguments.apply(undefined, arguments),
-        _parseArguments8 = slicedToArray(_parseArguments7, 2),
-        url = _parseArguments8[0],
-        options = _parseArguments8[1];
+  options.type = 'json';
+  return performRequest(url, options);
+}
 
-    return this.text(url, options).then(function (response) {
-      return csvParse(response, options.row);
-    });
-  },
-  tsv: function tsv() {
-    var _parseArguments9 = parseArguments.apply(undefined, arguments),
-        _parseArguments10 = slicedToArray(_parseArguments9, 2),
-        url = _parseArguments10[0],
-        options = _parseArguments10[1];
+function requestBuffer() {
+  var _parseArguments5 = parseArguments.apply(undefined, arguments),
+      _parseArguments6 = slicedToArray(_parseArguments5, 2),
+      url = _parseArguments6[0],
+      options = _parseArguments6[1];
 
-    return this.text(url, options).then(function (response) {
-      return tsvParse(response, options.row);
-    });
-  }
-};
+  options.type = 'arraybuffer';
+  options.encoding = null;
+  return performRequest(url, options);
+}
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+function requestCSV() {
+  var _parseArguments7 = parseArguments.apply(undefined, arguments),
+      _parseArguments8 = slicedToArray(_parseArguments7, 2),
+      url = _parseArguments8[0],
+      options = _parseArguments8[1];
+
+  var request = this.text(url, options);
+  var promise = request.then(function (response) {
+    return csvParse(response, options.row);
+  });
+  promise.abort = function () {
+    request.abort();
+  };
+  return promise;
+}
+
+function requestTSV() {
+  var _parseArguments9 = parseArguments.apply(undefined, arguments),
+      _parseArguments10 = slicedToArray(_parseArguments9, 2),
+      url = _parseArguments10[0],
+      options = _parseArguments10[1];
+
+  var request = this.text(url, options);
+  var promise = request.then(function (response) {
+    return tsvParse(response, options.row);
+  });
+  promise.abort = function () {
+    request.abort();
+  };
+  return promise;
+}
+
+Object.assign(performRequest, {
+  text: requestText,
+  json: requestJSON,
+  buffer: requestBuffer,
+  csv: requestCSV,
+  tsv: requestTSV
+});
+
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 function _packBufferGeometry5(geometry) {
   var byteOffset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -2273,7 +2059,7 @@ function _unpackBufferGeometry(data, buffer) {
   if (copy.data.index) {
     var type = copy.data.index.type;
 
-    var view = new (Function.prototype.bind.apply(Environment.self[type], [null].concat([buffer], toConsumableArray(copy.data.index.array))))();
+    var view = new (Function.prototype.bind.apply(Global.scope[type], [null].concat([buffer], toConsumableArray(copy.data.index.array))))();
     copy.data.index = _extends({}, copy.data.index, { array: view });
   }
   if (copy.data.attributes) {
@@ -2284,7 +2070,7 @@ function _unpackBufferGeometry(data, buffer) {
       var attribute = copy.data.attributes[name];
       var _type = attribute.type;
 
-      var _view = new (Function.prototype.bind.apply(Environment.self[_type], [null].concat([buffer], toConsumableArray(attribute.array))))();
+      var _view = new (Function.prototype.bind.apply(Global.scope[_type], [null].concat([buffer], toConsumableArray(attribute.array))))();
       attributes[name] = _extends({}, attribute, { array: _view });
     }
     copy.data.attributes = attributes;
@@ -2347,37 +2133,16 @@ var GeometryPack = {
   }
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-var internal$1 = Namespace('DivisionLevel');
+var internal$2 = createNamespace('DivisionLevel');
 
 var DivisionLevel = function () {
   function DivisionLevel(identifier, coder) {
     classCallCheck(this, DivisionLevel);
 
-    var scope = internal$1(this);
+    var scope = internal$2(this);
     scope.identifier = identifier;
     scope.coder = coder;
     scope.divisions = {};
@@ -2388,13 +2153,13 @@ var DivisionLevel = function () {
   createClass(DivisionLevel, [{
     key: 'init',
     value: function init(geography) {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       scope.geography = geography;
     }
   }, {
     key: 'division',
     value: function division(code) {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       var division = scope.divisions[code];
       if (division === undefined) {
         division = new Division(this, code);
@@ -2411,13 +2176,13 @@ var DivisionLevel = function () {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                scope = internal$1(this);
+                scope = internal$2(this);
                 hash = projection ? projection.hash : null;
 
                 if (scope.properties[hash] === undefined) {
                   path = FilePath.join(FilePath.dirname(this.geography.path), hash || '', this.geography.identifier, this.identifier, 'properties.json');
 
-                  scope.properties[hash] = Request.json(path, { local: true });
+                  scope.properties[hash] = performRequest.json(path, { local: true });
                 }
                 return _context.abrupt('return', scope.properties[hash]);
 
@@ -2444,7 +2209,7 @@ var DivisionLevel = function () {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                scope = internal$1(this);
+                scope = internal$2(this);
                 hash = projection ? projection.hash : null;
                 geometries = scope.geometries[hash];
 
@@ -2486,7 +2251,7 @@ var DivisionLevel = function () {
                 buffer = void 0;
                 _context3.prev = 3;
                 _context3.next = 6;
-                return Promise.all([Request.json(path + '.json'), Request.buffer(path + '.buffer')]);
+                return Promise.all([performRequest.json(path + '.json'), performRequest.buffer(path + '.buffer')]);
 
               case 6:
                 _ref4 = _context3.sent;
@@ -2521,25 +2286,25 @@ var DivisionLevel = function () {
   }, {
     key: 'identifier',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       return scope.identifier;
     }
   }, {
     key: 'coder',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       return scope.coder;
     }
   }, {
     key: 'geography',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       return scope.geography;
     }
   }, {
     key: 'data',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       if (scope.data === undefined) {
         scope.data = this.geography.data[this.identifier];
       }
@@ -2550,7 +2315,7 @@ var DivisionLevel = function () {
     get: function get$$1() {
       var _this = this;
 
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       scope.divisions = _extends({}, scope.divisions, this.data.reduce(function (divisions, data) {
         var code = data.code;
 
@@ -2564,7 +2329,7 @@ var DivisionLevel = function () {
   }, {
     key: 'codes',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       if (scope.codes === undefined) {
         scope.codes = this.data.map(function (data) {
           return data.code;
@@ -2575,7 +2340,7 @@ var DivisionLevel = function () {
   }, {
     key: 'superlevel',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       if (scope.superlevel === undefined) {
         var levels = this.geography.levels;
 
@@ -2590,7 +2355,7 @@ var DivisionLevel = function () {
   }, {
     key: 'sublevel',
     get: function get$$1() {
-      var scope = internal$1(this);
+      var scope = internal$2(this);
       if (scope.sublevel === undefined) {
         var levels = this.geography.levels;
 
@@ -2606,31 +2371,10 @@ var DivisionLevel = function () {
   return DivisionLevel;
 }();
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-var internal$3 = Namespace('Geography');
+var internal$3 = createNamespace('Geography');
 
 var Geography = function () {
   function Geography(identifier) {
@@ -2674,7 +2418,7 @@ var Geography = function () {
 
               case 8:
                 _context.next = 10;
-                return Request.json(path, { local: true });
+                return performRequest.json(path, { local: true });
 
               case 10:
                 scope.data = _context.sent;
@@ -2747,7 +2491,7 @@ var Geography = function () {
                 if (scope.properties[hash] === undefined) {
                   path = FilePath.join(FilePath.dirname(this.path), hash || '', this.identifier, 'properties.json');
 
-                  scope.properties[hash] = Request.json(path, { local: true });
+                  scope.properties[hash] = performRequest.json(path, { local: true });
                 }
                 return _context2.abrupt('return', scope.properties[hash]);
 
@@ -2928,7 +2672,7 @@ var Geography = function () {
                 buffer = void 0;
                 _context8.prev = 3;
                 _context8.next = 6;
-                return Promise.all([Request.json(path + '.json'), Request.buffer(path + '.buffer')]);
+                return Promise.all([performRequest.json(path + '.json'), performRequest.buffer(path + '.buffer')]);
 
               case 6:
                 _ref9 = _context8.sent;
@@ -3062,8 +2806,6 @@ var Geography = function () {
   }]);
   return Geography;
 }();
-
-'use strict';
 
 var earcut_1 = earcut;
 var default_1 = earcut;
@@ -3242,20 +2984,28 @@ function isEarHashed(ear, minX, minY, invSize) {
     var minZ = zOrder(minTX, minTY, minX, minY, invSize),
         maxZ = zOrder(maxTX, maxTY, minX, minY, invSize);
 
-    // first look for points inside the triangle in increasing z-order
-    var p = ear.nextZ;
+    var p = ear.prevZ,
+        n = ear.nextZ;
 
-    while (p && p.z <= maxZ) {
+    // look for points inside the triangle in both directions
+    while (p && p.z >= minZ && n && n.z <= maxZ) {
         if (p !== ear.prev && p !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
-        p = p.nextZ;
+        p = p.prevZ;
+
+        if (n !== ear.prev && n !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
+        n = n.nextZ;
     }
 
-    // then look for points in decreasing z-order
-    p = ear.prevZ;
-
+    // look for remaining points in decreasing z-order
     while (p && p.z >= minZ) {
         if (p !== ear.prev && p !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
         p = p.prevZ;
+    }
+
+    // look for remaining points in increasing z-order
+    while (n && n.z <= maxZ) {
+        if (n !== ear.prev && n !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
+        n = n.nextZ;
     }
 
     return true;
@@ -3699,9 +3449,7 @@ earcut.flatten = function (data) {
 
 earcut_1.default = default_1;
 
-'use strict';
-
-var index$7 = TinyQueue;
+var index$6 = TinyQueue;
 
 function TinyQueue(data, compare) {
     if (!(this instanceof TinyQueue)) return new TinyQueue(data, compare);
@@ -3787,9 +3535,7 @@ TinyQueue.prototype = {
     }
 };
 
-'use strict';
-
-var index$6 = polylabel;
+var index$8 = polylabel;
 var default_1$1 = polylabel;
 
 function polylabel(polygon, precision, debug) {
@@ -3811,7 +3557,7 @@ function polylabel(polygon, precision, debug) {
     var h = cellSize / 2;
 
     // a priority queue of cells in order of their "potential" (max distance to polygon)
-    var cellQueue = new index$7(null, compareMax);
+    var cellQueue = new index$6(null, compareMax);
 
     if (cellSize === 0) return [minX, minY];
 
@@ -3940,79 +3686,62 @@ function getSegDistSq(px, py, a, b) {
     return dx * dx + dy * dy;
 }
 
-index$6.default = default_1$1;
+index$8.default = default_1$1;
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-var Array$1 = {
-  min: function min(array, transform) {
-    var result = void 0;
-    var min = Number.POSITIVE_INFINITY;
-    if (typeof transform !== 'function') {
-      for (var index = 0; index < array.length; ++index) {
-        var item = array[index];
-        if (item < min) {
-          result = item;
-          min = item;
-        }
-      }
-      return result;
-    }
-    for (var _index = 0; _index < array.length; ++_index) {
-      var _item = array[_index];
-      var transformed = transform(_item, _index);
-      if (transformed < min) {
-        result = _item;
-        min = transformed;
-      }
-    }
-    return result;
-  },
-  max: function max(array, transform) {
-    var result = void 0;
-    var max = Number.NEGATIVE_INFINITY;
-    if (typeof transform !== 'function') {
-      for (var index = 0; index < array.length; ++index) {
-        var item = array[index];
-        if (item > max) {
-          result = item;
-          max = item;
-        }
-      }
-      return result;
-    }
-    for (var _index2 = 0; _index2 < array.length; ++_index2) {
-      var _item2 = array[_index2];
-      var transformed = transform(_item2, _index2);
-      if (transformed > max) {
-        result = _item2;
-        max = transformed;
+function min(array, transform) {
+  var result = void 0;
+  var min = Number.POSITIVE_INFINITY;
+  if (typeof transform !== 'function') {
+    for (var index = 0; index < array.length; ++index) {
+      var item = array[index];
+      if (item < min) {
+        result = item;
+        min = item;
       }
     }
     return result;
   }
+  for (var _index = 0; _index < array.length; ++_index) {
+    var _item = array[_index];
+    var transformed = transform(_item, _index);
+    if (transformed < min) {
+      result = _item;
+      min = transformed;
+    }
+  }
+  return result;
+}
+
+function max(array, transform) {
+  var result = void 0;
+  var max = Number.NEGATIVE_INFINITY;
+  if (typeof transform !== 'function') {
+    for (var index = 0; index < array.length; ++index) {
+      var item = array[index];
+      if (item > max) {
+        result = item;
+        max = item;
+      }
+    }
+    return result;
+  }
+  for (var _index2 = 0; _index2 < array.length; ++_index2) {
+    var _item2 = array[_index2];
+    var transformed = transform(_item2, _index2);
+    if (transformed > max) {
+      result = _item2;
+      max = transformed;
+    }
+  }
+  return result;
+}
+
+var Array$1 = {
+  min: min,
+  max: max
 };
 
 /*
@@ -4020,8 +3749,6 @@ var Array$1 = {
  *
  * http://pegjs.org/
  */
-
-"use strict";
 
 function peg$subclass(child, parent) {
   function ctor() {
@@ -6063,14 +5790,14 @@ function peg$parse(input, options) {
   }
 }
 
-var parser$1 = {
+var parser = {
   SyntaxError: peg$SyntaxError,
   parse: peg$parse
 };
 
 // v1.0 exported just the parser function. To maintain backwards compatibility,
 // we export additional named features as properties of that function.
-var parserFunction = parser$1.parse;
+var parserFunction = parser.parse;
 parserFunction.parseSVG = parserFunction;
 parserFunction.makeAbsolute = makeSVGPathCommandsAbsolute;
 var index$9 = parserFunction;
@@ -6097,29 +5824,8 @@ function makeSVGPathCommandsAbsolute(commands) {
 	return commands;
 }
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 function ImplementationError(message) {
   this.message = message;
@@ -6131,29 +5837,8 @@ ImplementationError.prototype.name = 'ImplementationError';
 ImplementationError.prototype.message = '';
 ImplementationError.prototype.constructor = ImplementationError;
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 function cross(a, b) {
   return a.x * b.y - a.y * b.x;
@@ -6173,7 +5858,7 @@ function crossings(a, b, point) {
   return 0;
 }
 
-var Path$1 = {
+var Path = {
   winding: function winding(curves) {
     if (curves.length < 3) {
       return undefined;
@@ -6382,34 +6067,13 @@ var Path$1 = {
   }
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 /* eslint-disable no-console */
 
 var d3 = Object.assign({}, d3Array, d3Geo);
-var topojson = External.optional('topojson');
+var topojson = runtimeImport.optional('topojson');
 
 function codePropertyKeyForLevel(level) {
   return level + 'Code';
@@ -6455,7 +6119,7 @@ function convertPolygonsToShapes(polygons, projection) {
       errors.push(index);
       return shapes;
     }
-    var path = Path$1.parse(svg, true);
+    var path = Path.parse(svg, true);
     var paths = void 0;
     if (path instanceof Three.Shape) {
       paths = path.curves;
@@ -6464,7 +6128,7 @@ function convertPolygonsToShapes(polygons, projection) {
     }
     var shape = new Three.Shape();
     paths.forEach(function (path) {
-      var winding = Path$1.winding(path.curves);
+      var winding = Path.winding(path.curves);
       if (winding === 'ccw') {
         shape.add(path);
       } else if (winding === 'cw') {
@@ -6525,7 +6189,7 @@ function convertShapesToLineSegmentGeometry(shapes) {
   return convertLinesToGeometry(lines);
 }
 
-var internal$4 = Namespace('GeographyBuilder');
+var internal$4 = createNamespace('GeographyBuilder');
 
 var GeographyBuilder = function () {
   function GeographyBuilder(levels) {
@@ -6552,7 +6216,7 @@ var GeographyBuilder = function () {
                 }
 
                 _context.next = 4;
-                return Request.json(data, { local: true });
+                return performRequest.json(data, { local: true });
 
               case 4:
                 scope.data = _context.sent;
@@ -6649,7 +6313,7 @@ var GeographyBuilder = function () {
           console.warn('Unable to derive pole of inaccessibility:', level, code);
           return null;
         }
-        var path = Path$1.parse(svg, true);
+        var path = Path.parse(svg, true);
         if (!path) {
           console.warn('Unable to derive pole of inaccessibility:', level, code);
           return null;
@@ -6665,7 +6329,7 @@ var GeographyBuilder = function () {
             return [curve.v1.x, curve.v1.y];
           });
         });
-        return index$6(projected, Math.sqrt(projection.path.area({
+        return index$8(projected, Math.sqrt(projection.path.area({
           type: 'Polygon',
           coordinates: _polygon
         })) * precision);
@@ -6680,7 +6344,7 @@ var GeographyBuilder = function () {
         console.warn('Unable to derive pole of inaccessibility:', level, code);
         return null;
       }
-      return index$6(polygon, Math.sqrt(d3.geoArea({
+      return index$8(polygon, Math.sqrt(d3.geoArea({
         type: 'Polygon',
         coordinates: polygon
       })) * precision);
@@ -6731,7 +6395,7 @@ var GeographyBuilder = function () {
         errors.push(0);
         return convertLinesToGeometry([]);
       }
-      var path = Path$1.parse(svg, true);
+      var path = Path.parse(svg, true);
       var lines = void 0;
       if (path instanceof Three.Shape) {
         lines = path.curves.reduce(function (lines, path) {
@@ -6981,29 +6645,8 @@ var GeographyBuilder = function () {
   return GeographyBuilder;
 }();
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 var JapanGeography = function (_Geography) {
   inherits(JapanGeography, _Geography);
@@ -7023,29 +6666,8 @@ var JapanGeography = function (_Geography) {
   return JapanGeography;
 }(Geography);
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 function modulo(numerator, denominator) {
   return {
@@ -7278,7 +6900,7 @@ var codeToPointConverters = {
   }
 };
 
-var internal$5 = Namespace('JapanRegionalMesh');
+var internal$5 = createNamespace('JapanRegionalMesh');
 
 var JapanRegionalMesh = function () {
   function JapanRegionalMesh(name, size) {
@@ -7340,10 +6962,6 @@ var suncalc = createCommonjsModule(function (module, exports) {
     */
 
     (function () {
-        'use strict';
-
-        // shortcuts for easier to read formulas
-
         var PI = Math.PI,
             sin = Math.sin,
             cos = Math.cos,
@@ -8195,7 +7813,7 @@ value = function value() {
 // Return the json_parse function. It will have access to all of the above
 // functions and variables.
 
-var parse$2 = function parse(source, reviver) {
+var parse$1 = function parse(source, reviver) {
     var result;
 
     text = source;
@@ -8353,7 +7971,7 @@ function str(key, holder) {
     }
 }
 
-var stringify$3 = function stringify(value, replacer, space) {
+var stringify$1 = function stringify(value, replacer, space) {
     var i;
     gap = '';
     indent = '';
@@ -8382,17 +8000,17 @@ var stringify$3 = function stringify(value, replacer, space) {
     return str('', { '': value });
 };
 
-var parse$1 = parse$2;
-var stringify$2 = stringify$3;
+var parse$3 = parse$1;
+var stringify$3 = stringify$1;
 
-var index$13 = {
-	parse: parse$1,
-	stringify: stringify$2
+var index$12 = {
+	parse: parse$3,
+	stringify: stringify$3
 };
 
-var json = typeof JSON !== 'undefined' ? JSON : index$13;
+var json = typeof JSON !== 'undefined' ? JSON : index$12;
 
-var index$12 = function index(obj, opts) {
+var index$14 = function index(obj, opts) {
     if (!opts) opts = {};
     if (typeof opts === 'function') opts = { cmp: opts };
     var space = opts.space || '';
@@ -8475,61 +8093,19 @@ var objectKeys = Object.keys || function (obj) {
     return keys;
 };
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
-function Hash(object) {
-  return md5(index$12(object));
+function generateHash(object) {
+  return md5(index$14(object));
 }
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 var d3$1 = Object.assign({}, d3Array, d3Geo, d3GeoProjection);
 
-var internal$6 = Namespace('Projection');
+var internal$6 = createNamespace('Projection');
 
 var Projection = function () {
   function Projection() {
@@ -8681,7 +8257,7 @@ var Projection = function () {
     get: function get$$1() {
       var scope = internal$6(this);
       if (scope.hash === undefined) {
-        scope.hash = Hash(this.toJSON());
+        scope.hash = generateHash(this.toJSON());
       }
       return scope.hash;
     }
@@ -8689,29 +8265,8 @@ var Projection = function () {
   return Projection;
 }();
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 var USGeography = function (_Geography) {
   inherits(USGeography, _Geography);
@@ -8731,29 +8286,8 @@ var USGeography = function (_Geography) {
   return USGeography;
 }(Geography);
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 var WorldGeography = function (_Geography) {
   inherits(WorldGeography, _Geography);
@@ -8766,29 +8300,8 @@ var WorldGeography = function (_Geography) {
   return WorldGeography;
 }(Geography);
 
-//
-//  The MIT License
-//
-//  Copyright (C) 2016-Present Shota Matsuda
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a
-//  copy of this software and associated documentation files (the "Software"),
-//  to deal in the Software without restriction, including without limitation
-//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-//  and/or sell copies of the Software, and to permit persons to whom the
-//  Software is furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-//  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-//  DEALINGS IN THE SOFTWARE.
-//
+// The MIT License
+// Copyright (C) 2016-Present Shota Matsuda
 
 exports.Division = Division;
 exports.DivisionLevel = DivisionLevel;
@@ -8797,7 +8310,7 @@ exports.GeographyBuilder = GeographyBuilder;
 exports.GeometryPack = GeometryPack;
 exports.JapanGeography = JapanGeography;
 exports.JapanRegionalMesh = JapanRegionalMesh$1;
-exports.Path = Path$1;
+exports.Path = Path;
 exports.Projection = Projection;
 exports.USGeography = USGeography;
 exports.WorldGeography = WorldGeography;
