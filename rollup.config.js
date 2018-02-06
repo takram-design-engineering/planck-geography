@@ -7,7 +7,6 @@ import nodeResolve from 'rollup-plugin-node-resolve'
 
 export default {
   input: './dist/planck-geography.module.js',
-  sourcemap: true,
   plugins: [
     nodeResolve({ browser: true }),
     commonjs(),
@@ -30,18 +29,17 @@ export default {
     'd3-geo-projection',
     'three',
   ],
-  globals: {
-    'd3-array': 'd3',
-    'd3-geo': 'd3',
-    'd3-geo-projection': 'd3',
-    'three': 'THREE',
-  },
-  output: [
-    {
-      format: 'umd',
-      extend: true,
-      name: 'Planck',
-      file: './dist/planck-geography.js',
+  output: {
+    globals: {
+      'd3-array': 'd3',
+      'd3-geo': 'd3',
+      'd3-geo-projection': 'd3',
+      'three': 'THREE',
     },
-  ],
+    format: 'umd',
+    extend: true,
+    name: 'Planck',
+    file: './dist/planck-geography.js',
+    sourcemap: true,
+  },
 }
