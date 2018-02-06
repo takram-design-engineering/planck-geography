@@ -12,7 +12,10 @@ import { GeographyBuilder, Projection } from '../..'
 
 const { expect } = chai
 
+// eslint-disable-next-line func-names
 describe('GeographyBuilder', function () {
+  this.timeout(300000)
+
   const projection = new Projection({
     name: 'TransverseMercator',
     origin: [137.2, 37],
