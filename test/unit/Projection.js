@@ -1,6 +1,8 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
+/* eslint-disable no-unused-expressions */
+
 import 'source-map-support/register'
 
 import chai from 'chai'
@@ -37,7 +39,7 @@ describe('Projection', () => {
       new Projection({ name: 'TransverseMercator' }),
       new Projection({ scale: 1 }),
       new Projection({ origin: [1, 1] }),
-      new Projection({ rotates: [false, false] }),
+      new Projection({ rotates: [false, false] })
     ].forEach(projection => {
       expect(projection.equals(new Projection())).false
     })
@@ -50,7 +52,7 @@ describe('Projection', () => {
       new Projection({ name: 'PeirceQuincuncial' }),
       new Projection({ scale: 1 }),
       new Projection({ origin: [1, 1] }),
-      new Projection({ rotates: [false, false] }),
+      new Projection({ rotates: [false, false] })
     ].forEach(projection => {
       expect(projection.equals(new Projection(projection.toJSON()))).true
     })
@@ -129,9 +131,9 @@ describe('Projection', () => {
           type: 'LineString',
           coordinates: [
             [90 / Math.PI, 45 / Math.PI],
-            [90 / Math.PI, -45 / Math.PI],
-          ],
-        },
+            [90 / Math.PI, -45 / Math.PI]
+          ]
+        }
       })).equal('M5000,-2500L5000,2500')
     })
   })

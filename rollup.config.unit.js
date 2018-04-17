@@ -19,13 +19,13 @@ export default {
         'es2016',
         'es2017',
         'stage-3',
-        'stage-2',
+        'stage-2'
       ],
       plugins: [
-        'external-helpers',
+        'external-helpers'
       ],
-      babelrc: false,
-    }),
+      babelrc: false
+    })
   ],
   external: [
     path.resolve(pkg.browser),
@@ -36,7 +36,7 @@ export default {
     'd3-array',
     'd3-geo',
     'd3-geo-projection',
-    'three',
+    'three'
   ],
   output: {
     intro: 'var BUNDLER = "rollup";',
@@ -48,10 +48,10 @@ export default {
       'd3-array': 'd3',
       'd3-geo': 'd3',
       'd3-geo-projection': 'd3',
-      'three': 'THREE',
+      'three': 'THREE'
     },
     format: 'iife',
     file: './dist/test/unit/rollup.js',
-    sourcemap: true,
-  },
+    sourcemap: true
+  }
 }

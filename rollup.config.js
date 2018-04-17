@@ -16,31 +16,31 @@ export default {
         'es2016',
         'es2017',
         'stage-3',
-        'stage-2',
+        'stage-2'
       ],
       plugins: [
-        'external-helpers',
+        'external-helpers'
       ],
-      babelrc: false,
-    }),
+      babelrc: false
+    })
   ],
   external: [
     'd3-array',
     'd3-geo',
     'd3-geo-projection',
-    'three',
+    'three'
   ],
   output: {
     globals: {
       'd3-array': 'd3',
       'd3-geo': 'd3',
       'd3-geo-projection': 'd3',
-      'three': 'THREE',
+      'three': 'THREE'
     },
     format: 'umd',
     extend: true,
     name: 'Planck',
     file: './dist/planck-geography.js',
-    sourcemap: true,
-  },
+    sourcemap: true
+  }
 }

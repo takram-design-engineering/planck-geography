@@ -1,8 +1,6 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-/* eslint-disable no-console */
-
 import * as d3Array from 'd3-array'
 import * as d3Geo from 'd3-geo'
 import * as Three from 'three'
@@ -19,16 +17,16 @@ import Path from './Path'
 const d3 = Object.assign({}, d3Array, d3Geo)
 const topojson = External.optional('topojson')
 
-function codePropertyKeyForLevel(level) {
+function codePropertyKeyForLevel (level) {
   return `${level}Code`
 }
 
-function includesGeometryObject(level, code, geometryObject) {
+function includesGeometryObject (level, code, geometryObject) {
   const key = codePropertyKeyForLevel(level)
   return geometryObject.properties[key] === code
 }
 
-function triangulateShape(contour, holes) {
+function triangulateShape (contour, holes) {
   let vertices = contour.reduce((values, point) => {
     return values.concat(point.x, point.y)
   }, [])
@@ -51,11 +49,11 @@ function triangulateShape(contour, holes) {
   return groups
 }
 
-function convertPolygonsToShapes(polygons, projection, errors = []) {
+function convertPolygonsToShapes (polygons, projection, errors = []) {
   return polygons.coordinates.reduce((shapes, polygon, index) => {
     const svg = projection.path({
       type: 'Polygon',
-      coordinates: polygon,
+      coordinates: polygon
     })
     if (!svg) {
       errors.push(index)
@@ -90,7 +88,7 @@ function convertPolygonsToShapes(polygons, projection, errors = []) {
   }, [])
 }
 
-function convertShapesToMeshGeometry(shapes) {
+function convertShapesToMeshGeometry (shapes) {
   // WORKAROUND: Use earcut triangulator instead of built-in one.
   // It's slower and less accurate but able to handle duplicated points
   // and holes better.
@@ -106,7 +104,7 @@ function convertShapesToMeshGeometry(shapes) {
   return geometry
 }
 
-function convertLinesToGeometry(lines) {
+function convertLinesToGeometry (lines) {
   const vertices = new Float32Array(lines.length * 6)
   lines.forEach((line, index) => {
     const index6 = index * 6
@@ -121,7 +119,7 @@ function convertLinesToGeometry(lines) {
   return geometry
 }
 
-function convertShapesToLineSegmentGeometry(shapes) {
+function convertShapesToLineSegmentGeometry (shapes) {
   const lines = shapes.reduce((lines, shape) => {
     return lines.concat(
       shape.curves.reduce((lines, path) => {
@@ -129,7 +127,7 @@ function convertShapesToLineSegmentGeometry(shapes) {
       }, []),
       shape.holes.reduce((lines, hole) => {
         return lines.concat(hole.curves)
-      }, []),
+      }, [])
     )
   }, [])
   return convertLinesToGeometry(lines)
@@ -138,12 +136,12 @@ function convertShapesToLineSegmentGeometry(shapes) {
 export const internal = Namespace('GeographyBuilder')
 
 export default class GeographyBuilder {
-  constructor(levels) {
+  constructor (levels) {
     const scope = internal(this)
     scope.levels = [...levels]
   }
 
-  async init(data) {
+  async init (data) {
     const scope = internal(this)
     if (typeof data === 'string') {
       scope.data = await Request.json(data, { local: true })
@@ -152,17 +150,17 @@ export default class GeographyBuilder {
     }
   }
 
-  get levels() {
+  get levels () {
     const scope = internal(this)
     return [...scope.levels]
   }
 
-  get data() {
+  get data () {
     const scope = internal(this)
     return scope.data
   }
 
-  property(name, { level, code, projection }) {
+  property (name, { level, code, projection }) {
     let { geometries } = this.data.objects.geography
     if (level) {
       geometries = geometries.filter(geometry => {
@@ -176,20 +174,20 @@ export default class GeographyBuilder {
     return d3[`geo${name.charAt().toUpperCase()}${name.slice(1)}`](merged)
   }
 
-  bounds(options) {
+  bounds (options) {
     return this.property('bounds', options)
   }
 
-  area(options) {
+  area (options) {
     return this.property('area', options)
   }
 
-  centroid(options) {
+  centroid (options) {
     return this.property('centroid', options)
   }
 
-  poleOfInaccessibility({
-    level, code, projection, precision = 0.01,
+  poleOfInaccessibility ({
+    level, code, projection, precision = 0.01
   }) {
     let { geometries } = this.data.objects.geography
     if (level) {
@@ -202,7 +200,7 @@ export default class GeographyBuilder {
       const polygon = Array.max(geometries.coordinates, polygon => {
         return projection.path.area({
           type: 'Polygon',
-          coordinates: polygon,
+          coordinates: polygon
         })
       })
       if (!polygon) {
@@ -211,7 +209,7 @@ export default class GeographyBuilder {
       }
       const svg = projection.path({
         type: 'Polygon',
-        coordinates: polygon,
+        coordinates: polygon
       })
       if (!svg) {
         console.warn('Unable to derive pole of inaccessibility:', level, code)
@@ -233,13 +231,13 @@ export default class GeographyBuilder {
       })
       return polylabel(projected, Math.sqrt(projection.path.area({
         type: 'Polygon',
-        coordinates: polygon,
+        coordinates: polygon
       })) * precision)
     }
     const polygon = Array.max(geometries.coordinates, polygon => {
       return d3.geoArea({
         type: 'Polygon',
-        coordinates: polygon,
+        coordinates: polygon
       })
     })
     if (!polygon) {
@@ -248,28 +246,28 @@ export default class GeographyBuilder {
     }
     return polylabel(polygon, Math.sqrt(d3.geoArea({
       type: 'Polygon',
-      coordinates: polygon,
+      coordinates: polygon
     })) * precision)
   }
 
-  shapes({ geometries, projection }, errors = []) {
+  shapes ({ geometries, projection }, errors = []) {
     const feature = topojson.merge(this.data, geometries)
     return convertPolygonsToShapes(feature, projection, errors)
   }
 
-  shapeGeometry({ geometries, projection }, errors = []) {
+  shapeGeometry ({ geometries, projection }, errors = []) {
     const feature = topojson.merge(this.data, geometries)
     const shapes = convertPolygonsToShapes(feature, projection, errors)
     return convertShapesToMeshGeometry(shapes)
   }
 
-  outlineGeometry({ geometries, projection }, errors = []) {
+  outlineGeometry ({ geometries, projection }, errors = []) {
     const feature = topojson.merge(this.data, geometries)
     const shapes = convertPolygonsToShapes(feature, projection, errors)
     return convertShapesToLineSegmentGeometry(shapes)
   }
 
-  borderGeometry({ object, filter, projection }, errors = []) {
+  borderGeometry ({ object, filter, projection }, errors = []) {
     const feature = topojson.mesh(this.data, object, filter)
     const svg = projection.path(feature)
     if (!svg) {
@@ -288,12 +286,12 @@ export default class GeographyBuilder {
     return convertLinesToGeometry(lines)
   }
 
-  geographyShapes({ projection }) {
+  geographyShapes ({ projection }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapes({
       projection,
-      geometries,
+      geometries
     }, errors)
     if (errors.length !== 0) {
       console.warn(`Unable to project ${errors.length} polygons`)
@@ -301,12 +299,12 @@ export default class GeographyBuilder {
     return result
   }
 
-  geographyShapeGeometry({ projection }) {
+  geographyShapeGeometry ({ projection }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapeGeometry({
       projection,
-      geometries,
+      geometries
     }, errors)
     if (errors.length !== 0) {
       console.warn(`Unable to project ${errors.length} polygons`)
@@ -314,12 +312,12 @@ export default class GeographyBuilder {
     return result
   }
 
-  geographyOutlineGeometry({ projection }) {
+  geographyOutlineGeometry ({ projection }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.outlineGeometry({
       projection,
-      geometries,
+      geometries
     }, errors)
     if (errors.length !== 0) {
       console.warn(`Unable to project ${errors.length} polygons`)
@@ -327,13 +325,13 @@ export default class GeographyBuilder {
     return result
   }
 
-  geographySubdivisionGeometry({ projection }) {
+  geographySubdivisionGeometry ({ projection }) {
     const key = codePropertyKeyForLevel(this.levels[0])
     const errors = []
     const result = this.borderGeometry({
       projection,
       object: this.data.objects.geography,
-      filter: (a, b) => a.properties[key] !== b.properties[key],
+      filter: (a, b) => a.properties[key] !== b.properties[key]
     }, errors)
     if (errors.length !== 0) {
       // Topology mesh can fail if a division doesn't have any adjacent
@@ -343,14 +341,14 @@ export default class GeographyBuilder {
     return result
   }
 
-  divisionShapes({ level, code, projection }) {
+  divisionShapes ({ level, code, projection }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapes({
       projection,
       geometries: geometries.filter(geometry => {
         return includesGeometryObject(level, code, geometry)
-      }),
+      })
     }, errors)
     if (errors.length !== 0) {
       console.warn(`${errors.length} polygons failed to project`)
@@ -358,14 +356,14 @@ export default class GeographyBuilder {
     return result
   }
 
-  divisionShapeGeometry({ level, code, projection }) {
+  divisionShapeGeometry ({ level, code, projection }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapeGeometry({
       projection,
       geometries: geometries.filter(geometry => {
         return includesGeometryObject(level, code, geometry)
-      }),
+      })
     }, errors)
     if (errors.length !== 0) {
       console.warn(`Unable to project ${errors.length} polygons:`, level, code)
@@ -373,14 +371,14 @@ export default class GeographyBuilder {
     return result
   }
 
-  divisionOutlineGeometry({ level, code, projection }) {
+  divisionOutlineGeometry ({ level, code, projection }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.outlineGeometry({
       projection,
       geometries: geometries.filter(geometry => {
         return includesGeometryObject(level, code, geometry)
-      }),
+      })
     }, errors)
     if (errors.length !== 0) {
       console.warn(`Unable to project ${errors.length} polygons:`, level, code)
@@ -388,7 +386,7 @@ export default class GeographyBuilder {
     return result
   }
 
-  divisionBorderGeometry({ level, code, projection }) {
+  divisionBorderGeometry ({ level, code, projection }) {
     const superlevel = (() => {
       const index = this.levels.indexOf(level)
       if (index === -1) {
@@ -424,7 +422,7 @@ export default class GeographyBuilder {
         return indices.includes(index) || indices.some(other => {
           return neighbors[other].includes(index)
         })
-      }),
+      })
     }
 
     const key = codePropertyKeyForLevel(level)
@@ -437,7 +435,7 @@ export default class GeographyBuilder {
           return a.properties[key] < b.properties[key]
         }
         return a.properties[key] > b.properties[key]
-      },
+      }
     }, errors)
     if (errors.length !== 0) {
       // Topology mesh can fail if a division doesn't have any adjacent
@@ -447,19 +445,19 @@ export default class GeographyBuilder {
     return result
   }
 
-  divisionSubdivisionGeometry({ level, code, projection }) {
+  divisionSubdivisionGeometry ({ level, code, projection }) {
     const { geometries } = this.data.objects.geography
     const object = {
       type: 'GeometryCollection',
       geometries: geometries.filter(geometry => {
         return includesGeometryObject(level, code, geometry)
-      }),
+      })
     }
     const errors = []
     const result = this.borderGeometry({
       projection,
       object,
-      filter: (a, b) => a !== b,
+      filter: (a, b) => a !== b
     }, errors)
     if (errors.length !== 0) {
       // Topology mesh can fail if a division doesn't have any adjacent

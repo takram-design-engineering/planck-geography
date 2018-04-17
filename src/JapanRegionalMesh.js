@@ -3,23 +3,23 @@
 
 import Namespace from '@takram/planck-core/src/Namespace'
 
-function modulo(numerator, denominator) {
+function modulo (numerator, denominator) {
   return {
     quotient: Math.floor(numerator / denominator),
-    remainder: numerator % denominator,
+    remainder: numerator % denominator
   }
 }
 
-function decompose(value) {
+function decompose (value) {
   const integral = Math.floor(value)
   return {
     integral,
-    fractional: value - integral,
+    fractional: value - integral
   }
 }
 
 const pointToCodeConverters = {
-  primary(point) {
+  primary (point) {
     let value = modulo(point[1] * 60, 40)
     const p = value.quotient
     value = decompose(point[0] - 100)
@@ -28,7 +28,7 @@ const pointToCodeConverters = {
             u * 1)
   },
 
-  secondary(point) {
+  secondary (point) {
     let value = modulo(point[1] * 60, 40)
     const p = value.quotient
     value = modulo(value.remainder, 5)
@@ -43,7 +43,7 @@ const pointToCodeConverters = {
             v * 1)
   },
 
-  basic(point) {
+  basic (point) {
     let value = modulo(point[1] * 60, 40)
     const p = value.quotient
     value = modulo(value.remainder, 5)
@@ -64,7 +64,7 @@ const pointToCodeConverters = {
             w * 1)
   },
 
-  half(point) {
+  half (point) {
     let value = modulo(point[1] * 60, 40)
     const p = value.quotient
     value = modulo(value.remainder, 5)
@@ -91,7 +91,7 @@ const pointToCodeConverters = {
             m * 1)
   },
 
-  quarter(point) {
+  quarter (point) {
     let value = modulo(point[1] * 60, 40)
     const p = value.quotient
     value = modulo(value.remainder, 5)
@@ -124,7 +124,7 @@ const pointToCodeConverters = {
             n * 1)
   },
 
-  eighth(point) {
+  eighth (point) {
     let value = modulo(point[1] * 60, 40)
     const p = value.quotient
     value = modulo(value.remainder, 5)
@@ -161,22 +161,22 @@ const pointToCodeConverters = {
             m * 100 +
             n * 10 +
             l * 1)
-  },
+  }
 }
 
 const codeToPointConverters = {
-  primary(code) {
+  primary (code) {
     let value = modulo(code, 100)
     const p = value.quotient
     value = modulo(value.remainder, 1)
     const u = value.quotient
     return [
       ((u + 100) * 3600) / 3600,
-      (p * 2400) / 3600,
+      (p * 2400) / 3600
     ]
   },
 
-  secondary(code) {
+  secondary (code) {
     let value = modulo(code, 10000)
     const p = value.quotient
     value = modulo(value.remainder, 100)
@@ -187,11 +187,11 @@ const codeToPointConverters = {
     const v = value.quotient
     return [
       ((u + 100) * 3600 + v * 450) / 3600,
-      (p * 2400 + q * 300) / 3600,
+      (p * 2400 + q * 300) / 3600
     ]
   },
 
-  basic(code) {
+  basic (code) {
     let value = modulo(code, 1000000)
     const p = value.quotient
     value = modulo(value.remainder, 10000)
@@ -206,11 +206,11 @@ const codeToPointConverters = {
     const w = value.quotient
     return [
       ((u + 100) * 3600 + v * 450 + w * 45) / 3600,
-      (p * 2400 + q * 300 + r * 30) / 3600,
+      (p * 2400 + q * 300 + r * 30) / 3600
     ]
   },
 
-  half(code) {
+  half (code) {
     let value = modulo(code, 10000000)
     const p = value.quotient
     value = modulo(value.remainder, 100000)
@@ -231,11 +231,11 @@ const codeToPointConverters = {
       ((u + 100) * 3600 + v * 450 + w * 45 +
        x * 22.5) / 3600,
       (p * 2400 + q * 300 + r * 30 +
-       s * 15) / 3600,
+       s * 15) / 3600
     ]
   },
 
-  quarter(code) {
+  quarter (code) {
     let value = modulo(code, 100000000)
     const p = value.quotient
     value = modulo(value.remainder, 1000000)
@@ -260,11 +260,11 @@ const codeToPointConverters = {
       ((u + 100) * 3600 + v * 450 + w * 45 +
        x * 22.5 + y * 11.25) / 3600,
       (p * 2400 + q * 300 + r * 30 +
-       s * 15 + t * 7.5) / 3600,
+       s * 15 + t * 7.5) / 3600
     ]
   },
 
-  eighth(code) {
+  eighth (code) {
     let value = modulo(code, 1000000000)
     const p = value.quotient
     value = modulo(value.remainder, 10000000)
@@ -293,40 +293,40 @@ const codeToPointConverters = {
       ((u + 100) * 3600 + v * 450 + w * 45 +
        x * 22.5 + y * 11.25 + z * 5.625) / 3600,
       (p * 2400 + q * 300 + r * 30 +
-       s * 15 + t * 7.5 + o * 3.75) / 3600,
+       s * 15 + t * 7.5 + o * 3.75) / 3600
     ]
-  },
+  }
 }
 
 export const internal = Namespace('JapanRegionalMesh')
 
 export class JapanRegionalMesh {
-  constructor(name, size) {
+  constructor (name, size) {
     const scope = internal(this)
     scope.name = name
     scope.size = [...size]
   }
 
-  code(point) {
+  code (point) {
     return pointToCodeConverters[this.name](point)
   }
 
-  origin(code) {
+  origin (code) {
     return codeToPointConverters[this.name](code)
   }
 
-  center(code) {
+  center (code) {
     const origin = this.origin(code)
     const { size } = this
     return [origin[0] + size[0] / 2, origin[1] + size[1] / 2]
   }
 
-  get name() {
+  get name () {
     const scope = internal(this)
     return scope.name
   }
 
-  get size() {
+  get size () {
     const scope = internal(this)
     return [...scope.size]
   }
@@ -338,5 +338,5 @@ export default {
   basic: new JapanRegionalMesh('basic', [45 / 3600, 30 / 3600]),
   half: new JapanRegionalMesh('half', [22.5 / 3600, 15 / 3600]),
   quarter: new JapanRegionalMesh('quarter', [11.25 / 3600, 7.5 / 3600]),
-  eighth: new JapanRegionalMesh('eighth', [5.625 / 3600, 3.75 / 3600]),
+  eighth: new JapanRegionalMesh('eighth', [5.625 / 3600, 3.75 / 3600])
 }

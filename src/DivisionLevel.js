@@ -11,7 +11,7 @@ import Division from './Division'
 export const internal = Namespace('DivisionLevel')
 
 export default class DivisionLevel {
-  constructor(identifier, coder) {
+  constructor (identifier, coder) {
     const scope = internal(this)
     scope.identifier = identifier
     scope.coder = coder
@@ -20,27 +20,27 @@ export default class DivisionLevel {
     scope.geometries = {}
   }
 
-  init(geography) {
+  init (geography) {
     const scope = internal(this)
     scope.geography = geography
   }
 
-  get identifier() {
+  get identifier () {
     const scope = internal(this)
     return scope.identifier
   }
 
-  get coder() {
+  get coder () {
     const scope = internal(this)
     return scope.coder
   }
 
-  get geography() {
+  get geography () {
     const scope = internal(this)
     return scope.geography
   }
 
-  get data() {
+  get data () {
     const scope = internal(this)
     if (scope.data === undefined) {
       scope.data = this.geography.data[this.identifier]
@@ -48,7 +48,7 @@ export default class DivisionLevel {
     return scope.data
   }
 
-  division(code) {
+  division (code) {
     const scope = internal(this)
     let division = scope.divisions[code]
     if (division === undefined) {
@@ -58,7 +58,7 @@ export default class DivisionLevel {
     return division
   }
 
-  get divisions() {
+  get divisions () {
     const scope = internal(this)
     scope.divisions = {
       ...scope.divisions,
@@ -68,12 +68,12 @@ export default class DivisionLevel {
           return { ...divisions, [code]: new Division(this, code) }
         }
         return divisions
-      }, {}),
+      }, {})
     }
     return Object.values(scope.divisions)
   }
 
-  get codes() {
+  get codes () {
     const scope = internal(this)
     if (scope.codes === undefined) {
       scope.codes = this.data.map(data => data.code)
@@ -81,7 +81,7 @@ export default class DivisionLevel {
     return [...scope.codes]
   }
 
-  get superlevel() {
+  get superlevel () {
     const scope = internal(this)
     if (scope.superlevel === undefined) {
       const { levels } = this.geography
@@ -94,7 +94,7 @@ export default class DivisionLevel {
     return scope.superlevel
   }
 
-  get sublevel() {
+  get sublevel () {
     const scope = internal(this)
     if (scope.sublevel === undefined) {
       const { levels } = this.geography
@@ -107,7 +107,7 @@ export default class DivisionLevel {
     return scope.sublevel
   }
 
-  async properties(projection) {
+  async properties (projection) {
     const scope = internal(this)
     const hash = projection ? projection.hash : null
     if (scope.properties[hash] === undefined) {
@@ -116,14 +116,14 @@ export default class DivisionLevel {
         hash || '',
         this.geography.identifier,
         this.identifier,
-        'properties.json',
+        'properties.json'
       )
       scope.properties[hash] = Request.json(path, { local: true })
     }
     return scope.properties[hash]
   }
 
-  async geometries(name, projection) {
+  async geometries (name, projection) {
     const scope = internal(this)
     const hash = projection ? projection.hash : null
     let geometries = scope.geometries[hash]
@@ -137,20 +137,20 @@ export default class DivisionLevel {
     return geometries[name]
   }
 
-  async requestGeometries(name, projection) {
+  async requestGeometries (name, projection) {
     const path = FilePath.join(
       FilePath.dirname(this.geography.path),
       projection.hash,
       this.geography.identifier,
       this.identifier,
-      name,
+      name
     )
     let data
     let buffer
     try {
       [data, buffer] = await Promise.all([
         Request.json(`${path}.json`),
-        Request.buffer(`${path}.buffer`),
+        Request.buffer(`${path}.buffer`)
       ])
     } catch (error) {
       // TODO: Process in worker

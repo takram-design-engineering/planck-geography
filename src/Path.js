@@ -6,11 +6,11 @@ import parser from 'svg-path-parser'
 
 import ImplementationError from '@takram/planck-core/src/ImplementationError'
 
-function cross(a, b) {
+function cross (a, b) {
   return a.x * b.y - a.y * b.x
 }
 
-function crossings(a, b, point) {
+function crossings (a, b, point) {
   if ((a.x < point.x && point.x <= b.x) ||
       (b.x < point.x && point.x <= a.x)) {
     let { y } = a
@@ -25,7 +25,7 @@ function crossings(a, b, point) {
 }
 
 export default {
-  winding(curves) {
+  winding (curves) {
     if (curves.length < 3) {
       return undefined
     }
@@ -43,7 +43,7 @@ export default {
     return undefined
   },
 
-  contains(curves, point) {
+  contains (curves, point) {
     if (curves.length < 3) {
       return false
     }
@@ -56,7 +56,7 @@ export default {
     return (sum % 2) === 1
   },
 
-  parse(input, flip = false) {
+  parse (input, flip = false) {
     let x1 = 0
     let y1 = 0
     let x2 = 0
@@ -137,7 +137,7 @@ export default {
             y += current.y
           } else {
             ({
-              x1, y1, x2, y2, x, y,
+              x1, y1, x2, y2, x, y
             } = current)
           }
           if (flip) {
@@ -157,7 +157,7 @@ export default {
             y += current.y
           } else {
             ({
-              x2, y2, x, y,
+              x2, y2, x, y
             } = current)
           }
           if (flip) {
@@ -175,7 +175,7 @@ export default {
             y += current.y
           } else {
             ({
-              x1, y1, x, y,
+              x1, y1, x, y
             } = current)
           }
           if (flip) {
@@ -222,5 +222,5 @@ export default {
       shape.add(path)
       return shape
     }, new Three.Shape())
-  },
+  }
 }

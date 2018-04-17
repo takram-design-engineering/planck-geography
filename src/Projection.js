@@ -14,11 +14,11 @@ const d3 = Object.assign({}, d3Array, d3Geo, d3GeoProjection)
 export const internal = Namespace('Projection')
 
 export default class Projection {
-  constructor({
+  constructor ({
     name = 'Equirectangular',
     scale = 10000,
     origin = [0, 0],
-    rotates = [true, true],
+    rotates = [true, true]
   } = {}) {
     const scope = internal(this)
     scope.name = name
@@ -36,7 +36,7 @@ export default class Projection {
     scope.projector = this.projector
   }
 
-  project(point, flip = false) {
+  project (point, flip = false) {
     const scope = internal(this)
     const result = scope.projector(point)
     if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
@@ -49,12 +49,12 @@ export default class Projection {
     return result
   }
 
-  unproject(point, flip = false) {
+  unproject (point, flip = false) {
     const scope = internal(this)
     const result = scope.projector.invert([
       point[0],
       // Avoid negating zero
-      flip ? (-point[1] || 0) : point[1],
+      flip ? (-point[1] || 0) : point[1]
     ])
     if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
       throw new Error(`Could not unproject point [${point}]`)
@@ -62,7 +62,7 @@ export default class Projection {
     return result
   }
 
-  get projector() {
+  get projector () {
     const projection = d3[`geo${this.name}`]
     if (projection === undefined) {
       throw new Error(`Could not find projection for name "${this.name}"`)
@@ -87,42 +87,42 @@ export default class Projection {
     return projector
   }
 
-  get path() {
+  get path () {
     const scope = internal(this)
     return d3.geoPath().projection(scope.projector)
   }
 
-  sun(time) {
+  sun (time) {
     const { origin } = this
     return suncalc.getPosition(time, origin[1], origin[0])
   }
 
-  moon(time) {
+  moon (time) {
     const { origin } = this
     return suncalc.getMoonPosition(time, origin[1], origin[0])
   }
 
-  get name() {
+  get name () {
     const scope = internal(this)
     return scope.name
   }
 
-  get scale() {
+  get scale () {
     const scope = internal(this)
     return scope.scale
   }
 
-  get origin() {
+  get origin () {
     const scope = internal(this)
     return [...scope.origin]
   }
 
-  get rotates() {
+  get rotates () {
     const scope = internal(this)
     return [...scope.rotates]
   }
 
-  get hash() {
+  get hash () {
     const scope = internal(this)
     if (scope.hash === undefined) {
       scope.hash = Hash(this.toJSON())
@@ -130,7 +130,7 @@ export default class Projection {
     return scope.hash
   }
 
-  equals(other) {
+  equals (other) {
     return (
       this.name === other.name &&
       this.scale === other.scale &&
@@ -140,12 +140,12 @@ export default class Projection {
       this.rotates[1] === other.rotates[1])
   }
 
-  toJSON() {
+  toJSON () {
     return {
       name: this.name,
       scale: this.scale,
       origin: this.origin,
-      rotates: this.rotates,
+      rotates: this.rotates
     }
   }
 }

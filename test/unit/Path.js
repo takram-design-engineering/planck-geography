@@ -1,6 +1,8 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
+/* eslint-disable no-unused-expressions */
+
 import 'source-map-support/register'
 
 import * as Three from 'three'
@@ -16,7 +18,7 @@ describe('Path', () => {
       expect(Path.winding([
         { v1: { x: 0, y: 0 }, v2: { x: 1, y: 0 } },
         { v1: { x: 1, y: 0 }, v2: { x: 1, y: 1 } },
-        { v1: { x: 1, y: 1 }, v2: { x: 0, y: 1 } },
+        { v1: { x: 1, y: 1 }, v2: { x: 0, y: 1 } }
       ])).equal('cw')
     })
 
@@ -24,25 +26,25 @@ describe('Path', () => {
       expect(Path.winding([
         { v1: { x: 0, y: 1 }, v2: { x: 1, y: 1 } },
         { v1: { x: 1, y: 1 }, v2: { x: 1, y: 0 } },
-        { v1: { x: 1, y: 0 }, v2: { x: 0, y: 0 } },
+        { v1: { x: 1, y: 0 }, v2: { x: 0, y: 0 } }
       ])).equal('ccw')
     })
 
     it('returns undefined for undetermined curves', () => {
       expect(Path.winding([
         { v1: { x: 0, y: 1 }, v2: { x: 1, y: 1 } },
-        { v1: { x: 1, y: 1 }, v2: { x: 1, y: 0 } },
+        { v1: { x: 1, y: 1 }, v2: { x: 1, y: 0 } }
       ])).undefined
       expect(Path.winding([
         { v1: { x: 0, y: 0 }, v2: { x: 0, y: 0 } },
         { v1: { x: 1, y: 0 }, v2: { x: 1, y: 0 } },
         { v1: { x: 2, y: 0 }, v2: { x: 2, y: 0 } },
-        { v1: { x: 3, y: 0 }, v2: { x: 3, y: 0 } },
+        { v1: { x: 3, y: 0 }, v2: { x: 3, y: 0 } }
       ])).undefined
       expect(Path.winding([
         { v1: { x: 0, y: 0 }, v2: { x: 1, y: 1 } },
         { v1: { x: 1, y: 1 }, v2: { x: 1, y: 0 } },
-        { v1: { x: 1, y: 0 }, v2: { x: 0, y: 1 } },
+        { v1: { x: 1, y: 0 }, v2: { x: 0, y: 1 } }
       ])).undefined
     })
   })
@@ -52,7 +54,7 @@ describe('Path', () => {
       const curves = [
         { v1: { x: 0, y: 0 }, v2: { x: 1, y: 0 } },
         { v1: { x: 1, y: 0 }, v2: { x: 1, y: 1 } },
-        { v1: { x: 1, y: 1 }, v2: { x: 0, y: 1 } },
+        { v1: { x: 1, y: 1 }, v2: { x: 0, y: 1 } }
       ]
       expect(Path.contains(curves, { x: -0.0001, y: 0.5 })).false
       expect(Path.contains(curves, { x: 0.0001, y: 0.5 })).true

@@ -1,8 +1,6 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-/* eslint-disable */
-
 import 'source-map-support/register'
 
 import chai from 'chai'
@@ -12,14 +10,13 @@ import { GeographyBuilder, Projection } from '../..'
 
 const { expect } = chai
 
-// eslint-disable-next-line func-names
 describe('GeographyBuilder', function () {
   this.timeout(300000)
 
   const projection = new Projection({
     name: 'TransverseMercator',
     origin: [137.2, 37],
-    rotates: [true, true],
+    rotates: [true, true]
   })
 
   const builder = new GeographyBuilder(['prefecture', 'municipality'])
@@ -33,7 +30,7 @@ describe('GeographyBuilder', function () {
       const result = builder.bounds({
         level: 'prefecture',
         code: 1,
-        projection,
+        projection
       })
       expect(result).a('array')
       expect(result.length).equal(2)
@@ -50,7 +47,7 @@ describe('GeographyBuilder', function () {
     it('returns unprojected result', () => {
       const result = builder.bounds({
         level: 'prefecture',
-        code: 1,
+        code: 1
       })
       expect(result).a('array')
       expect(result.length).equal(2)
@@ -70,7 +67,7 @@ describe('GeographyBuilder', function () {
       const result = builder.area({
         level: 'prefecture',
         code: 1,
-        projection,
+        projection
       })
       expect(result).a('number')
     })
@@ -78,7 +75,7 @@ describe('GeographyBuilder', function () {
     it('returns unprojected result', () => {
       const result = builder.area({
         level: 'prefecture',
-        code: 1,
+        code: 1
       })
       expect(result).a('number')
     })
@@ -89,7 +86,7 @@ describe('GeographyBuilder', function () {
       const result = builder.centroid({
         level: 'prefecture',
         code: 1,
-        projection,
+        projection
       })
       expect(result).a('array')
       expect(result.length).equal(2)
@@ -100,7 +97,7 @@ describe('GeographyBuilder', function () {
     it('returns unprojected result', () => {
       const result = builder.centroid({
         level: 'prefecture',
-        code: 1,
+        code: 1
       })
       expect(result).a('array')
       expect(result.length).equal(2)
@@ -114,7 +111,7 @@ describe('GeographyBuilder', function () {
       const result = builder.poleOfInaccessibility({
         level: 'prefecture',
         code: 1,
-        projection,
+        projection
       })
       expect(result).a('array')
       expect(result.length).equal(2)
@@ -125,7 +122,7 @@ describe('GeographyBuilder', function () {
     it('returns unprojected result', () => {
       const result = builder.poleOfInaccessibility({
         level: 'prefecture',
-        code: 1,
+        code: 1
       })
       expect(result).a('array')
       expect(result.length).equal(2)

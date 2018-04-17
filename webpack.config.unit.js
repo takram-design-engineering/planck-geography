@@ -7,7 +7,7 @@ const webpack = require('webpack')
 module.exports = {
   mode: 'development',
   entry: [
-    path.resolve(__dirname, 'test/unit.js'),
+    path.resolve(__dirname, 'test/unit.js')
   ],
   output: {
     path: path.resolve(__dirname, 'dist/test/unit'),
@@ -22,7 +22,7 @@ module.exports = {
     'd3-array': 'd3',
     'd3-geo': 'd3',
     'd3-geo-projection': 'd3',
-    'three': 'THREE',
+    'three': 'THREE'
   },
   module: {
     rules: [
@@ -38,18 +38,18 @@ module.exports = {
                 'es2016',
                 'es2017',
                 'stage-3',
-                'stage-2',
-              ],
-            },
-          },
-        ],
-      },
-    ],
+                'stage-2'
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.browser': JSON.stringify(true),
-      'BUNDLER': JSON.stringify('webpack'),
-    }),
-  ],
+      'BUNDLER': JSON.stringify('webpack')
+    })
+  ]
 }

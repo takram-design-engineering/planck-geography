@@ -11,7 +11,6 @@ import { JapanGeography, Projection } from '../..'
 
 const { expect } = chai
 
-// eslint-disable-next-line func-names
 describe('Geography', function () {
   this.timeout(300000)
   if (Global.isNode) {
@@ -22,7 +21,7 @@ describe('Geography', function () {
   const projection = new Projection({
     name: 'TransverseMercator',
     origin: [137.2, 37],
-    rotates: [true, true],
+    rotates: [true, true]
   })
 
   before(async () => {

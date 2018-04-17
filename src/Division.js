@@ -6,27 +6,27 @@ import Namespace from '@takram/planck-core/src/Namespace'
 export const internal = Namespace('Division')
 
 export default class Division {
-  constructor(level, code) {
+  constructor (level, code) {
     const scope = internal(this)
     scope.level = level
     scope.code = code
   }
 
-  get code() {
+  get code () {
     const scope = internal(this)
     return scope.code
   }
 
-  get level() {
+  get level () {
     const scope = internal(this)
     return scope.level
   }
 
-  get geography() {
+  get geography () {
     return this.level.geography
   }
 
-  get data() {
+  get data () {
     const scope = internal(this)
     if (scope.data === undefined) {
       scope.data = this.level.data.find(data => data.code === this.code)
@@ -34,15 +34,15 @@ export default class Division {
     return scope.data
   }
 
-  get name() {
+  get name () {
     return this.data.name
   }
 
-  get localizedName() {
+  get localizedName () {
     return this.data.localizedName || this.data.name
   }
 
-  get neighbors() {
+  get neighbors () {
     const scope = internal(this)
     if (scope.neighbors === undefined) {
       scope.neighbors = this.data.neighbors.map(code => {
@@ -52,7 +52,7 @@ export default class Division {
     return [...scope.neighbors]
   }
 
-  async properties(projection) {
+  async properties (projection) {
     const properties = await this.level.properties(projection)
     const { code } = this
     const result = properties[code]
@@ -63,23 +63,23 @@ export default class Division {
     return result
   }
 
-  async bounds(projection) {
+  async bounds (projection) {
     return (await this.properties(projection)).bounds
   }
 
-  async area(projection) {
+  async area (projection) {
     return (await this.properties(projection)).area
   }
 
-  async centroid(projection) {
+  async centroid (projection) {
     return (await this.properties(projection)).centroid
   }
 
-  async poleOfInaccessibility(projection) {
+  async poleOfInaccessibility (projection) {
     return (await this.properties(projection)).poleOfInaccessibility
   }
 
-  async geometry(name, projection) {
+  async geometry (name, projection) {
     const geometries = await this.level.geometries(name, projection)
     const { code } = this
     const result = geometries[code]
@@ -90,30 +90,30 @@ export default class Division {
     return result
   }
 
-  async shapeGeometry(projection) {
+  async shapeGeometry (projection) {
     return this.geometry('shapes', projection)
   }
 
-  async outlineGeometry(projection) {
+  async outlineGeometry (projection) {
     return this.geometry('outlines', projection)
   }
 
-  async borderGeometry(projection) {
+  async borderGeometry (projection) {
     return this.geometry('borders', projection)
   }
 
-  async subdivisionGeometry(projection) {
+  async subdivisionGeometry (projection) {
     return this.geometry('subdivisions', projection)
   }
 
-  belongsTo(division) {
+  belongsTo (division) {
     if (division.level !== this.level.superlevel) {
       return false
     }
     return division.code === this.level.coder.super(this.code)
   }
 
-  get superdivision() {
+  get superdivision () {
     const scope = internal(this)
     if (scope.superdivision === undefined) {
       const { superlevel } = this.level
@@ -128,7 +128,7 @@ export default class Division {
     return scope.superdivision
   }
 
-  get subdivisions() {
+  get subdivisions () {
     const scope = internal(this)
     if (scope.subdivisions === undefined) {
       const { sublevel } = this.level
