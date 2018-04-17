@@ -9,6 +9,20 @@ import { Projection } from '../..'
 
 const { expect } = chai
 
+chai.use(({ Assertion }, utils) => {
+  const delta = Number.EPSILON * 2
+  Assertion.addMethod('almost', function almost (expected, message) {
+    const actual = utils.flag(this, 'object')
+    if (!Array.isArray(actual) && !Array.isArray(expected)) {
+      return this.closeTo(expected, delta, message)
+    }
+    actual.forEach((actual, i) => {
+      new Assertion(actual).almost(expected[i], delta, message)
+    })
+    return this
+  })
+})
+
 describe('Projection', () => {
   it('initializes', () => {
     const projection = new Projection()
@@ -45,10 +59,10 @@ describe('Projection', () => {
   describe('#project', () => {
     it('transforms coordinates using projection', () => {
       const projection = new Projection()
-      expect(projection.project([90 / Math.PI, 0])).deep.equal([5000, 0])
-      expect(projection.project([-90 / Math.PI, 0])).deep.equal([-5000, 0])
-      expect(projection.project([0, 45 / Math.PI])).deep.equal([0, -2500])
-      expect(projection.project([0, -45 / Math.PI])).deep.equal([0, 2500])
+      expect(projection.project([90 / Math.PI, 0])).almost([5000, 0])
+      expect(projection.project([-90 / Math.PI, 0])).almost([-5000, 0])
+      expect(projection.project([0, 45 / Math.PI])).almost([0, -2500])
+      expect(projection.project([0, -45 / Math.PI])).almost([0, 2500])
     })
 
     it('throws error if any of components of the result is NaN', () => {
@@ -68,10 +82,10 @@ describe('Projection', () => {
   describe('#unproject', () => {
     it('unprojects coordinates', () => {
       const projection = new Projection()
-      expect(projection.unproject([5000, 0])).deep.equal([90 / Math.PI, 0])
-      expect(projection.unproject([-5000, 0])).deep.equal([-90 / Math.PI, 0])
-      expect(projection.unproject([0, -2500])).deep.equal([0, 45 / Math.PI])
-      expect(projection.unproject([0, 2500])).deep.equal([0, -45 / Math.PI])
+      expect(projection.unproject([5000, 0])).almost([90 / Math.PI, 0])
+      expect(projection.unproject([-5000, 0])).almost([-90 / Math.PI, 0])
+      expect(projection.unproject([0, -2500])).almost([0, 45 / Math.PI])
+      expect(projection.unproject([0, 2500])).almost([0, -45 / Math.PI])
     })
 
     it('throws error if any of components of the result is NaN', () => {
@@ -93,14 +107,14 @@ describe('Projection', () => {
       const projection = new Projection()
       const { projector } = projection
       expect(projector).not.equal(projection.projection)
-      expect(projector([90 / Math.PI, 0])).deep.equal([5000, 0])
-      expect(projector([-90 / Math.PI, 0])).deep.equal([-5000, 0])
-      expect(projector([0, 45 / Math.PI])).deep.equal([0, -2500])
-      expect(projector([0, -45 / Math.PI])).deep.equal([0, 2500])
-      expect(projector.invert([5000, 0])).deep.equal([90 / Math.PI, 0])
-      expect(projector.invert([-5000, 0])).deep.equal([-90 / Math.PI, 0])
-      expect(projector.invert([0, -2500])).deep.equal([0, 45 / Math.PI])
-      expect(projector.invert([0, 2500])).deep.equal([0, -45 / Math.PI])
+      expect(projector([90 / Math.PI, 0])).almost([5000, 0])
+      expect(projector([-90 / Math.PI, 0])).almost([-5000, 0])
+      expect(projector([0, 45 / Math.PI])).almost([0, -2500])
+      expect(projector([0, -45 / Math.PI])).almost([0, 2500])
+      expect(projector.invert([5000, 0])).almost([90 / Math.PI, 0])
+      expect(projector.invert([-5000, 0])).almost([-90 / Math.PI, 0])
+      expect(projector.invert([0, -2500])).almost([0, 45 / Math.PI])
+      expect(projector.invert([0, 2500])).almost([0, -45 / Math.PI])
     })
   })
 
