@@ -4,6 +4,7 @@ Planck Geography
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat
 )](http://mit-license.org)
 [![npm version](https://badge.fury.io/js/%40takram%2Fplanck-geography.svg)](http://badge.fury.io/js/%40takram%2Fplanck-geography)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![Build Status](https://travis-ci.org/takram-design-engineering/planck-geography.svg?branch=master)](https://travis-ci.org/takram-design-engineering/planck-geography)
 [![Sauce Test Status](https://saucelabs.com/buildstatus/planck-geography)](https://saucelabs.com/u/planck-geography)
 

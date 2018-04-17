@@ -5,8 +5,10 @@ import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs'
 import nodeResolve from 'rollup-plugin-node-resolve'
 
+import pkg from './package.json'
+
 export default {
-  input: './dist/planck-geography.module.js',
+  input: pkg.module,
   plugins: [
     nodeResolve({ browser: true }),
     commonjs(),
@@ -38,9 +40,10 @@ export default {
       'three': 'THREE'
     },
     format: 'umd',
+    exports: 'named',
     extend: true,
     name: 'Planck',
-    file: './dist/planck-geography.js',
+    file: pkg.main,
     sourcemap: true
   }
 }
