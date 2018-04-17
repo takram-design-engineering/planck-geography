@@ -21,23 +21,19 @@ export default class DivisionLevel {
   }
 
   init (geography) {
-    const scope = internal(this)
-    scope.geography = geography
+    internal(this).geography = geography
   }
 
   get identifier () {
-    const scope = internal(this)
-    return scope.identifier
+    return internal(this).identifier
   }
 
   get coder () {
-    const scope = internal(this)
-    return scope.coder
+    return internal(this).coder
   }
 
   get geography () {
-    const scope = internal(this)
-    return scope.geography
+    return internal(this).geography
   }
 
   get data () {

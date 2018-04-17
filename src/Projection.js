@@ -37,8 +37,7 @@ export default class Projection {
   }
 
   project (point, flip = false) {
-    const scope = internal(this)
-    const result = scope.projector(point)
+    const result = internal(this).projector(point)
     if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
       throw new Error(`Could not project point [${point}]`)
     }
@@ -50,8 +49,7 @@ export default class Projection {
   }
 
   unproject (point, flip = false) {
-    const scope = internal(this)
-    const result = scope.projector.invert([
+    const result = internal(this).projector.invert([
       point[0],
       // Avoid negating zero
       flip ? (-point[1] || 0) : point[1]
@@ -88,8 +86,7 @@ export default class Projection {
   }
 
   get path () {
-    const scope = internal(this)
-    return d3.geoPath().projection(scope.projector)
+    return d3.geoPath().projection(internal(this).projector)
   }
 
   sun (time) {
@@ -103,23 +100,19 @@ export default class Projection {
   }
 
   get name () {
-    const scope = internal(this)
-    return scope.name
+    return internal(this).name
   }
 
   get scale () {
-    const scope = internal(this)
-    return scope.scale
+    return internal(this).scale
   }
 
   get origin () {
-    const scope = internal(this)
-    return [...scope.origin]
+    return [...internal(this).origin]
   }
 
   get rotates () {
-    const scope = internal(this)
-    return [...scope.rotates]
+    return [...internal(this).rotates]
   }
 
   get hash () {

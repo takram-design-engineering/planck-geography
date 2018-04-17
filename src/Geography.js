@@ -32,18 +32,15 @@ export default class Geography {
   }
 
   get identifier () {
-    const scope = internal(this)
-    return scope.identifier
+    return internal(this).identifier
   }
 
   get levels () {
-    const scope = internal(this)
-    return [...scope.levels]
+    return [...internal(this).levels]
   }
 
   get path () {
-    const scope = internal(this)
-    return scope.path
+    return internal(this).path
   }
 
   get data () {

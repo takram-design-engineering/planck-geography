@@ -322,13 +322,11 @@ export class JapanRegionalMesh {
   }
 
   get name () {
-    const scope = internal(this)
-    return scope.name
+    return internal(this).name
   }
 
   get size () {
-    const scope = internal(this)
-    return [...scope.size]
+    return [...internal(this).size]
   }
 }
 

@@ -13,13 +13,11 @@ export default class Division {
   }
 
   get code () {
-    const scope = internal(this)
-    return scope.code
+    return internal(this).code
   }
 
   get level () {
-    const scope = internal(this)
-    return scope.level
+    return internal(this).level
   }
 
   get geography () {

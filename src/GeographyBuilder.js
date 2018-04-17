@@ -137,8 +137,7 @@ export const internal = Namespace('GeographyBuilder')
 
 export default class GeographyBuilder {
   constructor (levels) {
-    const scope = internal(this)
-    scope.levels = [...levels]
+    internal(this).levels = [...levels]
   }
 
   async init (data) {
@@ -151,13 +150,11 @@ export default class GeographyBuilder {
   }
 
   get levels () {
-    const scope = internal(this)
-    return [...scope.levels]
+    return [...internal(this).levels]
   }
 
   get data () {
-    const scope = internal(this)
-    return scope.data
+    return internal(this).data
   }
 
   property (name, { level, code, projection }) {
