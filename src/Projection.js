@@ -62,7 +62,7 @@ export default class Projection {
 
   get projector () {
     const projection = d3[`geo${this.name}`]
-    if (projection === undefined) {
+    if (projection == null) {
       throw new Error(`Could not find projection for name "${this.name}"`)
     }
     const projector = projection()
@@ -117,7 +117,7 @@ export default class Projection {
 
   get hash () {
     const scope = internal(this)
-    if (scope.hash === undefined) {
+    if (scope.hash == null) {
       scope.hash = Hash(this.toJSON())
     }
     return scope.hash

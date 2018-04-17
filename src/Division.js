@@ -26,7 +26,7 @@ export default class Division {
 
   get data () {
     const scope = internal(this)
-    if (scope.data === undefined) {
+    if (scope.data == null) {
       scope.data = this.level.data.find(data => data.code === this.code)
     }
     return scope.data
@@ -42,7 +42,7 @@ export default class Division {
 
   get neighbors () {
     const scope = internal(this)
-    if (scope.neighbors === undefined) {
+    if (scope.neighbors == null) {
       scope.neighbors = this.data.neighbors.map(code => {
         return this.constructor.for(code)
       })
@@ -54,7 +54,7 @@ export default class Division {
     const properties = await this.level.properties(projection)
     const { code } = this
     const result = properties[code]
-    if (result === undefined) {
+    if (result == null) {
       const level = this.level.identifier
       throw new Error(`Could not find properties for ${level} ${code}`)
     }
@@ -81,7 +81,7 @@ export default class Division {
     const geometries = await this.level.geometries(name, projection)
     const { code } = this
     const result = geometries[code]
-    if (result === undefined) {
+    if (result == null) {
       const level = this.level.identifier
       throw new Error(`Could not find ${name} geometry for ${level} ${code}`)
     }
@@ -113,7 +113,7 @@ export default class Division {
 
   get superdivision () {
     const scope = internal(this)
-    if (scope.superdivision === undefined) {
+    if (scope.superdivision == null) {
       const { superlevel } = this.level
       if (!superlevel) {
         scope.superdivision = null
@@ -128,7 +128,7 @@ export default class Division {
 
   get subdivisions () {
     const scope = internal(this)
-    if (scope.subdivisions === undefined) {
+    if (scope.subdivisions == null) {
       const { sublevel } = this.level
       if (!sublevel) {
         scope.subdivisions = []

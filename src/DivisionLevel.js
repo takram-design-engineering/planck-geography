@@ -38,7 +38,7 @@ export default class DivisionLevel {
 
   get data () {
     const scope = internal(this)
-    if (scope.data === undefined) {
+    if (scope.data == null) {
       scope.data = this.geography.data[this.identifier]
     }
     return scope.data
@@ -47,7 +47,7 @@ export default class DivisionLevel {
   division (code) {
     const scope = internal(this)
     let division = scope.divisions[code]
-    if (division === undefined) {
+    if (division == null) {
       division = new Division(this, code)
       scope.divisions[code] = division
     }
@@ -60,7 +60,7 @@ export default class DivisionLevel {
       ...scope.divisions,
       ...this.data.reduce((divisions, data) => {
         const { code } = data
-        if (scope.divisions[code] === undefined) {
+        if (scope.divisions[code] == null) {
           return { ...divisions, [code]: new Division(this, code) }
         }
         return divisions
@@ -71,7 +71,7 @@ export default class DivisionLevel {
 
   get codes () {
     const scope = internal(this)
-    if (scope.codes === undefined) {
+    if (scope.codes == null) {
       scope.codes = this.data.map(data => data.code)
     }
     return [...scope.codes]
@@ -79,7 +79,7 @@ export default class DivisionLevel {
 
   get superlevel () {
     const scope = internal(this)
-    if (scope.superlevel === undefined) {
+    if (scope.superlevel == null) {
       const { levels } = this.geography
       const index = levels.indexOf(this)
       if (index === -1) {
@@ -92,7 +92,7 @@ export default class DivisionLevel {
 
   get sublevel () {
     const scope = internal(this)
-    if (scope.sublevel === undefined) {
+    if (scope.sublevel == null) {
       const { levels } = this.geography
       const index = levels.indexOf(this)
       if (index === -1) {
@@ -106,7 +106,7 @@ export default class DivisionLevel {
   async properties (projection) {
     const scope = internal(this)
     const hash = projection ? projection.hash : null
-    if (scope.properties[hash] === undefined) {
+    if (scope.properties[hash] == null) {
       const path = FilePath.join(
         FilePath.dirname(this.geography.path),
         hash || '',
@@ -123,11 +123,11 @@ export default class DivisionLevel {
     const scope = internal(this)
     const hash = projection ? projection.hash : null
     let geometries = scope.geometries[hash]
-    if (geometries === undefined) {
+    if (geometries == null) {
       geometries = {}
       scope.geometries[hash] = geometries
     }
-    if (geometries[name] === undefined) {
+    if (geometries[name] == null) {
       geometries[name] = this.requestGeometries(name, projection)
     }
     return geometries[name]

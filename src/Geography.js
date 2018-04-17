@@ -53,7 +53,7 @@ export default class Geography {
 
   division (identifier, code) {
     const level = this.levels.find(level => level.identifier === identifier)
-    if (level === undefined) {
+    if (level == null) {
       throw new Error(`Could not find ${identifier} level in geography`)
     }
     return level.division(code)
@@ -61,7 +61,7 @@ export default class Geography {
 
   divisions (identifier) {
     const level = this.levels.find(level => level.identifier === identifier)
-    if (level === undefined) {
+    if (level == null) {
       throw new Error(`Could not find ${identifier} level in geography`)
     }
     return level.divisions
@@ -69,7 +69,7 @@ export default class Geography {
 
   codes (identifier) {
     const level = this.levels.find(level => level.identifier === identifier)
-    if (level === undefined) {
+    if (level == null) {
       throw new Error(`Could not find ${identifier} level in geography`)
     }
     return level.codes
@@ -78,7 +78,7 @@ export default class Geography {
   async properties (projection) {
     const scope = internal(this)
     const hash = projection ? projection.hash : null
-    if (scope.properties[hash] === undefined) {
+    if (scope.properties[hash] == null) {
       const path = FilePath.join(
         FilePath.dirname(this.path),
         hash || '',
@@ -110,11 +110,11 @@ export default class Geography {
     const scope = internal(this)
     const hash = projection ? projection.hash : null
     let geometries = scope.geometries[hash]
-    if (geometries === undefined) {
+    if (geometries == null) {
       geometries = {}
       scope.geometries[hash] = geometries
     }
-    if (geometries[name] === undefined) {
+    if (geometries[name] == null) {
       geometries[name] = this.requestGeometry(name, projection)
     }
     return geometries[name]
