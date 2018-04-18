@@ -7,10 +7,17 @@ import nodeResolve from 'rollup-plugin-node-resolve'
 
 import pkg from './package.json'
 
+const globals = {
+  'd3-array': 'd3',
+  'd3-geo': 'd3',
+  'd3-geo-projection': 'd3',
+  'three': 'THREE'
+}
+
 export default {
-  input: pkg.module,
+  input: './src/main.js',
   plugins: [
-    nodeResolve({ browser: true }),
+    nodeResolve(),
     commonjs(),
     babel({
       presets: [
@@ -26,24 +33,22 @@ export default {
       babelrc: false
     })
   ],
-  external: [
-    'd3-array',
-    'd3-geo',
-    'd3-geo-projection',
-    'three'
-  ],
-  output: {
-    globals: {
-      'd3-array': 'd3',
-      'd3-geo': 'd3',
-      'd3-geo-projection': 'd3',
-      'three': 'THREE'
+  external: Object.keys(globals),
+  output: [
+    {
+      globals,
+      format: 'umd',
+      exports: 'named',
+      extend: true,
+      name: 'Planck',
+      file: pkg.main,
+      sourcemap: true
     },
-    format: 'umd',
-    exports: 'named',
-    extend: true,
-    name: 'Planck',
-    file: pkg.main,
-    sourcemap: true
-  }
+    {
+      globals,
+      format: 'es',
+      file: pkg.module,
+      sourcemap: true
+    }
+  ]
 }
