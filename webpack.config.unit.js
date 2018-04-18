@@ -17,12 +17,11 @@ module.exports = {
   externals: {
     'chai': 'chai',
     'mocha': 'mocha',
-    'source-map-support/register': 'null',
-    '@takram/planck-core': 'Planck',
     'd3-array': 'd3',
     'd3-geo': 'd3',
     'd3-geo-projection': 'd3',
-    'three': 'THREE'
+    'three': 'THREE',
+    'source-map-support/register': 'null'
   },
   module: {
     rules: [
