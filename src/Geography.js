@@ -1,16 +1,14 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-import FilePath from '@takram/planck-core/src/FilePath'
-import Namespace from '@takram/planck-core/src/Namespace'
-import Request from '@takram/planck-core/src/Request'
+import { FilePath, Namespace, Request } from '@takram/planck-core'
 
 import GeometryPack from './GeometryPack'
 
 export const internal = Namespace('Geography')
 
 export default class Geography {
-  constructor(identifier, levels = []) {
+  constructor (identifier, levels = []) {
     const scope = internal(this)
     scope.identifier = identifier
     scope.levels = levels
@@ -18,7 +16,7 @@ export default class Geography {
     scope.geometries = {}
   }
 
-  async init(path, data) {
+  async init (path, data) {
     const scope = internal(this)
     scope.path = path
     if (data) {
@@ -31,22 +29,19 @@ export default class Geography {
     }))
   }
 
-  get identifier() {
-    const scope = internal(this)
-    return scope.identifier
+  get identifier () {
+    return internal(this).identifier
   }
 
-  get levels() {
-    const scope = internal(this)
-    return [...scope.levels]
+  get levels () {
+    return [...internal(this).levels]
   }
 
-  get path() {
-    const scope = internal(this)
-    return scope.path
+  get path () {
+    return internal(this).path
   }
 
-  get data() {
+  get data () {
     const scope = internal(this)
     if (!scope.data) {
       throw new Error(`Data is missing for ${this.identifier}`)
@@ -54,88 +49,88 @@ export default class Geography {
     return scope.data
   }
 
-  division(identifier, code) {
+  division (identifier, code) {
     const level = this.levels.find(level => level.identifier === identifier)
-    if (level === undefined) {
+    if (level == null) {
       throw new Error(`Could not find ${identifier} level in geography`)
     }
     return level.division(code)
   }
 
-  divisions(identifier) {
+  divisions (identifier) {
     const level = this.levels.find(level => level.identifier === identifier)
-    if (level === undefined) {
+    if (level == null) {
       throw new Error(`Could not find ${identifier} level in geography`)
     }
     return level.divisions
   }
 
-  codes(identifier) {
+  codes (identifier) {
     const level = this.levels.find(level => level.identifier === identifier)
-    if (level === undefined) {
+    if (level == null) {
       throw new Error(`Could not find ${identifier} level in geography`)
     }
     return level.codes
   }
 
-  async properties(projection) {
+  async properties (projection) {
     const scope = internal(this)
     const hash = projection ? projection.hash : null
-    if (scope.properties[hash] === undefined) {
+    if (scope.properties[hash] == null) {
       const path = FilePath.join(
         FilePath.dirname(this.path),
         hash || '',
         this.identifier,
-        'properties.json',
+        'properties.json'
       )
       scope.properties[hash] = Request.json(path, { local: true })
     }
     return scope.properties[hash]
   }
 
-  async bounds(projection) {
+  async bounds (projection) {
     return (await this.properties(projection)).bounds
   }
 
-  async area(projection) {
+  async area (projection) {
     return (await this.properties(projection)).area
   }
 
-  async centroid(projection) {
+  async centroid (projection) {
     return (await this.properties(projection)).centroid
   }
 
-  async poleOfInaccessibility(projection) {
+  async poleOfInaccessibility (projection) {
     return (await this.properties(projection)).poleOfInaccessibility
   }
 
-  async geometry(name, projection) {
+  async geometry (name, projection) {
     const scope = internal(this)
     const hash = projection ? projection.hash : null
     let geometries = scope.geometries[hash]
-    if (geometries === undefined) {
+    if (geometries == null) {
       geometries = {}
       scope.geometries[hash] = geometries
     }
-    if (geometries[name] === undefined) {
+    if (geometries[name] == null) {
       geometries[name] = this.requestGeometry(name, projection)
     }
     return geometries[name]
   }
 
-  async requestGeometry(name, projection) {
+  async requestGeometry (name, projection) {
     const path = FilePath.join(
       FilePath.dirname(this.path),
       projection.hash,
       this.identifier,
-      name,
+      name
     )
     let data
     let buffer
     try {
       [data, buffer] = await Promise.all([
         Request.json(`${path}.json`),
-        Request.buffer(`${path}.buffer`),
+        Request.buffer(`${path}.buffer`)
       ])
     } catch (error) {
       // TODO: Process in worker
@@ -144,15 +139,15 @@ export default class Geography {
     return GeometryPack.unpackBufferGeometry(data, buffer)
   }
 
-  async shapeGeometry(projection) {
+  async shapeGeometry (projection) {
     return this.geometry('shape', projection)
   }
 
-  async outlineGeometry(projection) {
+  async outlineGeometry (projection) {
     return this.geometry('outline', projection)
   }
 
-  async subdivisionGeometry(projection) {
+  async subdivisionGeometry (projection) {
     return this.geometry('subdivision', projection)
   }
 }

@@ -32,7 +32,7 @@ describe('GeometryPack', () => {
       new Three.BufferGeometry()
         .copy(new Three.SphereBufferGeometry()),
       new Three.BufferGeometry()
-        .copy(new Three.CylinderBufferGeometry()),
+        .copy(new Three.CylinderBufferGeometry())
     ]
     const packed = GeometryPack.packBufferGeometries(geometries)
     const unpacked = GeometryPack.unpackBufferGeometries(...packed)
@@ -57,7 +57,7 @@ describe('GeometryPack', () => {
       sphere: new Three.BufferGeometry()
         .copy(new Three.SphereBufferGeometry()),
       cylinder: new Three.BufferGeometry()
-        .copy(new Three.CylinderBufferGeometry()),
+        .copy(new Three.CylinderBufferGeometry())
     }
     const packed = GeometryPack.packBufferGeometries(geometries)
     const unpacked = GeometryPack.unpackBufferGeometries(...packed)

@@ -5,17 +5,17 @@ import DivisionLevel from './DivisionLevel'
 import Geography from './Geography'
 
 export default class USGeography extends Geography {
-  constructor() {
+  constructor () {
     super('us', [
       new DivisionLevel('state'),
       new DivisionLevel('county', {
-        coerce(code) {
+        coerce (code) {
           return parseInt(code, 10)
         },
-        super(code) {
+        super (code) {
           return parseInt(`${code}`.slice(0, -3), 10)
-        },
-      }),
+        }
+      })
     ])
   }
 }
