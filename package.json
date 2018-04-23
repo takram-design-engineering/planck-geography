@@ -1,6 +1,6 @@
 {
   "name": "@takram/planck-geography",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "",
   "repository": "takram-design-engineering/planck-geography",
   "main": "dist/planck-geography.js",
