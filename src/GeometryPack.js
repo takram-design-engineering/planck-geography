@@ -3,7 +3,7 @@
 
 import * as Three from 'three'
 
-import { globalScope } from '@takram/planck-core/src/Global'
+import { globalScope } from '@takram/planck-core'
 
 function packBufferGeometry (geometry, byteOffset = 0) {
   const data = geometry.toJSON()

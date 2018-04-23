@@ -1,21 +1,15 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-import * as d3Array from 'd3-array'
-import * as d3Geo from 'd3-geo'
+import * as d3 from 'd3'
 import * as Three from 'three'
+import * as topojson from 'topojson'
 import earcut from 'earcut'
 import polylabel from 'polylabel'
 
-import Array from '@takram/planck-core/src/Array'
-import External from '@takram/planck-core/src/External'
-import Namespace from '@takram/planck-core/src/Namespace'
-import Request from '@takram/planck-core/src/Request'
+import { Array, Namespace, Request } from '@takram/planck-core'
 
 import Path from './Path'
-
-const d3 = Object.assign({}, d3Array, d3Geo)
-const topojson = External.optional('topojson')
 
 function codePropertyKeyForLevel (level) {
   return `${level}Code`

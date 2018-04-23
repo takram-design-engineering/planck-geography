@@ -1,9 +1,7 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-import FilePath from '@takram/planck-core/src/FilePath'
-import Namespace from '@takram/planck-core/src/Namespace'
-import Request from '@takram/planck-core/src/Request'
+import { FilePath, Namespace, Request } from '@takram/planck-core'
 
 import GeometryPack from './GeometryPack'
 

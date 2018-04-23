@@ -4,7 +4,7 @@
 import * as Three from 'three'
 import parser from 'svg-path-parser'
 
-import ImplementationError from '@takram/planck-core/src/ImplementationError'
+import { ImplementationError } from '@takram/planck-core'
 
 function cross (a, b) {
   return a.x * b.y - a.y * b.x

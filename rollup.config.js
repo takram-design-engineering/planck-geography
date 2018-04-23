@@ -8,8 +8,8 @@ import nodeResolve from 'rollup-plugin-node-resolve'
 import pkg from './package.json'
 
 const globals = {
-  'd3-array': 'd3',
-  'd3-geo': 'd3',
+  '@takram/planck-core': 'Planck',
+  'd3': 'd3',
   'd3-geo-projection': 'd3',
   'three': 'THREE'
 }
@@ -45,7 +45,6 @@ export default {
       sourcemap: true
     },
     {
-      globals,
       format: 'es',
       file: pkg.module,
       sourcemap: true

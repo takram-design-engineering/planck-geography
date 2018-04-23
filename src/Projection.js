@@ -1,15 +1,11 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-import * as d3Array from 'd3-array'
-import * as d3Geo from 'd3-geo'
+import * as d3 from 'd3'
 import * as d3GeoProjection from 'd3-geo-projection'
 import suncalc from 'suncalc'
 
-import Hash from '@takram/planck-core/src/Hash'
-import Namespace from '@takram/planck-core/src/Namespace'
-
-const d3 = Object.assign({}, d3Array, d3Geo, d3GeoProjection)
+import { Hash, Namespace } from '@takram/planck-core'
 
 export const internal = Namespace('Projection')
 
@@ -61,7 +57,8 @@ export default class Projection {
   }
 
   get projector () {
-    const projection = d3[`geo${this.name}`]
+    const key = `geo${this.name}`
+    const projection = d3[key] || d3GeoProjection[key]
     if (projection == null) {
       throw new Error(`Could not find projection for name "${this.name}"`)
     }

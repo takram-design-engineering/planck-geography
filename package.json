@@ -68,8 +68,7 @@
   },
   "peerDependencies": {
     "@takram/planck-core": "0.x",
-    "d3-array": "^1.x",
-    "d3-geo": "^1.x",
+    "d3": "^5.x",
     "d3-geo-projection": "^2.x",
     "three": "^0.92.0"
   },
@@ -85,8 +84,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "browser-sync": "^2.23.7",
     "chai": "^4.1.2",
-    "d3-array": "^1.2.1",
-    "d3-geo": "^1.10.0",
+    "d3": "^5.1.0",
     "d3-geo-projection": "^2.4.0",
     "eslint": "^4.19.1",
     "express": "^4.16.3",

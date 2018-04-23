@@ -8,8 +8,7 @@ import nodeResolve from 'rollup-plugin-node-resolve'
 const globals = {
   'chai': 'chai',
   'mocha': 'mocha',
-  'd3-array': 'd3',
-  'd3-geo': 'd3',
+  'd3': 'd3',
   'd3-geo-projection': 'd3',
   'three': 'THREE'
 }
@@ -33,7 +32,10 @@ export default {
       babelrc: false
     })
   ],
-  external: Object.keys(globals),
+  external: [
+    ...Object.keys(globals),
+    'source-map-support/register'
+  ],
   output: {
     globals,
     intro: 'var BUNDLER = "rollup";',
