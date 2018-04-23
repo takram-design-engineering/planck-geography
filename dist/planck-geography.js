@@ -4,6 +4,23 @@
   (factory((global.Planck = global.Planck || {}),global.THREE,global.d3,global.d3,global.d3));
 }(this, (function (exports,Three,d3Array,d3Geo,d3GeoProjection) { 'use strict';
 
+  // The MIT License
+  // Copyright (C) 2016-Present Shota Matsuda
+
+  function createNamespace(name) {
+    var symbol = Symbol(name);
+    return function namespace(object, init) {
+      if (object[symbol] == null) {
+        if (typeof init === 'function') {
+          object[symbol] = init({});
+        } else {
+          object[symbol] = {};
+        }
+      }
+      return object[symbol];
+    };
+  }
+
   var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
     return typeof obj;
   } : function (obj) {
@@ -165,25 +182,6 @@
   };
 
   // The MIT License
-  // Copyright (C) 2016-Present Shota Matsuda
-
-  function createNamespace(name) {
-    var symbol = Symbol(name);
-    return function namespace(object, init) {
-      if (object[symbol] == null) {
-        if (typeof init === 'function') {
-          object[symbol] = init({});
-        } else if ((typeof init === 'undefined' ? 'undefined' : _typeof(init)) === 'object') {
-          object[symbol] = _extends({}, init);
-        } else {
-          object[symbol] = {};
-        }
-      }
-      return object[symbol];
-    };
-  }
-
-  // The MIT License
 
   var internal = createNamespace('Division');
 
@@ -213,7 +211,7 @@
                   code = this.code;
                   result = properties[code];
 
-                  if (!(result === undefined)) {
+                  if (!(result == null)) {
                     _context.next = 8;
                     break;
                   }
@@ -367,7 +365,7 @@
                   code = this.code;
                   result = geometries[code];
 
-                  if (!(result === undefined)) {
+                  if (!(result == null)) {
                     _context6.next = 8;
                     break;
                   }
@@ -499,14 +497,12 @@
     }, {
       key: 'code',
       get: function get$$1() {
-        var scope = internal(this);
-        return scope.code;
+        return internal(this).code;
       }
     }, {
       key: 'level',
       get: function get$$1() {
-        var scope = internal(this);
-        return scope.level;
+        return internal(this).level;
       }
     }, {
       key: 'geography',
@@ -519,7 +515,7 @@
         var _this = this;
 
         var scope = internal(this);
-        if (scope.data === undefined) {
+        if (scope.data == null) {
           scope.data = this.level.data.find(function (data) {
             return data.code === _this.code;
           });
@@ -542,7 +538,7 @@
         var _this2 = this;
 
         var scope = internal(this);
-        if (scope.neighbors === undefined) {
+        if (scope.neighbors == null) {
           scope.neighbors = this.data.neighbors.map(function (code) {
             return _this2.constructor.for(code);
           });
@@ -555,7 +551,7 @@
         var _this3 = this;
 
         var scope = internal(this);
-        if (scope.superdivision === undefined) {
+        if (scope.superdivision == null) {
           var superlevel = this.level.superlevel;
 
           if (!superlevel) {
@@ -574,7 +570,7 @@
         var _this4 = this;
 
         var scope = internal(this);
-        if (scope.subdivisions === undefined) {
+        if (scope.subdivisions == null) {
           var sublevel = this.level.sublevel;
 
           if (!sublevel) {
@@ -874,13 +870,6 @@
     }
     return undefined;
   }();
-
-  var Global = {
-    isBrowser: isBrowser,
-    isWorker: isWorker,
-    isNode: isNode,
-    scope: globalScope
-  };
 
   // The MIT License
 
@@ -2003,7 +1992,7 @@
     if (copy.data.index) {
       var type = copy.data.index.type;
 
-      var view = new (Function.prototype.bind.apply(Global.scope[type], [null].concat([buffer], toConsumableArray(copy.data.index.array))))();
+      var view = new (Function.prototype.bind.apply(globalScope[type], [null].concat([buffer], toConsumableArray(copy.data.index.array))))();
       copy.data.index = _extends({}, copy.data.index, { array: view });
     }
     if (copy.data.attributes) {
@@ -2014,7 +2003,7 @@
         var attribute = copy.data.attributes[name];
         var _type = attribute.type;
 
-        var _view = new (Function.prototype.bind.apply(Global.scope[_type], [null].concat([buffer], toConsumableArray(attribute.array))))();
+        var _view = new (Function.prototype.bind.apply(globalScope[_type], [null].concat([buffer], toConsumableArray(attribute.array))))();
         attributes[name] = _extends({}, attribute, { array: _view });
       }
       copy.data.attributes = attributes;
@@ -2096,15 +2085,14 @@
     createClass(DivisionLevel, [{
       key: 'init',
       value: function init(geography) {
-        var scope = internal$2(this);
-        scope.geography = geography;
+        internal$2(this).geography = geography;
       }
     }, {
       key: 'division',
       value: function division(code) {
         var scope = internal$2(this);
         var division = scope.divisions[code];
-        if (division === undefined) {
+        if (division == null) {
           division = new Division(this, code);
           scope.divisions[code] = division;
         }
@@ -2122,7 +2110,7 @@
                   scope = internal$2(this);
                   hash = projection ? projection.hash : null;
 
-                  if (scope.properties[hash] === undefined) {
+                  if (scope.properties[hash] == null) {
                     path = FilePath.join(FilePath.dirname(this.geography.path), hash || '', this.geography.identifier, this.identifier, 'properties.json');
 
                     scope.properties[hash] = performRequest.json(path, { local: true });
@@ -2156,11 +2144,11 @@
                   hash = projection ? projection.hash : null;
                   geometries = scope.geometries[hash];
 
-                  if (geometries === undefined) {
+                  if (geometries == null) {
                     geometries = {};
                     scope.geometries[hash] = geometries;
                   }
-                  if (geometries[name] === undefined) {
+                  if (geometries[name] == null) {
                     geometries[name] = this.requestGeometries(name, projection);
                   }
                   return _context2.abrupt('return', geometries[name]);
@@ -2229,26 +2217,23 @@
     }, {
       key: 'identifier',
       get: function get$$1() {
-        var scope = internal$2(this);
-        return scope.identifier;
+        return internal$2(this).identifier;
       }
     }, {
       key: 'coder',
       get: function get$$1() {
-        var scope = internal$2(this);
-        return scope.coder;
+        return internal$2(this).coder;
       }
     }, {
       key: 'geography',
       get: function get$$1() {
-        var scope = internal$2(this);
-        return scope.geography;
+        return internal$2(this).geography;
       }
     }, {
       key: 'data',
       get: function get$$1() {
         var scope = internal$2(this);
-        if (scope.data === undefined) {
+        if (scope.data == null) {
           scope.data = this.geography.data[this.identifier];
         }
         return scope.data;
@@ -2262,7 +2247,7 @@
         scope.divisions = _extends({}, scope.divisions, this.data.reduce(function (divisions, data) {
           var code = data.code;
 
-          if (scope.divisions[code] === undefined) {
+          if (scope.divisions[code] == null) {
             return _extends({}, divisions, defineProperty({}, code, new Division(_this, code)));
           }
           return divisions;
@@ -2273,7 +2258,7 @@
       key: 'codes',
       get: function get$$1() {
         var scope = internal$2(this);
-        if (scope.codes === undefined) {
+        if (scope.codes == null) {
           scope.codes = this.data.map(function (data) {
             return data.code;
           });
@@ -2284,7 +2269,7 @@
       key: 'superlevel',
       get: function get$$1() {
         var scope = internal$2(this);
-        if (scope.superlevel === undefined) {
+        if (scope.superlevel == null) {
           var levels = this.geography.levels;
 
           var index = levels.indexOf(this);
@@ -2299,7 +2284,7 @@
       key: 'sublevel',
       get: function get$$1() {
         var scope = internal$2(this);
-        if (scope.sublevel === undefined) {
+        if (scope.sublevel == null) {
           var levels = this.geography.levels;
 
           var index = levels.indexOf(this);
@@ -2391,7 +2376,7 @@
         var level = this.levels.find(function (level) {
           return level.identifier === identifier;
         });
-        if (level === undefined) {
+        if (level == null) {
           throw new Error('Could not find ' + identifier + ' level in geography');
         }
         return level.division(code);
@@ -2402,7 +2387,7 @@
         var level = this.levels.find(function (level) {
           return level.identifier === identifier;
         });
-        if (level === undefined) {
+        if (level == null) {
           throw new Error('Could not find ' + identifier + ' level in geography');
         }
         return level.divisions;
@@ -2413,7 +2398,7 @@
         var level = this.levels.find(function (level) {
           return level.identifier === identifier;
         });
-        if (level === undefined) {
+        if (level == null) {
           throw new Error('Could not find ' + identifier + ' level in geography');
         }
         return level.codes;
@@ -2430,7 +2415,7 @@
                   scope = internal$3(this);
                   hash = projection ? projection.hash : null;
 
-                  if (scope.properties[hash] === undefined) {
+                  if (scope.properties[hash] == null) {
                     path = FilePath.join(FilePath.dirname(this.path), hash || '', this.identifier, 'properties.json');
 
                     scope.properties[hash] = performRequest.json(path, { local: true });
@@ -2576,11 +2561,11 @@
                   hash = projection ? projection.hash : null;
                   geometries = scope.geometries[hash];
 
-                  if (geometries === undefined) {
+                  if (geometries == null) {
                     geometries = {};
                     scope.geometries[hash] = geometries;
                   }
-                  if (geometries[name] === undefined) {
+                  if (geometries[name] == null) {
                     geometries[name] = this.requestGeometry(name, projection);
                   }
                   return _context7.abrupt('return', geometries[name]);
@@ -2721,20 +2706,17 @@
     }, {
       key: 'identifier',
       get: function get$$1() {
-        var scope = internal$3(this);
-        return scope.identifier;
+        return internal$3(this).identifier;
       }
     }, {
       key: 'levels',
       get: function get$$1() {
-        var scope = internal$3(this);
-        return [].concat(toConsumableArray(scope.levels));
+        return [].concat(toConsumableArray(internal$3(this).levels));
       }
     }, {
       key: 'path',
       get: function get$$1() {
-        var scope = internal$3(this);
-        return scope.path;
+        return internal$3(this).path;
       }
     }, {
       key: 'data',
@@ -6146,8 +6128,7 @@
     function GeographyBuilder(levels) {
       classCallCheck(this, GeographyBuilder);
 
-      var scope = internal$4(this);
-      scope.levels = [].concat(toConsumableArray(levels));
+      internal$4(this).levels = [].concat(toConsumableArray(levels));
     }
 
     createClass(GeographyBuilder, [{
@@ -6583,14 +6564,12 @@
     }, {
       key: 'levels',
       get: function get$$1() {
-        var scope = internal$4(this);
-        return [].concat(toConsumableArray(scope.levels));
+        return [].concat(toConsumableArray(internal$4(this).levels));
       }
     }, {
       key: 'data',
       get: function get$$1() {
-        var scope = internal$4(this);
-        return scope.data;
+        return internal$4(this).data;
       }
     }]);
     return GeographyBuilder;
@@ -6881,14 +6860,12 @@
     }, {
       key: 'name',
       get: function get$$1() {
-        var scope = internal$5(this);
-        return scope.name;
+        return internal$5(this).name;
       }
     }, {
       key: 'size',
       get: function get$$1() {
-        var scope = internal$5(this);
-        return [].concat(toConsumableArray(scope.size));
+        return [].concat(toConsumableArray(internal$5(this).size));
       }
     }]);
     return JapanRegionalMesh;
@@ -8139,8 +8116,7 @@
       value: function project(point) {
         var flip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-        var scope = internal$6(this);
-        var result = scope.projector(point);
+        var result = internal$6(this).projector(point);
         if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
           throw new Error('Could not project point [' + point + ']');
         }
@@ -8155,8 +8131,7 @@
       value: function unproject(point) {
         var flip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-        var scope = internal$6(this);
-        var result = scope.projector.invert([point[0],
+        var result = internal$6(this).projector.invert([point[0],
         // Avoid negating zero
         flip ? -point[1] || 0 : point[1]]);
         if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
@@ -8197,7 +8172,7 @@
       key: 'projector',
       get: function get$$1() {
         var projection = d3$1['geo' + this.name];
-        if (projection === undefined) {
+        if (projection == null) {
           throw new Error('Could not find projection for name "' + this.name + '"');
         }
         var projector = projection();
@@ -8222,38 +8197,33 @@
     }, {
       key: 'path',
       get: function get$$1() {
-        var scope = internal$6(this);
-        return d3$1.geoPath().projection(scope.projector);
+        return d3$1.geoPath().projection(internal$6(this).projector);
       }
     }, {
       key: 'name',
       get: function get$$1() {
-        var scope = internal$6(this);
-        return scope.name;
+        return internal$6(this).name;
       }
     }, {
       key: 'scale',
       get: function get$$1() {
-        var scope = internal$6(this);
-        return scope.scale;
+        return internal$6(this).scale;
       }
     }, {
       key: 'origin',
       get: function get$$1() {
-        var scope = internal$6(this);
-        return [].concat(toConsumableArray(scope.origin));
+        return [].concat(toConsumableArray(internal$6(this).origin));
       }
     }, {
       key: 'rotates',
       get: function get$$1() {
-        var scope = internal$6(this);
-        return [].concat(toConsumableArray(scope.rotates));
+        return [].concat(toConsumableArray(internal$6(this).rotates));
       }
     }, {
       key: 'hash',
       get: function get$$1() {
         var scope = internal$6(this);
-        if (scope.hash === undefined) {
+        if (scope.hash == null) {
           scope.hash = generateHash(this.toJSON());
         }
         return scope.hash;
@@ -8297,6 +8267,20 @@
 
   // The MIT License
 
+  var main = {
+    Division: Division,
+    DivisionLevel: DivisionLevel,
+    Geography: Geography,
+    GeographyBuilder: GeographyBuilder,
+    GeometryPack: GeometryPack,
+    JapanGeography: JapanGeography,
+    JapanRegionalMesh: JapanRegionalMesh$1,
+    Path: Path,
+    Projection: Projection,
+    USGeography: USGeography,
+    WorldGeography: WorldGeography
+  };
+
   exports.Division = Division;
   exports.DivisionLevel = DivisionLevel;
   exports.Geography = Geography;
@@ -8308,6 +8292,7 @@
   exports.Projection = Projection;
   exports.USGeography = USGeography;
   exports.WorldGeography = WorldGeography;
+  exports.default = main;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
