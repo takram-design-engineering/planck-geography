@@ -5010,9 +5010,44 @@
     return level + 'Code';
   }
 
-  function includesGeometryObject(level, code, geometryObject) {
-    var key = codePropertyKeyForLevel(level);
-    return geometryObject.properties[key] === code;
+  function filterGeometryObjects(geometryObjects, _ref) {
+    var includes = _ref.includes,
+        excludes = _ref.excludes;
+
+    var result = geometryObjects;
+    if (includes) {
+      var levels = Object.keys(includes);
+
+      var _loop = function _loop(i) {
+        var level = levels[i];
+        var key = codePropertyKeyForLevel(level);
+        var codes = [].concat(includes[level]);
+        result = result.filter(function (geometryObject) {
+          return codes.includes(geometryObject.properties[key]);
+        });
+      };
+
+      for (var i = 0; i < levels.length; ++i) {
+        _loop(i);
+      }
+    }
+    if (excludes) {
+      var _levels = Object.keys(excludes);
+
+      var _loop2 = function _loop2(i) {
+        var level = _levels[i];
+        var key = codePropertyKeyForLevel(level);
+        var codes = [].concat(excludes[level]);
+        result = result.filter(function (geometryObject) {
+          return !codes.includes(geometryObject.properties[key]);
+        });
+      };
+
+      for (var i = 0; i < _levels.length; ++i) {
+        _loop2(i);
+      }
+    }
+    return result;
   }
 
   function triangulateShape(contour, holes) {
@@ -5132,7 +5167,7 @@
     createClass(GeographyBuilder, [{
       key: 'init',
       value: function () {
-        var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data) {
+        var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data) {
           var scope;
           return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
@@ -5169,22 +5204,22 @@
         }));
 
         function init(_x2) {
-          return _ref.apply(this, arguments);
+          return _ref2.apply(this, arguments);
         }
 
         return init;
       }()
     }, {
       key: 'property',
-      value: function property(name, _ref2) {
-        var level = _ref2.level,
-            code = _ref2.code,
-            projection = _ref2.projection;
+      value: function property(name, _ref3) {
+        var level = _ref3.level,
+            code = _ref3.code,
+            projection = _ref3.projection;
         var geometries = this.data.objects.geography.geometries;
 
         if (level) {
-          geometries = geometries.filter(function (geometry) {
-            return includesGeometryObject(level, code, geometry);
+          geometries = filterGeometryObjects(geometries, {
+            includes: defineProperty({}, level, code)
           });
         }
         var merged = merge(this.data, geometries);
@@ -5210,17 +5245,17 @@
       }
     }, {
       key: 'poleOfInaccessibility',
-      value: function poleOfInaccessibility(_ref3) {
-        var level = _ref3.level,
-            code = _ref3.code,
-            projection = _ref3.projection,
-            _ref3$precision = _ref3.precision,
-            precision = _ref3$precision === undefined ? 0.01 : _ref3$precision;
+      value: function poleOfInaccessibility(_ref4) {
+        var level = _ref4.level,
+            code = _ref4.code,
+            projection = _ref4.projection,
+            _ref4$precision = _ref4.precision,
+            precision = _ref4$precision === undefined ? 0.01 : _ref4$precision;
         var geometries = this.data.objects.geography.geometries;
 
         if (level) {
-          geometries = geometries.filter(function (geometry) {
-            return includesGeometryObject(level, code, geometry);
+          geometries = filterGeometryObjects(geometries, {
+            includes: defineProperty({}, level, code)
           });
         }
         geometries = merge(this.data, geometries);
@@ -5281,9 +5316,9 @@
       }
     }, {
       key: 'shapes',
-      value: function shapes(_ref4) {
-        var geometries = _ref4.geometries,
-            projection = _ref4.projection;
+      value: function shapes(_ref5) {
+        var geometries = _ref5.geometries,
+            projection = _ref5.projection;
         var errors = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
         var feature$$1 = merge(this.data, geometries);
@@ -5291,9 +5326,9 @@
       }
     }, {
       key: 'shapeGeometry',
-      value: function shapeGeometry(_ref5) {
-        var geometries = _ref5.geometries,
-            projection = _ref5.projection;
+      value: function shapeGeometry(_ref6) {
+        var geometries = _ref6.geometries,
+            projection = _ref6.projection;
         var errors = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
         var feature$$1 = merge(this.data, geometries);
@@ -5302,9 +5337,9 @@
       }
     }, {
       key: 'outlineGeometry',
-      value: function outlineGeometry(_ref6) {
-        var geometries = _ref6.geometries,
-            projection = _ref6.projection;
+      value: function outlineGeometry(_ref7) {
+        var geometries = _ref7.geometries,
+            projection = _ref7.projection;
         var errors = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
         var feature$$1 = merge(this.data, geometries);
@@ -5313,10 +5348,10 @@
       }
     }, {
       key: 'borderGeometry',
-      value: function borderGeometry(_ref7) {
-        var object = _ref7.object,
-            filter$$1 = _ref7.filter,
-            projection = _ref7.projection;
+      value: function borderGeometry(_ref8) {
+        var object = _ref8.object,
+            filter$$1 = _ref8.filter,
+            projection = _ref8.projection;
         var errors = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
         var feature$$1 = mesh(this.data, object, filter$$1);
@@ -5338,14 +5373,15 @@
       }
     }, {
       key: 'geographyShapes',
-      value: function geographyShapes(_ref8) {
-        var projection = _ref8.projection;
+      value: function geographyShapes(_ref9) {
+        var projection = _ref9.projection,
+            excludes = _ref9.excludes;
         var geometries = this.data.objects.geography.geometries;
 
         var errors = [];
         var result = this.shapes({
           projection: projection,
-          geometries: geometries
+          geometries: filterGeometryObjects(geometries, { excludes: excludes })
         }, errors);
         if (errors.length !== 0) {
           console.warn('Unable to project ' + errors.length + ' polygons');
@@ -5354,14 +5390,15 @@
       }
     }, {
       key: 'geographyShapeGeometry',
-      value: function geographyShapeGeometry(_ref9) {
-        var projection = _ref9.projection;
+      value: function geographyShapeGeometry(_ref10) {
+        var projection = _ref10.projection,
+            excludes = _ref10.excludes;
         var geometries = this.data.objects.geography.geometries;
 
         var errors = [];
         var result = this.shapeGeometry({
           projection: projection,
-          geometries: geometries
+          geometries: filterGeometryObjects(geometries, { excludes: excludes })
         }, errors);
         if (errors.length !== 0) {
           console.warn('Unable to project ' + errors.length + ' polygons');
@@ -5370,14 +5407,15 @@
       }
     }, {
       key: 'geographyOutlineGeometry',
-      value: function geographyOutlineGeometry(_ref10) {
-        var projection = _ref10.projection;
+      value: function geographyOutlineGeometry(_ref11) {
+        var projection = _ref11.projection,
+            excludes = _ref11.excludes;
         var geometries = this.data.objects.geography.geometries;
 
         var errors = [];
         var result = this.outlineGeometry({
           projection: projection,
-          geometries: geometries
+          geometries: filterGeometryObjects(geometries, { excludes: excludes })
         }, errors);
         if (errors.length !== 0) {
           console.warn('Unable to project ' + errors.length + ' polygons');
@@ -5386,14 +5424,20 @@
       }
     }, {
       key: 'geographySubdivisionGeometry',
-      value: function geographySubdivisionGeometry(_ref11) {
-        var projection = _ref11.projection;
+      value: function geographySubdivisionGeometry(_ref12) {
+        var projection = _ref12.projection,
+            excludes = _ref12.excludes;
+        var geometries = this.data.objects.geography.geometries;
 
+        var object = {
+          type: 'GeometryCollection',
+          geometries: filterGeometryObjects(geometries, { excludes: excludes })
+        };
         var key = codePropertyKeyForLevel(this.levels[0]);
         var errors = [];
         var result = this.borderGeometry({
           projection: projection,
-          object: this.data.objects.geography,
+          object: object,
           filter: function filter$$1(a, b) {
             return a.properties[key] !== b.properties[key];
           }
@@ -5407,17 +5451,19 @@
       }
     }, {
       key: 'divisionShapes',
-      value: function divisionShapes(_ref12) {
-        var level = _ref12.level,
-            code = _ref12.code,
-            projection = _ref12.projection;
+      value: function divisionShapes(_ref13) {
+        var level = _ref13.level,
+            code = _ref13.code,
+            projection = _ref13.projection,
+            excludes = _ref13.excludes;
         var geometries = this.data.objects.geography.geometries;
 
         var errors = [];
         var result = this.shapes({
           projection: projection,
-          geometries: geometries.filter(function (geometry) {
-            return includesGeometryObject(level, code, geometry);
+          geometries: filterGeometryObjects(geometries, {
+            includes: defineProperty({}, level, code),
+            excludes: excludes
           })
         }, errors);
         if (errors.length !== 0) {
@@ -5427,17 +5473,19 @@
       }
     }, {
       key: 'divisionShapeGeometry',
-      value: function divisionShapeGeometry(_ref13) {
-        var level = _ref13.level,
-            code = _ref13.code,
-            projection = _ref13.projection;
+      value: function divisionShapeGeometry(_ref14) {
+        var level = _ref14.level,
+            code = _ref14.code,
+            projection = _ref14.projection,
+            excludes = _ref14.excludes;
         var geometries = this.data.objects.geography.geometries;
 
         var errors = [];
         var result = this.shapeGeometry({
           projection: projection,
-          geometries: geometries.filter(function (geometry) {
-            return includesGeometryObject(level, code, geometry);
+          geometries: filterGeometryObjects(geometries, {
+            includes: defineProperty({}, level, code),
+            excludes: excludes
           })
         }, errors);
         if (errors.length !== 0) {
@@ -5447,17 +5495,19 @@
       }
     }, {
       key: 'divisionOutlineGeometry',
-      value: function divisionOutlineGeometry(_ref14) {
-        var level = _ref14.level,
-            code = _ref14.code,
-            projection = _ref14.projection;
+      value: function divisionOutlineGeometry(_ref15) {
+        var level = _ref15.level,
+            code = _ref15.code,
+            projection = _ref15.projection,
+            excludes = _ref15.excludes;
         var geometries = this.data.objects.geography.geometries;
 
         var errors = [];
         var result = this.outlineGeometry({
           projection: projection,
-          geometries: geometries.filter(function (geometry) {
-            return includesGeometryObject(level, code, geometry);
+          geometries: filterGeometryObjects(geometries, {
+            includes: defineProperty({}, level, code),
+            excludes: excludes
           })
         }, errors);
         if (errors.length !== 0) {
@@ -5467,12 +5517,13 @@
       }
     }, {
       key: 'divisionBorderGeometry',
-      value: function divisionBorderGeometry(_ref15) {
+      value: function divisionBorderGeometry(_ref16) {
         var _this = this;
 
-        var level = _ref15.level,
-            code = _ref15.code,
-            projection = _ref15.projection;
+        var level = _ref16.level,
+            code = _ref16.code,
+            projection = _ref16.projection,
+            excludes = _ref16.excludes;
 
         var superlevel = function () {
           var index = _this.levels.indexOf(level);
@@ -5487,15 +5538,16 @@
         // Reduce geometries to find neighbors if superlevel exists
         var geometries = this.data.objects.geography.geometries;
 
+        geometries = filterGeometryObjects(geometries, { excludes: excludes });
         if (superlevel) {
-          geometries = geometries.filter(function (geometry) {
-            return includesGeometryObject(superlevel, code, geometry);
+          geometries = filterGeometryObjects(geometries, {
+            includes: defineProperty({}, superlevel, code)
           });
         }
 
         // Remember the indices of geometries in this division
-        var indices = geometries.filter(function (geometry) {
-          return includesGeometryObject(level, code, geometry);
+        var indices = filterGeometryObjects(geometries, {
+          includes: defineProperty({}, level, code)
         }).map(function (geometry) {
           return geometries.indexOf(geometry);
         });
@@ -5532,16 +5584,18 @@
       }
     }, {
       key: 'divisionSubdivisionGeometry',
-      value: function divisionSubdivisionGeometry(_ref16) {
-        var level = _ref16.level,
-            code = _ref16.code,
-            projection = _ref16.projection;
+      value: function divisionSubdivisionGeometry(_ref17) {
+        var level = _ref17.level,
+            code = _ref17.code,
+            projection = _ref17.projection,
+            excludes = _ref17.excludes;
         var geometries = this.data.objects.geography.geometries;
 
         var object = {
           type: 'GeometryCollection',
-          geometries: geometries.filter(function (geometry) {
-            return includesGeometryObject(level, code, geometry);
+          geometries: filterGeometryObjects(geometries, {
+            includes: defineProperty({}, level, code),
+            excludes: excludes
           })
         };
         var errors = [];
