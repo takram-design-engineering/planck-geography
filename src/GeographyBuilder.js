@@ -15,9 +15,31 @@ function codePropertyKeyForLevel (level) {
   return `${level}Code`
 }
 
-function includesGeometryObject (level, code, geometryObject) {
-  const key = codePropertyKeyForLevel(level)
-  return geometryObject.properties[key] === code
+function filterGeometryObjects (geometryObjects, { includes, excludes }) {
+  let result = geometryObjects
+  if (includes) {
+    const levels = Object.keys(includes)
+    for (let i = 0; i < levels.length; ++i) {
+      const level = levels[i]
+      const key = codePropertyKeyForLevel(level)
+      const codes = [].concat(includes[level])
+      result = result.filter(geometryObject => {
+        return codes.includes(geometryObject.properties[key])
+      })
+    }
+  }
+  if (excludes) {
+    const levels = Object.keys(excludes)
+    for (let i = 0; i < levels.length; ++i) {
+      const level = levels[i]
+      const key = codePropertyKeyForLevel(level)
+      const codes = [].concat(excludes[level])
+      result = result.filter(geometryObject => {
+        return !codes.includes(geometryObject.properties[key])
+      })
+    }
+  }
+  return result
 }
 
 function triangulateShape (contour, holes) {
@@ -154,8 +176,8 @@ export default class GeographyBuilder {
   property (name, { level, code, projection }) {
     let { geometries } = this.data.objects.geography
     if (level) {
-      geometries = geometries.filter(geometry => {
-        return includesGeometryObject(level, code, geometry)
+      geometries = filterGeometryObjects(geometries, {
+        includes: { [level]: code }
       })
     }
     const merged = topojson.merge(this.data, geometries)
@@ -182,8 +204,8 @@ export default class GeographyBuilder {
   }) {
     let { geometries } = this.data.objects.geography
     if (level) {
-      geometries = geometries.filter(geometry => {
-        return includesGeometryObject(level, code, geometry)
+      geometries = filterGeometryObjects(geometries, {
+        includes: { [level]: code }
       })
     }
     geometries = topojson.merge(this.data, geometries)
@@ -277,12 +299,12 @@ export default class GeographyBuilder {
     return convertLinesToGeometry(lines)
   }
 
-  geographyShapes ({ projection }) {
+  geographyShapes ({ projection, excludes }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapes({
       projection,
-      geometries
+      geometries: filterGeometryObjects(geometries, { excludes })
     }, errors)
     if (errors.length !== 0) {
       console.warn(`Unable to project ${errors.length} polygons`)
@@ -290,12 +312,12 @@ export default class GeographyBuilder {
     return result
   }
 
-  geographyShapeGeometry ({ projection }) {
+  geographyShapeGeometry ({ projection, excludes }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapeGeometry({
       projection,
-      geometries
+      geometries: filterGeometryObjects(geometries, { excludes })
     }, errors)
     if (errors.length !== 0) {
       console.warn(`Unable to project ${errors.length} polygons`)
@@ -303,12 +325,12 @@ export default class GeographyBuilder {
     return result
   }
 
-  geographyOutlineGeometry ({ projection }) {
+  geographyOutlineGeometry ({ projection, excludes }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.outlineGeometry({
       projection,
-      geometries
+      geometries: filterGeometryObjects(geometries, { excludes })
     }, errors)
     if (errors.length !== 0) {
       console.warn(`Unable to project ${errors.length} polygons`)
@@ -316,12 +338,17 @@ export default class GeographyBuilder {
     return result
   }
 
-  geographySubdivisionGeometry ({ projection }) {
+  geographySubdivisionGeometry ({ projection, excludes }) {
+    const { geometries } = this.data.objects.geography
+    const object = {
+      type: 'GeometryCollection',
+      geometries: filterGeometryObjects(geometries, { excludes })
+    }
     const key = codePropertyKeyForLevel(this.levels[0])
     const errors = []
     const result = this.borderGeometry({
       projection,
-      object: this.data.objects.geography,
+      object,
       filter: (a, b) => a.properties[key] !== b.properties[key]
     }, errors)
     if (errors.length !== 0) {
@@ -332,13 +359,14 @@ export default class GeographyBuilder {
     return result
   }
 
-  divisionShapes ({ level, code, projection }) {
+  divisionShapes ({ level, code, projection, excludes }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapes({
       projection,
-      geometries: geometries.filter(geometry => {
-        return includesGeometryObject(level, code, geometry)
+      geometries: filterGeometryObjects(geometries, {
+        includes: { [level]: code },
+        excludes
       })
     }, errors)
     if (errors.length !== 0) {
@@ -347,13 +375,14 @@ export default class GeographyBuilder {
     return result
   }
 
-  divisionShapeGeometry ({ level, code, projection }) {
+  divisionShapeGeometry ({ level, code, projection, excludes }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.shapeGeometry({
       projection,
-      geometries: geometries.filter(geometry => {
-        return includesGeometryObject(level, code, geometry)
+      geometries: filterGeometryObjects(geometries, {
+        includes: { [level]: code },
+        excludes
       })
     }, errors)
     if (errors.length !== 0) {
@@ -362,13 +391,14 @@ export default class GeographyBuilder {
     return result
   }
 
-  divisionOutlineGeometry ({ level, code, projection }) {
+  divisionOutlineGeometry ({ level, code, projection, excludes }) {
     const { geometries } = this.data.objects.geography
     const errors = []
     const result = this.outlineGeometry({
       projection,
-      geometries: geometries.filter(geometry => {
-        return includesGeometryObject(level, code, geometry)
+      geometries: filterGeometryObjects(geometries, {
+        includes: { [level]: code },
+        excludes
       })
     }, errors)
     if (errors.length !== 0) {
@@ -377,7 +407,7 @@ export default class GeographyBuilder {
     return result
   }
 
-  divisionBorderGeometry ({ level, code, projection }) {
+  divisionBorderGeometry ({ level, code, projection, excludes }) {
     const superlevel = (() => {
       const index = this.levels.indexOf(level)
       if (index === -1) {
@@ -390,20 +420,19 @@ export default class GeographyBuilder {
 
     // Reduce geometries to find neighbors if superlevel exists
     let { geometries } = this.data.objects.geography
+    geometries = filterGeometryObjects(geometries, { excludes })
     if (superlevel) {
-      geometries = geometries.filter(geometry => {
-        return includesGeometryObject(superlevel, code, geometry)
+      geometries = filterGeometryObjects(geometries, {
+        includes: { [superlevel]: code }
       })
     }
 
     // Remember the indices of geometries in this division
-    const indices = geometries
-      .filter(geometry => {
-        return includesGeometryObject(level, code, geometry)
-      })
-      .map(geometry => {
-        return geometries.indexOf(geometry)
-      })
+    const indices = filterGeometryObjects(geometries, {
+      includes: { [level]: code }
+    }).map(geometry => {
+      return geometries.indexOf(geometry)
+    })
 
     // Construct object with adjacent geometries
     const neighbors = topojson.neighbors(geometries)
@@ -436,12 +465,13 @@ export default class GeographyBuilder {
     return result
   }
 
-  divisionSubdivisionGeometry ({ level, code, projection }) {
+  divisionSubdivisionGeometry ({ level, code, projection, excludes }) {
     const { geometries } = this.data.objects.geography
     const object = {
       type: 'GeometryCollection',
-      geometries: geometries.filter(geometry => {
-        return includesGeometryObject(level, code, geometry)
+      geometries: filterGeometryObjects(geometries, {
+        includes: { [level]: code },
+        excludes
       })
     }
     const errors = []
