@@ -1,8 +1,6 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-/* eslint-disable no-console */
-
 import { createGzip } from 'zlib'
 import { promisify } from 'util'
 import * as shapefile from 'shapefile'
@@ -15,12 +13,11 @@ import mapshaper from 'mapshaper'
 import mkdirp from 'mkdirp'
 import path from 'path'
 
-const exists = promisify(fs.exists)
 const mkdir = promisify(mkdirp)
 const stat = promisify(fs.stat)
 const writeFile = promisify(fs.writeFile)
 
-async function extractShapefile(input) {
+async function extractShapefile (input) {
   console.log(chalk.cyan('Extracting shapefile'))
 
   const shapefile = await decompress(input)
@@ -33,8 +30,8 @@ async function extractShapefile(input) {
   return { shp, dbf }
 }
 
-async function readShapefileFromFile(file, directory) {
-  if (!await exists(file)) {
+async function readShapefileFromFile (file, directory) {
+  if (!await fs.existsSync(file)) {
     throw new Error(`No such file or directory: ${file}`)
   }
   if ((await stat(file)).isDirectory()) {
@@ -43,14 +40,14 @@ async function readShapefileFromFile(file, directory) {
   return extractShapefile(file)
 }
 
-async function readShapefileFromUrl(url) {
+async function readShapefileFromUrl (url) {
   console.log(chalk.cyan('Downloading shapefile archive'))
 
   const buffer = await download(url)
   return extractShapefile(buffer)
 }
 
-async function convertToTopoJSON({ shp, dbf }, method, encoding) {
+async function convertToTopoJSON ({ shp, dbf }, method, encoding) {
   console.log(chalk.cyan('Converting shapefile to TopoJSON'))
 
   if (method === 'topojson') {
@@ -60,30 +57,30 @@ async function convertToTopoJSON({ shp, dbf }, method, encoding) {
   if (method === 'mapshaper') {
     const result = await promisify(mapshaper.applyCommands)([
       `-i input.shp name=geography encoding=${encoding}`,
-      '-o output.json format=topojson',
+      '-o output.json format=topojson'
     ].join(' '), {
       'input.shp': shp,
-      'input.dbf': dbf,
+      'input.dbf': dbf
     })
     return JSON.parse(result['output.json'])
   }
   throw new Error(`Unknown conversion method: ${method}`)
 }
 
-async function simplifyTopoJSON(data) {
+async function simplifyTopoJSON (data) {
   console.log(chalk.cyan('Simplifying TopoJSON'))
 
   const result = await promisify(mapshaper.applyCommands)([
     '-i input.json',
     '-simplify weighted 25%',
-    '-o output.json format=topojson',
+    '-o output.json format=topojson'
   ].join(' '), {
-    'input.json': data,
+    'input.json': data
   })
   return JSON.parse(result['output.json'])
 }
 
-function createCatalog(data, identifier, levels) {
+function createCatalog (data, identifier, levels) {
   console.log(chalk.cyan('Creating catalog'))
 
   const { geometries } = data.objects.geography
@@ -123,15 +120,15 @@ function createCatalog(data, identifier, levels) {
           code,
           name: geometry.properties[`${level}Name`],
           localizedName: geometry.properties[`localized${capitalLevel}Name`],
-          neighbors,
+          neighbors
         }
         return properties.concat(property)
-      }, []),
+      }, [])
     }
   }, { identifier })
 }
 
-function writeGzip(file, data) {
+function writeGzip (file, data) {
   return new Promise(resolve => {
     const stream = fs.createWriteStream(`${file}.gz`)
     const gzip = createGzip()
@@ -142,7 +139,7 @@ function writeGzip(file, data) {
   })
 }
 
-async function writeFiles(file, data) {
+async function writeFiles (file, data) {
   const json = JSON.stringify(data)
   await Promise.all([
     (async () => {
@@ -152,11 +149,11 @@ async function writeFiles(file, data) {
     (async () => {
       await writeGzip(file, json)
       console.log(chalk.green(`Written ${file}.gz`))
-    })(),
+    })()
   ])
 }
 
-async function main({
+async function main ({
   url,
   file,
   output,
@@ -164,7 +161,7 @@ async function main({
   transform,
   levels = [],
   method = 'topojson',
-  encoding = 'utf-8',
+  encoding = 'utf-8'
 }) {
   const outputDir = path.resolve(output)
   await mkdir(outputDir)
@@ -202,7 +199,7 @@ async function main({
   await writeFiles(path.resolve(outputDir, `${identifier}.json`), catalog)
 }
 
-export default async function setup(options) {
+export default async function setup (options) {
   const levels = options.levels.split(',')
   await main({ ...options, levels })
 }

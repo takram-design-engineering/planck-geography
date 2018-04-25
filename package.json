@@ -29,12 +29,14 @@
     "test:node": "mocha --recursive test/unit",
     "test:browser": "browser-sync start --server . --files dist --startPath test --no-open --no-notify",
     "test:cloud": "mocha test/setup.js",
-    "lint": "npm-run-all lint:main lint:test",
+    "lint": "npm-run-all lint:main lint:test lint:data",
     "lint:main": "standard -v *.js src/*.js src/**/*.js",
     "lint:test": "standard -v --env mocha test/*.js test/**/*.js",
-    "lint-fix": "npm-run-all lint-fix:main lint-fix:test",
+    "lint:data": "standard -v data/*.js data/**/*.js",
+    "lint-fix": "npm-run-all lint-fix:main lint-fix:test lint-fix:data",
     "lint-fix:main": "standard -v --fix *.js src/*.js src/**/*.js",
     "lint-fix:test": "standard -v --fix --env mocha test/*.js test/**/*.js",
+    "lint-fix:data": "standard -v --fix data/*.js data/**/*.js",
     "prewatch": "npm-run-all main:compile test:compile",
     "watch": "npm-run-all --parallel test:node watch:main watch:test watch:rollup watch:webpack test:browser",
     "watch:main": "nodemon -C --watch rollup.config.js --watch src --exec 'npm-run-all main:compile test:node'",
@@ -48,7 +50,7 @@
     "data-project": "npm-run-all --parallel data-project:japan data-project:us data-project:world",
     "data-project:japan": "node data/index.js project --output=dist/data --identifier=japan --levels=prefecture,municipality --name=TransverseMercator --origin=[137.2,37] --rotates=true",
     "data-project:us": "node data/index.js project --output=dist/data --identifier=us --levels=state,county --name=AlbersUsa --origin=[-99.5,39.5] --rotates=false",
-    "data-project:world": "node data/index.js project --output=dist/data --identifier=world --levels=country --name=PeirceQuincuncial --origin=[45,90] --rotates=true"
+    "data-project:world": "node data/index.js project --output=dist/data --identifier=world --levels=country --excludes=country:ATA --name=PeirceQuincuncial --origin=[45,90] --rotates=true"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
