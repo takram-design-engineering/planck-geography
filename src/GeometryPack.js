@@ -3,9 +3,9 @@
 
 import * as Three from 'three'
 
-import Global from '@takram/planck-core/src/Global'
+import { globalScope } from '@takram/planck-core'
 
-function packBufferGeometry(geometry, byteOffset = 0) {
+function packBufferGeometry (geometry, byteOffset = 0) {
   const data = geometry.toJSON()
   const scope = data.data || {}
   const buffers = []
@@ -32,7 +32,7 @@ function packBufferGeometry(geometry, byteOffset = 0) {
   return [data, buffers, byteLength]
 }
 
-function packBufferGeometries(geometries) {
+function packBufferGeometries (geometries) {
   if (Array.isArray(geometries)) {
     const data = []
     const buffers = []
@@ -41,7 +41,7 @@ function packBufferGeometries(geometries) {
       const [
         eachData,
         eachBuffers,
-        eachByteOffset,
+        eachByteOffset
       ] = packBufferGeometry(geometries[i], byteOffset)
       data.push(eachData)
       buffers.push(...eachBuffers)
@@ -58,7 +58,7 @@ function packBufferGeometries(geometries) {
     const [
       eachData,
       eachBuffers,
-      eachByteOffset,
+      eachByteOffset
     ] = packBufferGeometry(geometries[name], byteOffset)
     data[name] = eachData
     buffers.push(...eachBuffers)
@@ -67,11 +67,11 @@ function packBufferGeometries(geometries) {
   return [data, buffers, byteOffset]
 }
 
-function unpackBufferGeometry(data, buffer) {
+function unpackBufferGeometry (data, buffer) {
   const copy = { ...data, data: { ...data.data } }
   if (copy.data.index) {
     const { type } = copy.data.index
-    const view = new Global.scope[type](buffer, ...copy.data.index.array)
+    const view = new globalScope[type](buffer, ...copy.data.index.array)
     copy.data.index = { ...copy.data.index, array: view }
   }
   if (copy.data.attributes) {
@@ -81,7 +81,7 @@ function unpackBufferGeometry(data, buffer) {
       const name = names[i]
       const attribute = copy.data.attributes[name]
       const { type } = attribute
-      const view = new Global.scope[type](buffer, ...attribute.array)
+      const view = new globalScope[type](buffer, ...attribute.array)
       attributes[name] = { ...attribute, array: view }
     }
     copy.data.attributes = attributes
@@ -89,7 +89,7 @@ function unpackBufferGeometry(data, buffer) {
   return new Three.BufferGeometryLoader().parse(copy)
 }
 
-function mergeBuffers(buffers, byteLength) {
+function mergeBuffers (buffers, byteLength) {
   const buffer = new ArrayBuffer(byteLength)
   const view = new Uint8Array(buffer)
   for (let i = 0; i < buffers.length; ++i) {
@@ -100,23 +100,23 @@ function mergeBuffers(buffers, byteLength) {
 }
 
 export default {
-  packBufferGeometry(geometry) {
+  packBufferGeometry (geometry) {
     const [data, buffers, byteLength] = packBufferGeometry(geometry)
     const buffer = mergeBuffers(buffers, byteLength)
     return [data, buffer]
   },
 
-  packBufferGeometries(geometries) {
+  packBufferGeometries (geometries) {
     const [data, buffers, byteLength] = packBufferGeometries(geometries)
     const buffer = mergeBuffers(buffers, byteLength)
     return [data, buffer]
   },
 
-  unpackBufferGeometry(data, buffer) {
+  unpackBufferGeometry (data, buffer) {
     return unpackBufferGeometry(data, buffer)
   },
 
-  unpackBufferGeometries(data, buffer) {
+  unpackBufferGeometries (data, buffer) {
     if (Array.isArray(data)) {
       const result = []
       for (let index = 0; index < data.length; ++index) {
@@ -131,5 +131,5 @@ export default {
       result[name] = unpackBufferGeometry(data[name], buffer)
     }
     return result
-  },
+  }
 }

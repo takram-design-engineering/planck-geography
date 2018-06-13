@@ -1,24 +1,20 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-import * as d3Array from 'd3-array'
-import * as d3Geo from 'd3-geo'
+import * as d3 from 'd3'
 import * as d3GeoProjection from 'd3-geo-projection'
 import suncalc from 'suncalc'
 
-import Hash from '@takram/planck-core/src/Hash'
-import Namespace from '@takram/planck-core/src/Namespace'
-
-const d3 = Object.assign({}, d3Array, d3Geo, d3GeoProjection)
+import { Hash, Namespace } from '@takram/planck-core'
 
 export const internal = Namespace('Projection')
 
 export default class Projection {
-  constructor({
+  constructor ({
     name = 'Equirectangular',
     scale = 10000,
     origin = [0, 0],
-    rotates = [true, true],
+    rotates = [true, true]
   } = {}) {
     const scope = internal(this)
     scope.name = name
@@ -36,9 +32,8 @@ export default class Projection {
     scope.projector = this.projector
   }
 
-  project(point, flip = false) {
-    const scope = internal(this)
-    const result = scope.projector(point)
+  project (point, flip = false) {
+    const result = internal(this).projector(point)
     if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
       throw new Error(`Could not project point [${point}]`)
     }
@@ -49,12 +44,11 @@ export default class Projection {
     return result
   }
 
-  unproject(point, flip = false) {
-    const scope = internal(this)
-    const result = scope.projector.invert([
+  unproject (point, flip = false) {
+    const result = internal(this).projector.invert([
       point[0],
       // Avoid negating zero
-      flip ? (-point[1] || 0) : point[1],
+      flip ? (-point[1] || 0) : point[1]
     ])
     if (Number.isNaN(result[0]) || Number.isNaN(result[1])) {
       throw new Error(`Could not unproject point [${point}]`)
@@ -62,9 +56,10 @@ export default class Projection {
     return result
   }
 
-  get projector() {
-    const projection = d3[`geo${this.name}`]
-    if (projection === undefined) {
+  get projector () {
+    const key = `geo${this.name}`
+    const projection = d3[key] || d3GeoProjection[key]
+    if (projection == null) {
       throw new Error(`Could not find projection for name "${this.name}"`)
     }
     const projector = projection()
@@ -87,50 +82,45 @@ export default class Projection {
     return projector
   }
 
-  get path() {
-    const scope = internal(this)
-    return d3.geoPath().projection(scope.projector)
+  get path () {
+    return d3.geoPath().projection(internal(this).projector)
   }
 
-  sun(time) {
+  sun (time) {
     const { origin } = this
     return suncalc.getPosition(time, origin[1], origin[0])
   }
 
-  moon(time) {
+  moon (time) {
     const { origin } = this
     return suncalc.getMoonPosition(time, origin[1], origin[0])
   }
 
-  get name() {
-    const scope = internal(this)
-    return scope.name
+  get name () {
+    return internal(this).name
   }
 
-  get scale() {
-    const scope = internal(this)
-    return scope.scale
+  get scale () {
+    return internal(this).scale
   }
 
-  get origin() {
-    const scope = internal(this)
-    return [...scope.origin]
+  get origin () {
+    return [...internal(this).origin]
   }
 
-  get rotates() {
-    const scope = internal(this)
-    return [...scope.rotates]
+  get rotates () {
+    return [...internal(this).rotates]
   }
 
-  get hash() {
+  get hash () {
     const scope = internal(this)
-    if (scope.hash === undefined) {
+    if (scope.hash == null) {
       scope.hash = Hash(this.toJSON())
     }
     return scope.hash
   }
 
-  equals(other) {
+  equals (other) {
     return (
       this.name === other.name &&
       this.scale === other.scale &&
@@ -140,12 +130,12 @@ export default class Projection {
       this.rotates[1] === other.rotates[1])
   }
 
-  toJSON() {
+  toJSON () {
     return {
       name: this.name,
       scale: this.scale,
       origin: this.origin,
-      rotates: this.rotates,
+      rotates: this.rotates
     }
   }
 }

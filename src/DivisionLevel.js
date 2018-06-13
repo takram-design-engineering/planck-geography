@@ -1,9 +1,7 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-import FilePath from '@takram/planck-core/src/FilePath'
-import Namespace from '@takram/planck-core/src/Namespace'
-import Request from '@takram/planck-core/src/Request'
+import { FilePath, Namespace, Request } from '@takram/planck-core'
 
 import GeometryPack from './GeometryPack'
 import Division from './Division'
@@ -11,7 +9,7 @@ import Division from './Division'
 export const internal = Namespace('DivisionLevel')
 
 export default class DivisionLevel {
-  constructor(identifier, coder) {
+  constructor (identifier, coder) {
     const scope = internal(this)
     scope.identifier = identifier
     scope.coder = coder
@@ -20,70 +18,66 @@ export default class DivisionLevel {
     scope.geometries = {}
   }
 
-  init(geography) {
-    const scope = internal(this)
-    scope.geography = geography
+  init (geography) {
+    internal(this).geography = geography
   }
 
-  get identifier() {
-    const scope = internal(this)
-    return scope.identifier
+  get identifier () {
+    return internal(this).identifier
   }
 
-  get coder() {
-    const scope = internal(this)
-    return scope.coder
+  get coder () {
+    return internal(this).coder
   }
 
-  get geography() {
-    const scope = internal(this)
-    return scope.geography
+  get geography () {
+    return internal(this).geography
   }
 
-  get data() {
+  get data () {
     const scope = internal(this)
-    if (scope.data === undefined) {
+    if (scope.data == null) {
       scope.data = this.geography.data[this.identifier]
     }
     return scope.data
   }
 
-  division(code) {
+  division (code) {
     const scope = internal(this)
     let division = scope.divisions[code]
-    if (division === undefined) {
+    if (division == null) {
       division = new Division(this, code)
       scope.divisions[code] = division
     }
     return division
   }
 
-  get divisions() {
+  get divisions () {
     const scope = internal(this)
     scope.divisions = {
       ...scope.divisions,
       ...this.data.reduce((divisions, data) => {
         const { code } = data
-        if (scope.divisions[code] === undefined) {
+        if (scope.divisions[code] == null) {
           return { ...divisions, [code]: new Division(this, code) }
         }
         return divisions
-      }, {}),
+      }, {})
     }
     return Object.values(scope.divisions)
   }
 
-  get codes() {
+  get codes () {
     const scope = internal(this)
-    if (scope.codes === undefined) {
+    if (scope.codes == null) {
       scope.codes = this.data.map(data => data.code)
     }
     return [...scope.codes]
   }
 
-  get superlevel() {
+  get superlevel () {
     const scope = internal(this)
-    if (scope.superlevel === undefined) {
+    if (scope.superlevel == null) {
       const { levels } = this.geography
       const index = levels.indexOf(this)
       if (index === -1) {
@@ -94,9 +88,9 @@ export default class DivisionLevel {
     return scope.superlevel
   }
 
-  get sublevel() {
+  get sublevel () {
     const scope = internal(this)
-    if (scope.sublevel === undefined) {
+    if (scope.sublevel == null) {
       const { levels } = this.geography
       const index = levels.indexOf(this)
       if (index === -1) {
@@ -107,50 +101,50 @@ export default class DivisionLevel {
     return scope.sublevel
   }
 
-  async properties(projection) {
+  async properties (projection) {
     const scope = internal(this)
     const hash = projection ? projection.hash : null
-    if (scope.properties[hash] === undefined) {
+    if (scope.properties[hash] == null) {
       const path = FilePath.join(
         FilePath.dirname(this.geography.path),
         hash || '',
         this.geography.identifier,
         this.identifier,
-        'properties.json',
+        'properties.json'
       )
       scope.properties[hash] = Request.json(path, { local: true })
     }
     return scope.properties[hash]
   }
 
-  async geometries(name, projection) {
+  async geometries (name, projection) {
     const scope = internal(this)
     const hash = projection ? projection.hash : null
     let geometries = scope.geometries[hash]
-    if (geometries === undefined) {
+    if (geometries == null) {
       geometries = {}
       scope.geometries[hash] = geometries
     }
-    if (geometries[name] === undefined) {
+    if (geometries[name] == null) {
       geometries[name] = this.requestGeometries(name, projection)
     }
     return geometries[name]
   }
 
-  async requestGeometries(name, projection) {
+  async requestGeometries (name, projection) {
     const path = FilePath.join(
       FilePath.dirname(this.geography.path),
       projection.hash,
       this.geography.identifier,
       this.identifier,
-      name,
+      name
     )
     let data
     let buffer
     try {
       [data, buffer] = await Promise.all([
         Request.json(`${path}.json`),
-        Request.buffer(`${path}.buffer`),
+        Request.buffer(`${path}.buffer`)
       ])
     } catch (error) {
       // TODO: Process in worker

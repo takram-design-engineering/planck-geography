@@ -5,9 +5,9 @@ import Geography from './Geography'
 import DivisionLevel from './DivisionLevel'
 
 export default class WorldGeography extends Geography {
-  constructor() {
+  constructor () {
     super('world', [
-      new DivisionLevel('country'),
+      new DivisionLevel('country')
     ])
   }
 }

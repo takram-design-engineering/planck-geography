@@ -11,7 +11,6 @@ import { JapanGeography, Projection } from '../..'
 
 const { expect } = chai
 
-// eslint-disable-next-line func-names
 describe('Division', function () {
   this.timeout(300000)
   if (Global.isNode) {
@@ -23,7 +22,7 @@ describe('Division', function () {
   const projection = new Projection({
     name: 'TransverseMercator',
     origin: [137.2, 37],
-    rotates: [true, true],
+    rotates: [true, true]
   })
 
   let division

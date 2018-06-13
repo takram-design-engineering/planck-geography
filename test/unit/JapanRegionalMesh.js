@@ -1,6 +1,8 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
+/* eslint-disable no-unused-expressions */
+
 import 'source-map-support/register'
 
 import chai from 'chai'
@@ -55,7 +57,7 @@ describe('JapanRegionalMesh', () => {
       const mesh = JapanRegionalMesh
       const coordinate = [
         139 + 42 / 60 + 53.1 / 3600,
-        35 + 42 / 60 + 2.8 / 3600,
+        35 + 42 / 60 + 2.8 / 3600
       ]
       expect(mesh.primary.code(coordinate)).equal(5339)
       expect(mesh.secondary.code(coordinate)).equal(533945)
@@ -70,7 +72,7 @@ describe('JapanRegionalMesh', () => {
     it('converts code to coordinates at the top-left corner of mesh', () => {
       const coordinate = [
         139 + 42 / 60 + 53.1 / 3600,
-        35 + 42 / 60 + 2.8 / 3600,
+        35 + 42 / 60 + 2.8 / 3600
       ]
       const eps = 0.000000001
       {
@@ -146,7 +148,7 @@ describe('JapanRegionalMesh', () => {
     it('converts code to coordinates at the center of mesh', () => {
       const coordinate = [
         139 + 42 / 60 + 53.1 / 3600,
-        35 + 42 / 60 + 2.8 / 3600,
+        35 + 42 / 60 + 2.8 / 3600
       ]
       const eps = 0.000000001
       {
@@ -157,35 +159,35 @@ describe('JapanRegionalMesh', () => {
         expect(center[1]).closeTo(coordinate[1], mesh.size[1])
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 - eps,
+          center[1] - mesh.size[1] / 2 - eps
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 + eps,
+          center[1] - mesh.size[1] / 2 + eps
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 - eps,
+          center[1] + mesh.size[1] / 2 - eps
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 + eps,
+          center[1] + mesh.size[1] / 2 + eps
         ])).not.equal(code)
       }
       {
@@ -196,35 +198,35 @@ describe('JapanRegionalMesh', () => {
         expect(center[1]).closeTo(coordinate[1], mesh.size[1])
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 - eps,
+          center[1] - mesh.size[1] / 2 - eps
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 + eps,
+          center[1] - mesh.size[1] / 2 + eps
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 - eps,
+          center[1] + mesh.size[1] / 2 - eps
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 + eps,
+          center[1] + mesh.size[1] / 2 + eps
         ])).not.equal(code)
       }
       {
@@ -235,35 +237,35 @@ describe('JapanRegionalMesh', () => {
         expect(center[1]).closeTo(coordinate[1], mesh.size[1])
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 - eps,
+          center[1] - mesh.size[1] / 2 - eps
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 + eps,
+          center[1] - mesh.size[1] / 2 + eps
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 - eps,
+          center[1] + mesh.size[1] / 2 - eps
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 + eps,
+          center[1] + mesh.size[1] / 2 + eps
         ])).not.equal(code)
       }
       {
@@ -274,35 +276,35 @@ describe('JapanRegionalMesh', () => {
         expect(center[1]).closeTo(coordinate[1], mesh.size[1])
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 - eps,
+          center[1] - mesh.size[1] / 2 - eps
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 + eps,
+          center[1] - mesh.size[1] / 2 + eps
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 - eps,
+          center[1] + mesh.size[1] / 2 - eps
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 + eps,
+          center[1] + mesh.size[1] / 2 + eps
         ])).not.equal(code)
       }
       {
@@ -313,35 +315,35 @@ describe('JapanRegionalMesh', () => {
         expect(center[1]).closeTo(coordinate[1], mesh.size[1])
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 - eps,
+          center[1] - mesh.size[1] / 2 - eps
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 + eps,
+          center[1] - mesh.size[1] / 2 + eps
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 - eps,
+          center[1] + mesh.size[1] / 2 - eps
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 + eps,
+          center[1] + mesh.size[1] / 2 + eps
         ])).not.equal(code)
       }
       {
@@ -352,35 +354,35 @@ describe('JapanRegionalMesh', () => {
         expect(center[1]).closeTo(coordinate[1], mesh.size[1])
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0] - mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 - eps,
+          center[1] - mesh.size[1] / 2 - eps
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] - mesh.size[1] / 2 + eps,
+          center[1] - mesh.size[1] / 2 + eps
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 - eps,
-          center[1],
+          center[1]
         ])).equal(code)
         expect(mesh.code([
           center[0] + mesh.size[0] / 2 + eps,
-          center[1],
+          center[1]
         ])).not.equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 - eps,
+          center[1] + mesh.size[1] / 2 - eps
         ])).equal(code)
         expect(mesh.code([
           center[0],
-          center[1] + mesh.size[1] / 2 + eps,
+          center[1] + mesh.size[1] / 2 + eps
         ])).not.equal(code)
       }
     })
