@@ -1,8 +1,6 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-/* eslint-disable no-console */
-
 import { createGzip } from 'zlib'
 import { promisify } from 'util'
 import chalk from 'chalk'
@@ -12,13 +10,12 @@ import path from 'path'
 
 import { GeographyBuilder, GeometryPack, Projection } from '../..'
 
-const exists = promisify(fs.exists)
 const mkdir = promisify(mkdirp)
 const stat = promisify(fs.stat)
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 
-function writeGzip(file, data) {
+function writeGzip (file, data) {
   return new Promise(resolve => {
     const stream = fs.createWriteStream(`${file}.gz`)
     const gzip = createGzip()
@@ -29,7 +26,7 @@ function writeGzip(file, data) {
   })
 }
 
-async function writeFiles(file, data) {
+async function writeFiles (file, data) {
   const json = JSON.stringify(data)
   await Promise.all([
     (async () => {
@@ -39,11 +36,11 @@ async function writeFiles(file, data) {
     (async () => {
       await writeGzip(file, json)
       console.log(chalk.green(`Written ${file}.gz`))
-    })(),
+    })()
   ])
 }
 
-async function writeGeometry(file, geometry) {
+async function writeGeometry (file, geometry) {
   const [data, array] = GeometryPack.packBufferGeometry(geometry)
   const json = JSON.stringify(data)
   const buffer = Buffer.from(array)
@@ -63,11 +60,11 @@ async function writeGeometry(file, geometry) {
     (async () => {
       await writeGzip(`${file}.buffer`, buffer)
       console.log(chalk.green(`Written ${file}.buffer.gz`))
-    })(),
+    })()
   ])
 }
 
-async function writeGeometries(file, geometries) {
+async function writeGeometries (file, geometries) {
   const [data, array] = GeometryPack.packBufferGeometries(geometries)
   const json = JSON.stringify(data)
   const buffer = Buffer.from(array)
@@ -87,22 +84,25 @@ async function writeGeometries(file, geometries) {
     (async () => {
       await writeGzip(`${file}.buffer`, buffer)
       console.log(chalk.green(`Written ${file}.buffer.gz`))
-    })(),
+    })()
   ])
 }
 
-async function writeGeographyProperties(options) {
-  const {
-    output, identifier, builder, projection,
-  } = options
+async function writeGeographyProperties ({
+  output,
+  identifier,
+  builder,
+  projection
+}) {
+  const options = { projection }
 
   // Create properties
   console.log(chalk.cyan('Creating properties for geography'))
   const properties = {
-    bounds: builder.bounds({ projection }),
-    area: builder.area({ projection }),
-    centroid: builder.centroid({ projection }),
-    poleOfInaccessibility: builder.poleOfInaccessibility({ projection }),
+    bounds: builder.bounds(options),
+    area: builder.area(options),
+    centroid: builder.centroid(options),
+    poleOfInaccessibility: builder.poleOfInaccessibility(options)
   }
 
   // Write properties
@@ -111,18 +111,22 @@ async function writeGeographyProperties(options) {
   await writeFiles(path.resolve(directory, 'properties.json'), properties)
 }
 
-async function writeGeographyGeometries(options) {
-  const {
-    output, identifier, builder, projection,
-  } = options
+async function writeGeographyGeometries ({
+  output,
+  identifier,
+  builder,
+  projection,
+  excludes
+}) {
+  const options = { projection, excludes }
 
   // Create geometries
   console.log(chalk.cyan('Creating shape for geography'))
-  const shape = builder.geographyShapeGeometry({ projection })
+  const shape = builder.geographyShapeGeometry(options)
   console.log(chalk.cyan('Creating outline for geography'))
-  const outline = builder.geographyOutlineGeometry({ projection })
+  const outline = builder.geographyOutlineGeometry(options)
   console.log(chalk.cyan('Creating subdivision for geography'))
-  const subdivision = builder.geographySubdivisionGeometry({ projection })
+  const subdivision = builder.geographySubdivisionGeometry(options)
 
   // Write geometries
   const directory = path.resolve(output, identifier)
@@ -130,21 +134,25 @@ async function writeGeographyGeometries(options) {
   await Promise.all([
     writeGeometry(path.resolve(directory, 'shape'), shape),
     writeGeometry(path.resolve(directory, 'outline'), outline),
-    writeGeometry(path.resolve(directory, 'subdivision'), subdivision),
+    writeGeometry(path.resolve(directory, 'subdivision'), subdivision)
   ])
 }
 
-async function writeGeography(options) {
+async function writeGeography (options) {
   await Promise.all([
     writeGeographyProperties(options),
-    writeGeographyGeometries(options),
+    writeGeographyGeometries(options)
   ])
 }
 
-async function writeDivisionsProperties(options) {
-  const {
-    catalog, output, identifier, builder, projection, level,
-  } = options
+async function writeDivisionsProperties ({
+  catalog,
+  output,
+  identifier,
+  builder,
+  projection,
+  level
+}) {
   const codes = catalog[level].map(entry => entry.code)
 
   // Create properties
@@ -157,8 +165,8 @@ async function writeDivisionsProperties(options) {
         bounds: builder.bounds(options),
         area: builder.area(options),
         centroid: builder.centroid(options),
-        poleOfInaccessibility: builder.poleOfInaccessibility(options),
-      },
+        poleOfInaccessibility: builder.poleOfInaccessibility(options)
+      }
     }
   }, {})
 
@@ -168,39 +176,48 @@ async function writeDivisionsProperties(options) {
   await writeFiles(path.resolve(directory, 'properties.json'), properties)
 }
 
-async function writeDivisionsGeometries(options) {
-  const {
-    catalog, output, identifier, builder, projection, level,
-  } = options
+async function writeDivisionsGeometries ({
+  catalog,
+  output,
+  identifier,
+  builder,
+  projection,
+  level,
+  excludes
+}) {
   const codes = catalog[level].map(entry => entry.code)
 
   // Create geometries
   console.log(chalk.cyan(`Creating shapes for ${level}`))
   const shapes = codes.reduce((result, code) => {
+    const options = { projection, level, code, excludes }
     return {
       ...result,
-      [code]: builder.divisionShapeGeometry({ projection, level, code }),
+      [code]: builder.divisionShapeGeometry(options)
     }
   }, {})
   console.log(chalk.cyan(`Creating outlines for ${level}`))
   const outlines = codes.reduce((result, code) => {
+    const options = { projection, level, code, excludes }
     return {
       ...result,
-      [code]: builder.divisionOutlineGeometry({ projection, level, code }),
+      [code]: builder.divisionOutlineGeometry(options)
     }
   }, {})
   console.log(chalk.cyan(`Creating borders for ${level}`))
   const borders = codes.reduce((result, code) => {
+    const options = { projection, level, code, excludes }
     return {
       ...result,
-      [code]: builder.divisionBorderGeometry({ projection, level, code }),
+      [code]: builder.divisionBorderGeometry(options)
     }
   }, {})
   console.log(chalk.cyan(`Creating subdivisions for ${level}`))
   const subdivisions = codes.reduce((result, code) => {
+    const options = { projection, level, code, excludes }
     return {
       ...result,
-      [code]: builder.divisionSubdivisionGeometry({ projection, level, code }),
+      [code]: builder.divisionSubdivisionGeometry(options)
     }
   }, {})
 
@@ -211,26 +228,27 @@ async function writeDivisionsGeometries(options) {
     writeGeometries(path.resolve(directory, 'shapes'), shapes),
     writeGeometries(path.resolve(directory, 'outlines'), outlines),
     writeGeometries(path.resolve(directory, 'borders'), borders),
-    writeGeometries(path.resolve(directory, 'subdivisions'), subdivisions),
+    writeGeometries(path.resolve(directory, 'subdivisions'), subdivisions)
   ])
 }
 
-async function writeDivisions(options) {
+async function writeDivisions (options) {
   const { levels } = options
   await Promise.all([].concat(levels.map(level => {
     return [
       writeDivisionsProperties({ ...options, level }),
-      writeDivisionsGeometries({ ...options, level }),
+      writeDivisionsGeometries({ ...options, level })
     ]
   })))
 }
 
-async function main({
+async function main ({
   catalog,
   topojson,
   output,
   identifier,
   levels = [],
+  excludes,
   ...rest
 }) {
   const projection = new Projection(rest)
@@ -250,10 +268,10 @@ async function main({
   } else {
     topojsonFile = path.resolve(output, `${identifier}.topojson`)
   }
-  if (!await exists(catalogFile)) {
+  if (!await fs.existsSync(catalogFile)) {
     throw new Error(`No such file or directory: ${catalogFile}`)
   }
-  if (!await exists(topojsonFile)) {
+  if (!await fs.existsSync(topojsonFile)) {
     throw new Error(`No such file or directory: ${topojsonFile}`)
   }
   if ((await stat(catalogFile)).isDirectory()) {
@@ -280,14 +298,23 @@ async function main({
     builder,
     projection,
     levels: [].concat(levels),
+    excludes: excludes && excludes.split(',').reduce((excludes, entry) => {
+      const [level, code] = entry.split(':')
+      if (!excludes[level]) {
+        excludes[level] = [code]
+      } else {
+        excludes[level].push(code)
+      }
+      return excludes
+    }, {})
   }
   await Promise.all([
     writeGeography(options),
-    writeDivisions(options),
+    writeDivisions(options)
   ])
 }
 
-export default async function project(options) {
+export default async function project (options) {
   const levels = options.levels.split(',')
   let origin
   if (options.origin) {
@@ -298,6 +325,6 @@ export default async function project(options) {
     rotates = JSON.parse(options.rotates)
   }
   await main({
-    ...options, levels, origin, rotates,
+    ...options, levels, origin, rotates
   })
 }

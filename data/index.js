@@ -1,10 +1,6 @@
 // The MIT License
 // Copyright (C) 2016-Present Shota Matsuda
 
-/* eslint-disable global-require */
-/* eslint-disable import/no-dynamic-require */
-/* eslint-disable no-console */
-
 require('babel-core/register')
 require('babel-polyfill')
 
@@ -19,7 +15,7 @@ try {
   preset = require(path.resolve(__dirname, 'src/preset', args.preset))
 } catch (error) {}
 
-async function main() {
+async function main () {
   let result
   try {
     result = await action(Object.assign({}, preset, args))

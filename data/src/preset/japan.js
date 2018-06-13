@@ -48,7 +48,7 @@ const prefectureNames = {
   44: 'Oita',
   45: 'Miyazaki',
   46: 'Kagoshima',
-  47: 'Okinawa',
+  47: 'Okinawa'
 }
 
 const localizedPrefectureNames = {
@@ -98,20 +98,20 @@ const localizedPrefectureNames = {
   44: '大分県',
   45: '宮崎県',
   46: '鹿児島県',
-  47: '沖縄県',
+  47: '沖縄県'
 }
 
 // https://www.esrij.com/products/japan-shp/
 export const url = 'https://www.esrij.com/cgi-bin/wp/wp-content/uploads/2017/01/japan_ver81.zip'
 
-export function transform(properties) {
+export function transform (properties) {
   const {
     JCODE: code,
     CITY_ENG: municipalityName,
     SICHO: localizedSubprefectureName,
     GUN: localizedDistrictName,
     SEIREI: localizedDesignatedCityName,
-    SIKUCHOSON: localizedCityName,
+    SIKUCHOSON: localizedCityName
   } = properties
   let prefectureCode
   let municipalityCode
@@ -139,6 +139,6 @@ export function transform(properties) {
     prefectureName: prefectureNames[prefectureCode],
     municipalityName,
     localizedPrefectureName: localizedPrefectureNames[prefectureCode],
-    localizedMunicipalityName,
+    localizedMunicipalityName
   }
 }

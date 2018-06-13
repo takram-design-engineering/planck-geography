@@ -5,18 +5,20 @@ import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs'
 import nodeResolve from 'rollup-plugin-node-resolve'
 
+import pkg from './package.json'
+
 const globals = {
-  'chai': 'chai',
-  'mocha': 'mocha',
+  '@takram/planck-core': 'Planck',
   'd3': 'd3',
   'd3-geo-projection': 'd3',
   'three': 'THREE'
 }
 
 export default {
-  input: './test/unit.js',
+  input: './src/index.js',
+  external: Object.keys(globals),
   plugins: [
-    nodeResolve(),
+    nodeResolve({ browser: true }),
     commonjs(),
     babel({
       presets: [
@@ -32,15 +34,20 @@ export default {
       babelrc: false
     })
   ],
-  external: [
-    ...Object.keys(globals),
-    'source-map-support/register'
-  ],
-  output: {
-    globals,
-    intro: 'var BUNDLER = "rollup";',
-    format: 'iife',
-    file: './dist/test/unit/rollup.js',
-    sourcemap: true
-  }
+  output: [
+    {
+      globals,
+      format: 'umd',
+      exports: 'named',
+      extend: true,
+      name: 'Planck',
+      file: pkg.browser[pkg.main],
+      sourcemap: true
+    },
+    {
+      format: 'es',
+      file: pkg.browser[pkg.module],
+      sourcemap: true
+    }
+  ]
 }
