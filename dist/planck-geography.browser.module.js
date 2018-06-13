@@ -1,11 +1,8 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var planckCore = require('@takram/planck-core');
-var Three = require('three');
-var d3 = require('d3');
-var d3GeoProjection = require('d3-geo-projection');
+import { Namespace, globalScope, FilePath, Request, ImplementationError, Array as Array$1, Hash } from '@takram/planck-core';
+import { BufferGeometryLoader, Shape, ShapeUtils, BufferGeometry, ShapeGeometry, Geometry, BufferAttribute, Path } from 'three';
+import * as d3 from 'd3';
+import { geoArea, geoPath } from 'd3';
+import * as d3GeoProjection from 'd3-geo-projection';
 
 var asyncToGenerator = function (fn) {
   return function () {
@@ -163,7 +160,7 @@ var toConsumableArray = function (arr) {
 
 // The MIT License
 
-var internal = planckCore.Namespace('Division');
+var internal = Namespace('Division');
 
 var Division = function () {
   function Division(level, code) {
@@ -643,7 +640,7 @@ function _unpackBufferGeometry(data, buffer) {
   if (copy.data.index) {
     var type = copy.data.index.type;
 
-    var view = new (Function.prototype.bind.apply(planckCore.globalScope[type], [null].concat([buffer], toConsumableArray(copy.data.index.array))))();
+    var view = new (Function.prototype.bind.apply(globalScope[type], [null].concat([buffer], toConsumableArray(copy.data.index.array))))();
     copy.data.index = _extends({}, copy.data.index, { array: view });
   }
   if (copy.data.attributes) {
@@ -654,12 +651,12 @@ function _unpackBufferGeometry(data, buffer) {
       var attribute = copy.data.attributes[name];
       var _type = attribute.type;
 
-      var _view = new (Function.prototype.bind.apply(planckCore.globalScope[_type], [null].concat([buffer], toConsumableArray(attribute.array))))();
+      var _view = new (Function.prototype.bind.apply(globalScope[_type], [null].concat([buffer], toConsumableArray(attribute.array))))();
       attributes[name] = _extends({}, attribute, { array: _view });
     }
     copy.data.attributes = attributes;
   }
-  return new Three.BufferGeometryLoader().parse(copy);
+  return new BufferGeometryLoader().parse(copy);
 }
 
 function mergeBuffers(buffers, byteLength) {
@@ -719,7 +716,7 @@ var GeometryPack = {
 
 // The MIT License
 
-var internal$1 = planckCore.Namespace('DivisionLevel');
+var internal$1 = Namespace('DivisionLevel');
 
 var DivisionLevel = function () {
   function DivisionLevel(identifier, coder) {
@@ -762,9 +759,9 @@ var DivisionLevel = function () {
                 hash = projection ? projection.hash : null;
 
                 if (scope.properties[hash] == null) {
-                  path = planckCore.FilePath.join(planckCore.FilePath.dirname(this.geography.path), hash || '', this.geography.identifier, this.identifier, 'properties.json');
+                  path = FilePath.join(FilePath.dirname(this.geography.path), hash || '', this.geography.identifier, this.identifier, 'properties.json');
 
-                  scope.properties[hash] = planckCore.Request.json(path, { local: true });
+                  scope.properties[hash] = Request.json(path, { local: true });
                 }
                 return _context.abrupt('return', scope.properties[hash]);
 
@@ -828,12 +825,12 @@ var DivisionLevel = function () {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                path = planckCore.FilePath.join(planckCore.FilePath.dirname(this.geography.path), projection.hash, this.geography.identifier, this.identifier, name);
+                path = FilePath.join(FilePath.dirname(this.geography.path), projection.hash, this.geography.identifier, this.identifier, name);
                 data = void 0;
                 buffer = void 0;
                 _context3.prev = 3;
                 _context3.next = 6;
-                return Promise.all([planckCore.Request.json(path + '.json'), planckCore.Request.buffer(path + '.buffer')]);
+                return Promise.all([Request.json(path + '.json'), Request.buffer(path + '.buffer')]);
 
               case 6:
                 _ref4 = _context3.sent;
@@ -952,7 +949,7 @@ var DivisionLevel = function () {
 
 // The MIT License
 
-var internal$2 = planckCore.Namespace('Geography');
+var internal$2 = Namespace('Geography');
 
 var Geography = function () {
   function Geography(identifier) {
@@ -996,7 +993,7 @@ var Geography = function () {
 
               case 8:
                 _context.next = 10;
-                return planckCore.Request.json(path, { local: true });
+                return Request.json(path, { local: true });
 
               case 10:
                 scope.data = _context.sent;
@@ -1067,9 +1064,9 @@ var Geography = function () {
                 hash = projection ? projection.hash : null;
 
                 if (scope.properties[hash] == null) {
-                  path = planckCore.FilePath.join(planckCore.FilePath.dirname(this.path), hash || '', this.identifier, 'properties.json');
+                  path = FilePath.join(FilePath.dirname(this.path), hash || '', this.identifier, 'properties.json');
 
-                  scope.properties[hash] = planckCore.Request.json(path, { local: true });
+                  scope.properties[hash] = Request.json(path, { local: true });
                 }
                 return _context2.abrupt('return', scope.properties[hash]);
 
@@ -1245,12 +1242,12 @@ var Geography = function () {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
-                path = planckCore.FilePath.join(planckCore.FilePath.dirname(this.path), projection.hash, this.identifier, name);
+                path = FilePath.join(FilePath.dirname(this.path), projection.hash, this.identifier, name);
                 data = void 0;
                 buffer = void 0;
                 _context8.prev = 3;
                 _context8.next = 6;
-                return Promise.all([planckCore.Request.json(path + '.json'), planckCore.Request.buffer(path + '.buffer')]);
+                return Promise.all([Request.json(path + '.json'), Request.buffer(path + '.buffer')]);
 
               case 6:
                 _ref9 = _context8.sent;
@@ -4781,7 +4778,7 @@ function crossings(a, b, point) {
   return 0;
 }
 
-var Path = {
+var Path$1 = {
   winding: function winding(curves) {
     if (curves.length < 3) {
       return undefined;
@@ -4836,7 +4833,7 @@ var Path = {
           if (path && path.curves.length === 0) {
             paths.pop();
           }
-          path = new Three.Path();
+          path = new Path();
           paths.push(path);
           if (flip) {
             path.moveTo(x, -y);
@@ -4968,7 +4965,7 @@ var Path = {
         case 'A':
         case 'a':
           // TODO: Support arcs
-          throw new planckCore.ImplementationError();
+          throw new ImplementationError();
         case 'Z':
           path.closePath();
           break;
@@ -4986,7 +4983,7 @@ var Path = {
     return paths.reduce(function (shape, path) {
       shape.add(path);
       return shape;
-    }, new Three.Shape());
+    }, new Shape());
   }
 };
 
@@ -5071,16 +5068,16 @@ function convertPolygonsToShapes(polygons, projection) {
       errors.push(index);
       return shapes;
     }
-    var path = Path.parse(svg, true);
+    var path = Path$1.parse(svg, true);
     var paths = void 0;
-    if (path instanceof Three.Shape) {
+    if (path instanceof Shape) {
       paths = path.curves;
     } else {
       paths = [path];
     }
-    var shape = new Three.Shape();
+    var shape = new Shape();
     paths.forEach(function (path) {
-      var winding = Path.winding(path.curves);
+      var winding = Path$1.winding(path.curves);
       if (winding === 'ccw') {
         shape.add(path);
       } else if (winding === 'cw') {
@@ -5091,7 +5088,7 @@ function convertPolygonsToShapes(polygons, projection) {
     // Expand composite shape without holes into multiple shapes
     if (shape.holes.length === 0) {
       return shapes.concat(shape.curves.map(function (curve) {
-        var shape = new Three.Shape();
+        var shape = new Shape();
         shape.add(curve);
         return shape;
       }));
@@ -5104,13 +5101,13 @@ function convertShapesToMeshGeometry(shapes) {
   // WORKAROUND: Use earcut triangulator instead of built-in one.
   // It's slower and less accurate but able to handle duplicated points
   // and holes better.
-  var builtinTriangulateShape = Three.ShapeUtils.triangulateShape;
-  Three.ShapeUtils.triangulateShape = triangulateShape;
-  var geometry = new Three.BufferGeometry().fromGeometry(shapes.reduce(function (geometry, shape) {
-    geometry.merge(new Three.ShapeGeometry(shape));
+  var builtinTriangulateShape = ShapeUtils.triangulateShape;
+  ShapeUtils.triangulateShape = triangulateShape;
+  var geometry = new BufferGeometry().fromGeometry(shapes.reduce(function (geometry, shape) {
+    geometry.merge(new ShapeGeometry(shape));
     return geometry;
-  }, new Three.Geometry()));
-  Three.ShapeUtils.triangulateShape = builtinTriangulateShape;
+  }, new Geometry()));
+  ShapeUtils.triangulateShape = builtinTriangulateShape;
   geometry.computeBoundingSphere();
   return geometry;
 }
@@ -5124,8 +5121,8 @@ function convertLinesToGeometry(lines) {
     vertices[index6 + 3] = line.v2.x;
     vertices[index6 + 4] = line.v2.y;
   });
-  var geometry = new Three.BufferGeometry();
-  var positions = new Three.BufferAttribute(vertices, 3);
+  var geometry = new BufferGeometry();
+  var positions = new BufferAttribute(vertices, 3);
   geometry.addAttribute('position', positions);
   return geometry;
 }
@@ -5141,7 +5138,7 @@ function convertShapesToLineSegmentGeometry(shapes) {
   return convertLinesToGeometry(lines);
 }
 
-var internal$3 = planckCore.Namespace('GeographyBuilder');
+var internal$3 = Namespace('GeographyBuilder');
 
 var GeographyBuilder = function () {
   function GeographyBuilder(levels) {
@@ -5167,7 +5164,7 @@ var GeographyBuilder = function () {
                 }
 
                 _context.next = 4;
-                return planckCore.Request.json(data, { local: true });
+                return Request.json(data, { local: true });
 
               case 4:
                 scope.data = _context.sent;
@@ -5246,7 +5243,7 @@ var GeographyBuilder = function () {
       }
       geometries = merge(this.data, geometries);
       if (projection) {
-        var _polygon = planckCore.Array.max(geometries.coordinates, function (polygon) {
+        var _polygon = Array$1.max(geometries.coordinates, function (polygon) {
           return projection.path.area({
             type: 'Polygon',
             coordinates: polygon
@@ -5264,13 +5261,13 @@ var GeographyBuilder = function () {
           console.warn('Unable to derive pole of inaccessibility:', level, code);
           return null;
         }
-        var path = Path.parse(svg, true);
+        var path = Path$1.parse(svg, true);
         if (!path) {
           console.warn('Unable to derive pole of inaccessibility:', level, code);
           return null;
         }
         var paths = void 0;
-        if (path instanceof Three.Shape) {
+        if (path instanceof Shape) {
           paths = path.curves;
         } else {
           paths = [path];
@@ -5285,8 +5282,8 @@ var GeographyBuilder = function () {
           coordinates: _polygon
         })) * precision);
       }
-      var polygon = planckCore.Array.max(geometries.coordinates, function (polygon) {
-        return d3.geoArea({
+      var polygon = Array$1.max(geometries.coordinates, function (polygon) {
+        return geoArea({
           type: 'Polygon',
           coordinates: polygon
         });
@@ -5295,7 +5292,7 @@ var GeographyBuilder = function () {
         console.warn('Unable to derive pole of inaccessibility:', level, code);
         return null;
       }
-      return polylabel_1(polygon, Math.sqrt(d3.geoArea({
+      return polylabel_1(polygon, Math.sqrt(geoArea({
         type: 'Polygon',
         coordinates: polygon
       })) * precision);
@@ -5346,9 +5343,9 @@ var GeographyBuilder = function () {
         errors.push(0);
         return convertLinesToGeometry([]);
       }
-      var path = Path.parse(svg, true);
+      var path = Path$1.parse(svg, true);
       var lines = void 0;
-      if (path instanceof Three.Shape) {
+      if (path instanceof Shape) {
         lines = path.curves.reduce(function (lines, path) {
           return lines.concat(path.curves);
         }, []);
@@ -5431,7 +5428,7 @@ var GeographyBuilder = function () {
       if (errors.length !== 0) {
         // Topology mesh can fail if a division doesn't have any adjacent
         // division. Just return an empty geometry without logging warning.
-        return new Three.BufferGeometry();
+        return new BufferGeometry();
       }
       return result;
     }
@@ -5564,7 +5561,7 @@ var GeographyBuilder = function () {
       if (errors.length !== 0) {
         // Topology mesh can fail if a division doesn't have any adjacent
         // division. Just return an empty geometry without logging warning.
-        return new Three.BufferGeometry();
+        return new BufferGeometry();
       }
       return result;
     }
@@ -5595,7 +5592,7 @@ var GeographyBuilder = function () {
       if (errors.length !== 0) {
         // Topology mesh can fail if a division doesn't have any adjacent
         // division. Just return an empty geometry without logging warning.
-        return new Three.BufferGeometry();
+        return new BufferGeometry();
       }
       return result;
     }
@@ -5866,7 +5863,7 @@ var codeToPointConverters = {
   }
 };
 
-var internal$4 = planckCore.Namespace('JapanRegionalMesh');
+var internal$4 = Namespace('JapanRegionalMesh');
 
 var JapanRegionalMesh = function () {
   function JapanRegionalMesh(name, size) {
@@ -6256,7 +6253,7 @@ var suncalc = createCommonjsModule(function (module, exports) {
 
 // The MIT License
 
-var internal$5 = planckCore.Namespace('Projection');
+var internal$5 = Namespace('Projection');
 
 var Projection = function () {
   function Projection() {
@@ -6375,7 +6372,7 @@ var Projection = function () {
   }, {
     key: 'path',
     get: function get$$1() {
-      return d3.geoPath().projection(internal$5(this).projector);
+      return geoPath().projection(internal$5(this).projector);
     }
   }, {
     key: 'name',
@@ -6402,7 +6399,7 @@ var Projection = function () {
     get: function get$$1() {
       var scope = internal$5(this);
       if (scope.hash == null) {
-        scope.hash = planckCore.Hash(this.toJSON());
+        scope.hash = Hash(this.toJSON());
       }
       return scope.hash;
     }
@@ -6453,22 +6450,12 @@ var index = {
   GeometryPack: GeometryPack,
   JapanGeography: JapanGeography,
   JapanRegionalMesh: JapanRegionalMesh$1,
-  Path: Path,
+  Path: Path$1,
   Projection: Projection,
   USGeography: USGeography,
   WorldGeography: WorldGeography
 };
 
-exports.Division = Division;
-exports.DivisionLevel = DivisionLevel;
-exports.Geography = Geography;
-exports.GeographyBuilder = GeographyBuilder;
-exports.GeometryPack = GeometryPack;
-exports.JapanGeography = JapanGeography;
-exports.JapanRegionalMesh = JapanRegionalMesh$1;
-exports.Path = Path;
-exports.Projection = Projection;
-exports.USGeography = USGeography;
-exports.WorldGeography = WorldGeography;
-exports.default = index;
-//# sourceMappingURL=planck-geography.js.map
+export default index;
+export { Division, DivisionLevel, Geography, GeographyBuilder, GeometryPack, JapanGeography, JapanRegionalMesh$1 as JapanRegionalMesh, Path$1 as Path, Projection, USGeography, WorldGeography };
+//# sourceMappingURL=planck-geography.browser.module.js.map

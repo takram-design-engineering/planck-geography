@@ -58,22 +58,22 @@ const stateNames = {
   69: 'Northern Mariana Islands',
   72: 'Puerto Rico',
   74: 'U.S. Minor Outlying Islands',
-  78: 'U.S. Virgin Islands',
+  78: 'U.S. Virgin Islands'
 }
 
 // https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
 export const url = 'http://www2.census.gov/geo/tiger/GENZ2016/shp/cb_2016_us_county_500k.zip'
 
-export function transform(properties) {
+export function transform (properties) {
   const {
     STATEFP: stateCode,
     GEOID: countyCode,
-    NAME: countyName,
+    NAME: countyName
   } = properties
   return {
     stateCode: parseInt(stateCode, 10),
     countyCode: parseInt(countyCode, 10),
     stateNames: stateNames[stateCode],
-    countyName,
+    countyName
   }
 }

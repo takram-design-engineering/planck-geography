@@ -1,5 +1,5 @@
 import { Namespace, globalScope, FilePath, Request, ImplementationError, Array as Array$1, Hash } from '@takram/planck-core';
-import { Shape, ShapeUtils, BufferGeometry, ShapeGeometry, Geometry, BufferAttribute, BufferGeometryLoader, Path } from 'three';
+import { BufferGeometryLoader, Shape, ShapeUtils, BufferGeometry, ShapeGeometry, Geometry, BufferAttribute, Path } from 'three';
 import * as d3 from 'd3';
 import { geoArea, geoPath } from 'd3';
 import * as d3GeoProjection from 'd3-geo-projection';
@@ -2528,13 +2528,6 @@ TinyQueue.prototype = {
     }
 };
 
-var tinyqueue$1 = /*#__PURE__*/Object.freeze({
-  default: tinyqueue,
-  __moduleExports: tinyqueue
-});
-
-var Queue = ( tinyqueue$1 && tinyqueue ) || tinyqueue$1;
-
 var polylabel_1 = polylabel;
 var default_1$1 = polylabel;
 
@@ -2557,7 +2550,7 @@ function polylabel(polygon, precision, debug) {
     var h = cellSize / 2;
 
     // a priority queue of cells in order of their "potential" (max distance to polygon)
-    var cellQueue = new Queue(null, compareMax);
+    var cellQueue = new tinyqueue(null, compareMax);
 
     if (cellSize === 0) return [minX, minY];
 
@@ -2922,7 +2915,6 @@ function peg$parse(input, options) {
       peg$posDetailsCache = [{ line: 1, column: 1 }],
       peg$maxFailPos = 0,
       peg$maxFailExpected = [],
-      peg$silentFails = 0,
       peg$result;
 
   if ("startRule" in options) {
@@ -3226,7 +3218,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c3);
       }
     }
@@ -3293,7 +3285,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c6);
       }
     }
@@ -3314,7 +3306,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c9);
       }
     }
@@ -3416,7 +3408,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c12);
       }
     }
@@ -3518,7 +3510,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c15);
       }
     }
@@ -3559,7 +3551,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c18);
       }
     }
@@ -3707,7 +3699,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c21);
       }
     }
@@ -3840,7 +3832,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c24);
       }
     }
@@ -3973,7 +3965,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c27);
       }
     }
@@ -4075,7 +4067,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c29);
       }
     }
@@ -4362,7 +4354,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c35);
       }
     }
@@ -4454,7 +4446,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s0 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c39);
       }
     }
@@ -4524,7 +4516,7 @@ function peg$parse(input, options) {
         peg$currPos++;
       } else {
         s3 = peg$FAILED;
-        if (peg$silentFails === 0) {
+        {
           peg$fail(peg$c42);
         }
       }
@@ -4554,7 +4546,7 @@ function peg$parse(input, options) {
           peg$currPos++;
         } else {
           s3 = peg$FAILED;
-          if (peg$silentFails === 0) {
+          {
             peg$fail(peg$c42);
           }
         }
@@ -4588,7 +4580,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s2 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c44);
       }
     }
@@ -4630,7 +4622,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s0 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c46);
       }
     }
@@ -4648,7 +4640,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s2 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c48);
       }
     }
@@ -4660,7 +4652,7 @@ function peg$parse(input, options) {
           peg$currPos++;
         } else {
           s2 = peg$FAILED;
-          if (peg$silentFails === 0) {
+          {
             peg$fail(peg$c48);
           }
         }
@@ -4685,7 +4677,7 @@ function peg$parse(input, options) {
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) {
+      {
         peg$fail(peg$c51);
       }
     }
@@ -4736,19 +4728,10 @@ var parser = {
   SyntaxError: peg$SyntaxError,
   parse: peg$parse
 };
-var parser_1 = parser.parse;
-
-var parser$1 = /*#__PURE__*/Object.freeze({
-  default: parser,
-  __moduleExports: parser,
-  parse: parser_1
-});
-
-var require$$0 = ( parser$1 && parser ) || parser$1;
 
 // v1.0 exported just the parser function. To maintain backwards compatibility,
 // we export additional named features as properties of that function.
-var parserFunction = require$$0.parse;
+var parserFunction = parser.parse;
 parserFunction.parseSVG = parserFunction;
 parserFunction.makeAbsolute = makeSVGPathCommandsAbsolute;
 var svgPathParser = parserFunction;
@@ -6459,7 +6442,7 @@ var WorldGeography = function (_Geography) {
 
 // The MIT License
 
-var main = {
+var index = {
   Division: Division,
   DivisionLevel: DivisionLevel,
   Geography: Geography,
@@ -6473,6 +6456,6 @@ var main = {
   WorldGeography: WorldGeography
 };
 
-export default main;
+export default index;
 export { Division, DivisionLevel, Geography, GeographyBuilder, GeometryPack, JapanGeography, JapanRegionalMesh$1 as JapanRegionalMesh, Path$1 as Path, Projection, USGeography, WorldGeography };
 //# sourceMappingURL=planck-geography.module.js.map
